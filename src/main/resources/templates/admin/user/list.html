@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro"
+      layout:decorate="layout">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Cherish">
+    <title>员工信息</title>
+
+</head>
+<body>
+
+<div layout:fragment="content">
+
+    <!--body wrapper start-->
+    <div class="wrapper">
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- well -->
+                <div class="well">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="input-group">
+										<span class="input-group-addon"> <label for="tel">手机号码：</label>
+										</span> <input name="telephone" id="tel" type="text"
+                                                       class="form-control" placeholder="手机号码">
+                            </div>
+                            <!-- /input-group -->
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="input-group">
+										<span class="input-group-addon"> <label for="nick">姓名：</label>
+										</span> <input name="nickname" id="nick" type="text"
+                                                       class="form-control" placeholder="员工姓名">
+                            </div>
+                            <!-- /input-group -->
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="input-group">
+                                <button id="btn_search" type="button" class="btn btn-primary">
+                                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                    查询
+                                </button>
+                                <button id="btn_reset" type="button" class="btn btn-warning">
+                                    <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span>
+                                    重置
+                                </button>
+                                <button id="btn_fresh" type="button" class="btn btn-info">
+                                    <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                                    刷新
+                                </button>
+                            </div>
+                            <!-- /input-group -->
+                        </div>
+
+                    </div>
+                    <!-- /.row -->
+                </div>
+                <!-- /.well -->
+            </div>
+        </div><!-- row end -->
+
+        <div class="row">
+            <div class="col-sm-12">
+                <section class="panel">
+                    <header class="panel-heading">
+                        员工信息表格
+                        <span class="tools pull-right">
+								<a href="javascript:;" class="fa fa-chevron-down"></a>
+								<a href="javascript:;" class="fa fa-times"></a>
+							</span>
+                    </header>
+                    <div class="panel-body">
+                        <button type="button" id="otable_new" class="btn btn-primary">添加 <i class="fa fa-plus"></i>
+                        </button>
+                        <!-- table -->
+                        <table id="otable" class="table" cellspacing="0" width="100%">
+                            <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>姓名</th>
+                                <th>手机号码</th>
+                                <th>入职时间</th>
+                                <th>职位</th>
+                                <th>创建时间</th>
+                                <th>登陆账号</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tfoot>
+                            <tr>
+                                <th>序号</th>
+                                <th>姓名</th>
+                                <th>手机号码</th>
+                                <th>入职时间</th>
+                                <th>职位</th>
+                                <th>创建时间</th>
+                                <th>登陆账号</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                            </tfoot>
+                            <tbody>
+                            <tr>
+                                <td>序号</td>
+                                <td>姓名</td>
+                                <td>手机号码</td>
+                                <th>入职时间</th>
+                                <th>职位</th>
+                                <td>创建时间</td>
+                                <td>登陆账号</td>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                            </tbody>
+
+                        </table>
+                        <!-- table end -->
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    <!--body wrapper end-->
+
+</div>
+
+<!--将被layout引入的js-->
+<div layout:fragment="javascript">
+    <script type="text/javascript">
+        //你会算下标的,从零开始   0  >  0
+        jQuery('.active').removeClass('active');
+        $li = $('.sub-menu-list:eq(0)').find('> li:eq(0)');
+        $li.addClass('active');
+
+        jQuery('.nav-active').removeClass('nav-active');
+        $menuLi = $('.menu-list:eq(0)');
+        $menuLi.addClass('nav-active');
+
+    </script>
+    <script src="/static/js/admin/dataTableConstant.js" type="text/javascript"></script>
+    <script src="/static/js/admin/userManage.js" type="text/javascript"></script>
+</div>
+
+</body>
+</html>

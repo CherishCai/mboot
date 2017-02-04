@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" content="text/html" />
+    <title>500 Page</title>
+    <link rel="shortcut icon" th:href="@{/favicon.ico}" type="image/x-icon" />
+
+    <link href="/static/css/style.css" rel="stylesheet">
+    <link href="/static/css/style-responsive.css" rel="stylesheet">
+
+    <!--[if lt IE 9]>
+    <script src="/static/js/html5shiv.js"></script>
+    <script src="/static/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="error-page">
+<section>
+    <div class="container ">
+
+        <section class="error-wrapper text-center">
+            <h1>
+                <img alt="500" th:src="@{/image/500-error.png}">
+            </h1>
+            <h2>OOOPS!!!</h2>
+            <h3>Something went wrong.</h3>
+            <p class="nrml-txt">
+                Why not try refreshing you page? Or you can <a th:href="@{/}">contact
+                our support</a> if the problem persists.
+            </p>
+            <a class="back-btn" th:href="@{/}"> Back To Home</a>
+        </section>
+
+    </div>
+</section>
+
+<script th:src="@{/js/jquery-1.12.4.js}" type="text/javascript"></script>
+<script th:src="@{/tools/bootstrap-3.3.7/js/bootstrap.js}" type="text/javascript"></script>
+<script th:src="@{/js/modernizr.js}"></script>
+</body>
+</html>

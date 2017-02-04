@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" content="text/html" />
+    <title>404 Page</title>
+    <link rel="shortcut icon" th:href="@{/favicon.ico}" type="image/x-icon" />
+
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <link th:href="@{/css/style-responsive.css}" rel="stylesheet">
+
+    <!--[if lt IE 9]>
+        <script src="/static/js/html5shiv.js"></script>
+        <script src="/static/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body class="error-page">
+<section>
+    <div class="container ">
+        <section class="error-wrapper text-center">
+            <h1>
+                <img alt="404" th:src="@{/image/404-error.png}">
+            </h1>
+            <h2>page not found</h2>
+            <h3>We Couldn’t Find This Page</h3>
+            <a class="back-btn" th:href="@{/}"> Back To Home</a>
+        </section>
+    </div>
+</section>
+
+<script th:src="@{/js/jquery-1.12.4.js}" type="text/javascript"></script>
+<script th:src="@{/tools/bootstrap-3.3.7/js/bootstrap.js}" type="text/javascript"></script>
+<script th:src="@{/js/modernizr.js}"></script>
+</body>
+</html>

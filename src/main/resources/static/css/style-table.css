@@ -1,0 +1,33 @@
+@CHARSET "UTF-8";
+/*------------------------------------------
+Author: Cherish
+-------------------------------------------*/
+
+@import url('/static/tools/dataTables-1.10.12/css/dataTables.bootstrap.css');
+@import url('/static/tools/dataTables-1.10.12/css/responsive.bootstrap.css');
+
+/*奇数行*/
+tr.odd {
+	background-color: whitesmoke !important;
+}
+/*偶数行*/
+tr.even {
+	background-color: white !important;
+}
+/*行被选中*/
+tr.selected {
+	background-color: #00CCFF !important;
+}
+/*小text*/
+input.small{
+    display: inline-block;
+	width:65px;
+	vertical-align: middle;
+}
+td.details-control {
+    background: url('/static/images/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+tr.shown td.details-control {
+    background: url('/static/images/details_close.png') no-repeat center center;
+}
