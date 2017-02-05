@@ -18,6 +18,8 @@ public class ABaseController {
 	protected static final int NOT_FOUND_CODE = 404;
 	protected static final int ERROR_CODE = 500;
 
+	protected static final String BUSY_MSG = "系统繁忙";
+
 	protected Map getReturnMap(int code, String message, Object data) {
 		Map<String, Object> map = new HashMap<>(5);
 		map.put("code", code);

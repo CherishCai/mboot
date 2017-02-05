@@ -56,14 +56,15 @@
 
                 <h5 class="left-nav-title">用户信息</h5>
                 <ul class="nav nav-pills nav-stacked custom-nav">
-                    <li><a th:href="@{/profile}"><i class="fa fa-user"></i> <span>个人信息</span></a></li>
+                    <li><a th:href="@{/user/profile}"><i class="fa fa-user"></i> <span>个人信息</span></a></li>
+                    <li><a th:href="@{/user/modifyPassword}"><i class="fa fa-edit"></i> <span>修改密码</span></a></li>
                     <li><a th:href="@{/logout}" class="logout"><i class="fa fa-sign-out"></i> <span>登出</span></a></li>
                 </ul>
             </div>
 
             <!--sidebar nav start-->
             <ul class="nav nav-pills nav-stacked custom-nav">
-                <li class="active"><a th:href="@{/admin}"><i class="fa fa-home"></i> <span> 数据面板</span></a></li>
+                <li id="datapanelLi"><a th:href="@{/admin}"><i class="fa fa-home"></i> <span> 数据面板</span></a></li>
 
                 <li class="menu-list"><a href=""><i class="fa fa-laptop"></i>
                     <span> 用户管理</span></a>
@@ -125,7 +126,8 @@
                             th:src="@{/image/user-avatar.png}" alt="" /> <label shiro:principal="nickname"></label> <span class="caret"></span>
                     </a>
                         <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
-                            <li><a th:href="@{/profile}"><i class="fa fa-user"></i> 个人信息</a></li>
+                            <li><a th:href="@{/user/profile}"><i class="fa fa-user"></i> 个人信息</a></li>
+                            <li><a th:href="@{/user/modifyPassword}"><i class="fa fa-edit"></i> <span>修改密码</span></a></li>
                             <li><a th:href="@{/logout}" class="logout"><i class="fa fa-sign-out"></i> 登出</a></li>
                         </ul></li>
 
@@ -136,9 +138,12 @@
         </div>
         <!-- header section end-->
 
-        <div shiro:hasRole="admin">
-            <div id="contentpage" style="background: #eff0f4;" layout:fragment="content"></div>
-        </div>
+        <p shiro:hasRole="admin"><!-- 角色与判断 -->
+            <div style="background: #eff0f4;z-index: -1;" >
+                <div id="contentpage" layout:fragment="content"></div>
+            </div>
+        </p>
+
         <footer>
             2017 &copy; caihongwen.cn By Cherish
         </footer>

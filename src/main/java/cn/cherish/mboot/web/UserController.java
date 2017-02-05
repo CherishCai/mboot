@@ -1,9 +1,15 @@
 package cn.cherish.mboot.web;
 
 import cn.cherish.mboot.dal.dto.UserDTO;
+import cn.cherish.mboot.dal.entity.User;
 import cn.cherish.mboot.dal.vo.BasicSearchVO;
+import cn.cherish.mboot.dal.vo.ModifyPasswordVO;
 import cn.cherish.mboot.dal.vo.UserVO;
+import cn.cherish.mboot.extra.shiro.CryptographyUtil;
+import cn.cherish.mboot.extra.shiro.ShiroUserUtil;
 import cn.cherish.mboot.service.UserService;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.slf4j.Logger;
@@ -11,9 +17,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,6 +32,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("user")
+@RequiresAuthentication
 public class UserController extends ABaseController {
 
     private static Logger LOGGER = LoggerFactory.getLogger(UserController.class);
@@ -47,16 +59,16 @@ public class UserController extends ABaseController {
     public Map toPage(BasicSearchVO basicSearchVO, UserVO userVO){
 
         try {
-            Page<UserDTO> page = userService.findAllByVO(userVO, basicSearchVO);
+            Page<UserDTO> page = userService.findAll(userVO, basicSearchVO);
 
             LOGGER.debug("用户总数：{}",page.getTotalElements());
 
             return getReturnMap(Boolean.TRUE, basicSearchVO.getDraw(), page);
         } catch (Exception e) {
             e.printStackTrace();
-            LOGGER.error("获取用户列表失败" + e.getMessage());
+            LOGGER.error("获取用户列表失败:", e.getMessage());
+            return getReturnMap(Boolean.FALSE, BUSY_MSG, null);
         }
-        return getReturnMap(Boolean.FALSE, "系统繁忙", null);
     }
 
     @DeleteMapping("/{userId}")
@@ -69,77 +81,103 @@ public class UserController extends ABaseController {
             return getReturnMap(Boolean.TRUE, "删除成功", null);
         } catch (Exception e) {
             e.printStackTrace();
-            LOGGER.error("删除失败" + e.getMessage());
+            LOGGER.error("删除失败:{}", e.getMessage());
+            return getReturnMap(Boolean.FALSE, "删除失败", null);
         }
-        return getReturnMap(Boolean.FALSE, "删除失败", null);
     }
 
-//    @RequiresPermissions("userManage")
-  /*  @PostMapping("/edit")
+    @PostMapping("/update")
     @ResponseBody
-    public Map editUser(@RequestBody UserDto userDto){
+    public Map updateUser(@RequestBody UserVO userVO){
 
-        if(userDto == null || userDto.getId() == null){
-            return getReturnMap(Boolean.FALSE, "数据错误！", null);
+        if(userVO == null || userVO.getId() == null){
+            return getReturnMap(Boolean.FALSE, "数据错误", null);
         }
 
         try {
-            userService.update(userDto);
+            User user = userService.findById(userVO.getId());
+            //TODO
+
+
+            userService.update(user);
 
             return getReturnMap(Boolean.TRUE, "修改成功", null);
         } catch (Exception e) {
             e.printStackTrace();
-            LOGGER.error("修改用户错误" + e.getMessage());
+            LOGGER.error("修改用户错误:{}", e.getMessage());
         }
         return getReturnMap(Boolean.FALSE, "修改失败", null);
     }
 
     @PostMapping("/save")
     @ResponseBody
-    public Map saveUser(@RequestBody UserDto userDto){
+    public Map saveUser(@RequestBody UserVO userVO){
 
-        if(userDto == null || userDto.getUsername() == null){
+        if(userVO == null || userVO.getUsername() == null){
             return getReturnMap(Boolean.FALSE, "数据错误！", null);
         }
 
         try {
-            String backStr = userService.save(userDto);
+            User user = new User();
+            //TODO
 
-            return getReturnMap(Boolean.TRUE, backStr, null);
+            userService.save(user);
+
+            return getReturnMap(Boolean.TRUE, "添加成功", null);
         } catch (Exception e) {
             e.printStackTrace();
-            LOGGER.error("添加本企业用户失败" + e.getMessage());
+            LOGGER.error("添加用户失败:{}", e.getMessage());
             return getReturnMap(Boolean.FALSE, "添加失败", null);
         }
-    }*/
+    }
 
+    @GetMapping("/profile")
+    public ModelAndView profile(){
+        ModelAndView mv = new ModelAndView("/admin/user/profile");
+        return mv;
+    }
 
-    /*@RequestMapping("/modifyPassword")
+    @GetMapping("/modifyPassword")
+    public ModelAndView modifyPassword(){
+        ModelAndView mv = new ModelAndView("/admin/user/modifyPassword");
+        return mv;
+    }
+
+    @PostMapping("/modifyPassword")
     @ResponseBody
-    public Map modifyPassword(String oldPassword, String password,
-                              String confirmPassword) {
-        Date date = new Date();
-        if (StringUtils.isBlank(password)
-                || StringUtils.isBlank(confirmPassword)
-                || !password.equals(confirmPassword))
-            return getReturnMap(SUCCESS_CODE, "两次输入的密码不一致", null);
+    public Map modifyPassword(@Validated ModifyPasswordVO modifyPasswordVO, BindingResult bindingResult) {
+
+        //表单验证是否通过
+        if (bindingResult.hasErrors()) {
+            List<FieldError> list = bindingResult.getFieldErrors();
+            Map<String, Object> errorMap = new HashMap<>();
+            for (FieldError error : list) {
+                errorMap.put(error.getField(), error.getDefaultMessage());
+            }
+            System.out.println("errorMap = " + errorMap);
+        }
+
+        if (StringUtils.isBlank(modifyPasswordVO.getPassword())
+                || StringUtils.isBlank(modifyPasswordVO.getConfirmPassword())
+                || !modifyPasswordVO.getPassword().equals(modifyPasswordVO.getConfirmPassword()))
+            return getReturnMap(Boolean.FALSE, "两次输入的密码不一致", null);
 
         try {
-            Long id = SessionUser.getUserId();
-            Admin admin = adminService.getById(id);
-            if (!admin.getPassword()
-                    .equals(CryptographyUtil.cherishSha1(oldPassword))) {
-                return getReturnMap(ERROR_CODE, "密码认证错误", null);
+            User user = userService.findByUsername(ShiroUserUtil.getUsername());
+
+            if (!user.getPassword().equals(CryptographyUtil.cherishSha1(modifyPasswordVO.getOldPassword()))) {
+                return getReturnMap(Boolean.FALSE, "密码认证错误", null);
             }
-            admin.setPassword(CryptographyUtil.cherishSha1(password));
-            admin.setLastUpdateTime(date);
-            adminService.save(admin);
-            return getReturnMap(SUCCESS_CODE, "更改成功", null);
+            user.setPassword(CryptographyUtil.cherishSha1(modifyPasswordVO.getPassword()));
+            userService.update(user);
+
+            return getReturnMap(Boolean.TRUE, "更改成功", null);
         } catch (Exception e) {
             e.printStackTrace();
-            return getReturnMap(ERROR_CODE, "网络错误", null);
+            LOGGER.error("修改密码失败:{}", e.getMessage());
+            return getReturnMap(Boolean.FALSE, BUSY_MSG, null);
         }
-    }*/
+    }
 
 
 }

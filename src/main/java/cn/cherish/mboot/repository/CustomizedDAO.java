@@ -1,5 +1,9 @@
 package cn.cherish.mboot.repository;
 
+import cn.cherish.mboot.dal.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -75,6 +79,13 @@ public final class CustomizedDAO {
         return nativeQuery.executeUpdate() > 0;
     }
 
-
+    // TODO 自行封装Page just Demo
+    public Page<User> findByPageRequest(PageRequest pageRequest){
+        String sql = "FROM User AS u";
+        Query query = entityManager.createQuery(sql, User.class);
+        query.setFirstResult((pageRequest.getPageNumber()-1) * pageRequest.getPageSize());
+        query.setMaxResults(pageRequest.getPageSize());
+        return new PageImpl<>(query.getResultList(),pageRequest,2);
+    }
 
 }

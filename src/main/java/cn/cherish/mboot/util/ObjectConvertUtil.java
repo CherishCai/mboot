@@ -153,6 +153,43 @@ public class ObjectConvertUtil {
     }
 
     /**
+     * 判断对象的所有非静态属性是否为空或""
+     * @param obj 分析的对象
+     * @return 对象的所有非静态属性是否为空或""
+     */
+    public static boolean objectFieldIsBlank(Object obj) {
+        if (obj == null) return true;
+        Field[] fields = obj.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            //如果是final或static属性则跳过
+            int modifiers = field.getModifiers();
+            if (Modifier.isFinal(modifiers) || Modifier.isStatic(modifiers)){
+                continue;
+            }
+
+            String name = field.getName();
+            String method = name.substring(0, 1).toUpperCase() + name.substring(1, name.length());
+            String strGet = "get" + method;
+            Method methodGet;
+            try {
+                methodGet = obj.getClass().getDeclaredMethod(strGet);
+                Object object = methodGet.invoke(obj);
+                if (object == null ||
+                        (object instanceof String &&
+                        org.apache.commons.lang3.StringUtils.isBlank((String) object))
+                        ){
+                    continue;
+                }
+                //除了以上的null 和String的""空串，则非Blank
+                return false;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return true;
+    }
+
+    /**
      * 为对象（obj）继承直接父类的属性赋值
      *
      * @param <T> map

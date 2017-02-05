@@ -50,7 +50,12 @@ hr {
 /*-------------------------------
             LOGIN STYLES
 -------------------------------*/
-
+.field-error{
+    border: #e9151c;
+}
+.error-label{
+    color: #e9151c;
+}
 .login-body {
     background: #65cea7 url("/static/image/login-bg.jpg") no-repeat fixed;
     background-size: cover;
@@ -651,7 +656,7 @@ h5.left-nav-title {
 
 .notification-menu .dropdown-menu {
     border: 0;
-    margin-top: 0px;
+    margin-top: 0;
     -moz-border-radius: 2px 0 2px 2px;
     -webkit-border-radius: 2px 0 2px 2px;
     border-radius: 2px 0 2px 2px;
@@ -849,7 +854,7 @@ h5.left-nav-title {
     top: 0;
     left: 0;
     width: 240px;
-    /*z-index: 100;*/
+    z-index: 100;
     background: #424f63;
 
 }
@@ -863,7 +868,7 @@ h5.left-nav-title {
     top: 0;
     left: 240px;
     width: 100%;
-    /*z-index: 100;*/
+    z-index: 100;
 }
 
 .sticky-header .main-content {

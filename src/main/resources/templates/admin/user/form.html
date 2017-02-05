@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro"
+      layout:decorate="layout">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Cherish">
+    <title>新增员工</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <form id="messageForm" th:action="@{/user/save}" th:object="${user}"
+          action="/user/save" method="post">
+
+        <input type="hidden" th:field="*{id}"/>
+        <label for="nickname">呢称：</label>
+        <input type="text" id="nickname" th:field="*{nickname}"/>
+
+        <div class="form-actions">
+            <button class="btn btn-primary" type="submit">保存</button>
+        </div>
+    </form>
+</div>
+
+<div layout:fragment="javascript">
+    <script type="text/javascript">
+        //菜单的active
+        //你会算下标的,从零开始   0  >  0
+        jQuery('.active').removeClass('active');
+        $li = $('.sub-menu-list:eq(0)').find('> li:eq(0)');
+        $li.addClass('active');
+
+        jQuery('.nav-active').removeClass('nav-active');
+        $menuLi = $('.menu-list:eq(0)');
+        $menuLi.addClass('nav-active');
+
+    </script>
+</div>
+</body>
+</html>

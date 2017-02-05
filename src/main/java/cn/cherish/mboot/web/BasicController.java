@@ -1,6 +1,6 @@
 package cn.cherish.mboot.web;
 
-import cn.cherish.mboot.dal.entity.User;
+import cn.cherish.mboot.dal.vo.LoginVO;
 import cn.cherish.mboot.extra.shiro.CryptographyUtil;
 import cn.cherish.mboot.service.UserService;
 import cn.cherish.mboot.util.ValidateCode;
@@ -9,6 +9,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.util.WebUtils;
@@ -57,6 +58,7 @@ public class BasicController {
     /**
      * 管理页面
      */
+    @RequiresAuthentication
     @GetMapping(value = "admin")
     public String admin(){
         return "/admin/datapanel";
@@ -74,34 +76,41 @@ public class BasicController {
 	 * 执行登陆
 	 */
 	@PostMapping(value = "/login")
-	public ModelAndView login(@Validated User user, BindingResult msgResult, HttpServletRequest request){
+	public ModelAndView login(@Validated LoginVO loginVO, BindingResult bindingResult, HttpServletRequest request){
 
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.addObject("usernameBefore", user.getUsername());
-		modelAndView.addObject("passwordBefore", user.getPassword());
 		modelAndView.setViewName("/admin/login");
+        Map<String, Object> errorMap = new HashMap<>();
+        modelAndView.addObject("errorMap", errorMap);
 
 		String code = (String) request.getSession().getAttribute("validateCode");
 		String submitCode = WebUtils.getCleanParam(request, "validateCode");
 		//判断验证码
-		if (StringUtils.isEmpty(submitCode) || !StringUtils.equals(code,submitCode.toLowerCase())) {
+		if (StringUtils.isBlank(submitCode) || !StringUtils.equalsIgnoreCase(code,submitCode.toLowerCase())) {
 			log.debug("验证码不正确");
-			modelAndView.addObject("validateCodeError", "验证码不正确");
+            errorMap.put("validateCodeError", "验证码不正确");
+            //添加上表单输入数据返回给页面
+            modelAndView.addObject("usernameInput", loginVO.getUsername());
+            modelAndView.addObject("passwordInput", loginVO.getPassword());
 			return modelAndView;
 		}
 
 		//表单验证是否通过
-		if (msgResult.hasErrors()) {
-			List<FieldError> list = msgResult.getFieldErrors();
-			for (FieldError error : list) {
-				modelAndView.addObject(error.getField(), error.getDefaultMessage());
-			}
-			return modelAndView;
+		if (bindingResult.hasErrors()) {
+			List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+            for (FieldError error : fieldErrors) {
+                errorMap.put(error.getField(), error.getDefaultMessage());
+                log.debug("Login fieldErrors:{} -> {}", error.getField(), error.getDefaultMessage());
+            }
+            //添加上表单输入数据返回给页面
+            modelAndView.addObject("usernameInput", loginVO.getUsername());
+            modelAndView.addObject("passwordInput", loginVO.getPassword());
+            return modelAndView;
 		}
 
 		//实现登陆
 		UsernamePasswordToken token = new UsernamePasswordToken(
-				user.getUsername(), CryptographyUtil.cherishSha1(user.getPassword()));
+				loginVO.getUsername(), CryptographyUtil.cherishSha1(loginVO.getPassword()));
 		//token.setRememberMe(true);
 		Subject subject = SecurityUtils.getSubject();
 		
@@ -111,27 +120,29 @@ public class BasicController {
 
 			Session session = subject.getSession();
 			session.setAttribute("msg", "登陆成功");
-			session.setAttribute("username", user.getUsername());
+			session.setAttribute("username", loginVO.getUsername());
 
 		} catch (UnknownAccountException uae) {
 			log.debug("账户不存在!");
+            errorMap.put("username","账户或密码错误，请重新输入");
         } catch (IncorrectCredentialsException ice) {
-			log.debug("密码不正确!");
+            errorMap.put("username","账户或密码错误，请重新输入");
+            log.debug("密码不正确!");
         } catch (LockedAccountException lae) {
-			log.debug("账户被禁了!");
-		}catch(ExcessiveAttemptsException eae){
+			log.debug("账户被冻结!");
+            errorMap.put("username","该账户被冻结");
+        }catch(ExcessiveAttemptsException eae){
 			log.debug("错误次数过多");
+            errorMap.put("username","密码错误次数过多，请稍后再试");
         } catch (AuthenticationException ae) {
         	token.clear();
-			log.debug("认证错误!");
+            errorMap.put("username","系统认证错误");
+            log.debug("认证错误!");
 		}
 
 		if (subject.isAuthenticated()){
 			log.debug("登录认证通过(这里可以进行一些认证通过后的一些系统参数初始化操作)");
 			modelAndView.setViewName("redirect:/admin");
-		}else{
-			token.clear();
-			modelAndView.setViewName("redirect:/admin/login");
 		}
 
 		return modelAndView;

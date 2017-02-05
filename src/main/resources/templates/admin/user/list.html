@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="Cherish">
-    <title>员工信息</title>
+    <title>员工列表</title>
 
 </head>
 <body>
@@ -133,6 +133,7 @@
 <!--将被layout引入的js-->
 <div layout:fragment="javascript">
     <script type="text/javascript">
+        //菜单的active
         //你会算下标的,从零开始   0  >  0
         jQuery('.active').removeClass('active');
         $li = $('.sub-menu-list:eq(0)').find('> li:eq(0)');
