@@ -9,6 +9,15 @@ Author: Cherish
 /*
 @import url(http://fonts.useso.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic);
 */
+.field-error{
+    border: #e9151c;
+}
+.error-label{
+    color: #e9151c;
+}
+.success-label{
+    color: #12e991;
+}
 body {
     background: #424f63;
     font-family: 'Open Sans', sans-serif;
@@ -50,12 +59,7 @@ hr {
 /*-------------------------------
             LOGIN STYLES
 -------------------------------*/
-.field-error{
-    border: #e9151c;
-}
-.error-label{
-    color: #e9151c;
-}
+
 .login-body {
     background: #65cea7 url("/static/image/login-bg.jpg") no-repeat fixed;
     background-size: cover;
@@ -910,6 +914,7 @@ h5.left-nav-title {
 
 .main-content {
     margin-left: 240px;
+    /*background: #ffffff;*/
     background: #eff0f4;
     /*min-height: 500px;*/
 }

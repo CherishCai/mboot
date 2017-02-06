@@ -30,7 +30,7 @@
                             </div>
                             <!-- /input-group -->
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <div class="input-group">
 										<span class="input-group-addon"> <label for="nick">姓名：</label>
 										</span> <input name="nickname" id="nick" type="text"
@@ -39,7 +39,7 @@
                             <!-- /input-group -->
                         </div>
 
-                        <div class="col-sm-4">
+                        <div class="col-sm-5">
                             <div class="input-group">
                                 <button id="btn_search" type="button" class="btn btn-primary">
                                     <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
@@ -69,10 +69,10 @@
                 <section class="panel">
                     <header class="panel-heading">
                         员工信息表格
-                        <span class="tools pull-right">
+                        <!--<span class="tools pull-right">
 								<a href="javascript:;" class="fa fa-chevron-down"></a>
 								<a href="javascript:;" class="fa fa-times"></a>
-							</span>
+							</span>-->
                     </header>
                     <div class="panel-body">
                         <button type="button" id="otable_new" class="btn btn-primary">添加 <i class="fa fa-plus"></i>
@@ -85,7 +85,7 @@
                                 <th>姓名</th>
                                 <th>手机号码</th>
                                 <th>入职时间</th>
-                                <th>职位</th>
+                                <th>角色</th>
                                 <th>创建时间</th>
                                 <th>登陆账号</th>
                                 <th>状态</th>
@@ -98,7 +98,7 @@
                                 <th>姓名</th>
                                 <th>手机号码</th>
                                 <th>入职时间</th>
-                                <th>职位</th>
+                                <th>角色</th>
                                 <th>创建时间</th>
                                 <th>登陆账号</th>
                                 <th>状态</th>
@@ -111,7 +111,7 @@
                                 <td>姓名</td>
                                 <td>手机号码</td>
                                 <th>入职时间</th>
-                                <th>职位</th>
+                                <th>角色</th>
                                 <td>创建时间</td>
                                 <td>登陆账号</td>
                                 <th>状态</th>
@@ -133,15 +133,18 @@
 <!--将被layout引入的js-->
 <div layout:fragment="javascript">
     <script type="text/javascript">
-        //菜单的active
-        //你会算下标的,从零开始   0  >  0
-        jQuery('.active').removeClass('active');
-        $li = $('.sub-menu-list:eq(0)').find('> li:eq(0)');
-        $li.addClass('active');
+        $(function () {
 
-        jQuery('.nav-active').removeClass('nav-active');
-        $menuLi = $('.menu-list:eq(0)');
-        $menuLi.addClass('nav-active');
+            //菜单的active
+            //你会算下标的,从零开始   0  >  0
+            jQuery('.left-side .active').removeClass('active');
+            $li = $('.left-side .sub-menu-list:eq(0)').find('> li:eq(0)');
+            $li.addClass('active');
+
+            jQuery('.left-side .nav-active').removeClass('nav-active');
+            $menuLi = $('.left-side .menu-list:eq(0)');
+            $menuLi.addClass('nav-active');
+        });
 
     </script>
     <script src="/static/js/admin/dataTableConstant.js" type="text/javascript"></script>

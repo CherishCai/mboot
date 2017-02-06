@@ -1,9 +1,12 @@
 package cn.cherish.mboot.dal.vo;
 
 import lombok.Data;
-import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
 
@@ -33,30 +36,29 @@ public class UserVO implements java.io.Serializable {
      * @NotEmpty   被注释的字符串的必须非空
      * @Range(min=,max=,message=)  被注释的元素必须在合适的范围内
      */
+    @Min(value = 1, message = "{user.id}")
     private Long id;
 
-    @NotBlank(message ="{user.username}")
-    @Pattern(regexp="^(?![0-9]+$)[0-9A-Za-z]{6,10}$", message="{user.username}")
+    @Pattern(regexp="^(?![0-9]+$)[0-9A-Za-z]{6,10}$", message="账号必须是6~16位字母和数字的组合")
     private String username;
 
-    @Pattern(regexp="^(?![0-9]+$)[0-9A-Za-z]{6,10}$", message="{user.password}")
+    @Pattern(regexp="^(?![0-9]+$)[0-9A-Za-z]{6,10}$", message="密码必须是6~16位字母和数字的组合")
     private String password;
 
+    @Length(min = 1 ,max = 16 ,message = "{user.nickname}")
     private String nickname;
 
+    @Pattern(regexp = "^[1][34578][0-9]{9}$", message = "请输入正确的手机号码")
     private String telephone;
 
-    @DateTimeFormat(pattern="yyyy-MM-dd",iso = DateTimeFormat.ISO.DATE_TIME)
+    @DateTimeFormat(pattern="yyyy-MM-dd",iso = DateTimeFormat.ISO.DATE)
+    @Past(message = "入职时间该在今天之前")
     private Date hiredate;
 
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm",iso = DateTimeFormat.ISO.DATE_TIME)
-    private Date createdTime;
+    @Range(min = 0, max = 1, message = "{user.active}")
+    private Integer active;
 
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm",iso = DateTimeFormat.ISO.DATE_TIME)
-    private Date modifiedTime;
-
-    private String active;
-
+    @Length(min = 0, max = 1024, message = "{user.description}")
     private String description;
 
 }

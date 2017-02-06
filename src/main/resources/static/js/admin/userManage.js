@@ -49,19 +49,13 @@
 			    }, {
 					"data" : 'hiredate'
                 }, {
-                    "data" : 'roleId',
-                    "render" : function (data, type, row, meta) {
-                        return roleHTML(data);
-                    }
+                    "data" : 'roleStr'
 				}, {
 					"data" : 'createdTime'
 				}, {
 					"data" : 'username'
 				}, {
-					"data" : 'active',
-					"render" : function (data, type, row, meta) {
-                        return activeHTML(data);
-                    }
+					"data" : 'activeStr'
 				},
 				CONSTANT.DATA_TABLES.COLUMN.OPERATION
 				],
@@ -125,13 +119,13 @@
 					param.orderColumn = "telephone";
 					break;
 				case 3:
-					param.orderColumn = "createtime";
+					param.orderColumn = "hiredate";
 					break;
 				case 4:
 					param.orderColumn = "username";
 					break;
 				default:
-					param.orderColumn = "createtime";
+					param.orderColumn = "id";
 					break;
 				}
 				param.orderDir = data.order[0].dir;
@@ -157,14 +151,15 @@
 	 //新增行
     $('#otable_new').on('click', function (e) {
         e.preventDefault();
-
+        var url = "/user/add";
+        window.open(url, "_self");
     });
 
     //表格行删除操作
     $('#otable').on('click', 'a.op_delete', function (e) {
         e.preventDefault();
 
-        window.top.myConfirm("你确定要删除吗?",function(){
+        myConfirm("你确定要删除吗?",function(){
             var nRow = $(this).parents('tr')[0];
             var id = oTable.row(nRow).id();
             //向服务器提交删除请求
@@ -172,11 +167,11 @@
             var result = delAjax(url);
 
             if(result.success){
-                window.top.myModalSuccess(result.message);
+                myModalSuccess(result.message);
                 //删除页面中的原有行
                 oTable.row(nRow).remove().draw(false);
             }else{
-                window.top.myModalFail(result.message);
+                myModalFail(result.message);
             }
         });
 
@@ -187,127 +182,7 @@
         e.preventDefault();
         /* Get the row as a parent of the link that was clicked on */
         var nRow = $(this).parents('tr')[0];
-
-        editRow(oTable, nRow);
+        var id = oTable.row(nRow).id();
+        var url = "/user/" + id;
+        window.open(url, "_self");
     });
-
-    //编辑，打开模态框
-    function editRow(oTable, nRow) {
-        var rowData = oTable.row(nRow).data();
-
-        var bodyHTML = '<input type="hidden" id="id_modal" value="'+rowData.id+'">'
-                   +'姓名：'
-                   +'<input type="text" id="nickname_modal" class="form-control" placeholder="员工姓名" value="'+rowData.nickname+'">'
-                   +'手机：'
-                   +'<input type="text" id="telephone_modal" class="form-control" placeholder="员工手机号" value="'+rowData.telephone+'">'
-                   +'入职时间：'
-                   +'<input type="text" id="createtime_modal" class="form-control" placeholder="入职时间" value="'+rowData.createtime+'">'
-                   +'登陆账号：'
-                   +'<input type="text" id="username_modal" class="form-control" readonly value="'+rowData.username+'">'
-                   +'登陆密码：'
-                   +'<input type="text" id="password_modal" class="form-control" placeholder="默认不显示，若要修改请填写新密码" value="">'
-                   +'职业：'
-                   +roleSelect(rowData.roleId)
-                   +'状态：'
-                   +activeSelect(rowData.active)
-                   +'描述：'
-                   +window.top.toolbar()
-                   +'<div id="editor" contenteditable="true">'+rowData.description+'</div>'
-                   +'';
-        window.top.myEditModal(bodyHTML,function(){
-            var id = window.top.$("#id_modal").val();
-            var nickname = window.top.$("#nickname_modal").val();
-            var telephone = window.top.$("#telephone_modal").val();
-            var createtime = window.top.$("#createtime_modal").val();
-            var username = window.top.$("#username_modal").val();
-            var password = window.top.$("#password_modal").val();
-            var roleId = window.top.$("#roleId :selected").val();
-            var active = window.top.$("#active :selected").val();
-            var description = window.top.$("#editor").html();
-
-            var json = {};
-            json.id = id;
-            json.nickname = nickname;
-            json.telephone = telephone;
-            json.createtime = createtime;
-            json.username = username;
-            json.password = password;
-            json.roleId = roleId;
-            json.active = active;
-            json.description = description;
-
-            var url = "/user/edit";
-            var result = postAjax(url, json);
-
-            if(result.success){
-                window.top.myModalSuccess(result.message);
-                oTable.draw(false);
-                return true;
-            }else{
-                window.top.myModalFail(result.message);
-                return false;
-            }
-        });
-    }
-
-	function roleHTML(roleId){
-	    var s = "<span style='color:#CC0000'>前台人员</span>";
-    		if(1 == roleId)
-    			s = "<span style='color:blue;font-weight:blod;'>管理员</span>";
-    		else if(2 == roleId)
-    			s = "<span style='color:#009900;font-weight:blod;'>推拿师</span>";
-    		else
-    			s = "<span style='color:#CC0000;font-weight:blod;'>前台人员</span>";
-    		return s;
-	}
-
-	function roleSelect(roleId){
-	    var s = '<select name="roleId" id="roleId" class="form-control">'
-            if(1 == roleId){
-                s += '<option value="1" selected>管理员</option>'
-                      +'<option value="2">推拿师</option>'
-                      +'<option value="3">前台人员</option>';
-            }
-            else if(2 == roleId){
-                s += '<option value="1">管理员</option>'
-                          +'<option value="2" selected>推拿师</option>'
-                          +'<option value="3">前台人员</option>';
-            }
-            else{
-                s += '<option value="1" selected>管理员</option>'
-                      +'<option value="2">推拿师</option>'
-                      +'<option value="3" selected>前台人员</option>';
-            }
-            s +='</select>';
-            return s;
-	}
-
-	function activeHTML(isActive){
-		var s = "<span style='color:#000000'>冻结/已离职</span>";
-		if(0 == isActive)
-			s = "<span style='color:#000000;font-weight:blod;'>冻结/已离职</span>";
-		else if(1 == isActive)
-			s = "<span style='color:#009900;font-weight:blod;'>激活/在职</span>";
-		else
-			s = "<span style='color:#CC0000;font-weight:blod;'>未知</span>";
-		return s;
-	}
-
-	function activeSelect(active){
-        var s = '<select name="active" id="active" class="form-control">'
-        if("0" == active){
-            s += '<option value="0" selected>冻结/离职</option>'
-                 +'<option value="1">激活/在职</option>';
-        }
-        else if("1" == active){
-            s += '<option value="0">冻结/离职</option>'
-                 +'<option value="1" selected>激活/在职</option>';
-        }
-        else{
-            s += +'<option value="">请选择</option>'
-                 +'<option value="0">冻结/离职</option>'
-                 +'<option value="1">激活/在职</option>';
-        }
-        s +='</select>';
-        return s;
-    }

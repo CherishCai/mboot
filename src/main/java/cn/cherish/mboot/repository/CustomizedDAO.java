@@ -54,7 +54,7 @@ public final class CustomizedDAO {
     /**
      * 冻结用户
      * @param userId 用户ID
-     * @return 是否冻结成功
+     * @return 是否成功
      */
     @Transactional(readOnly = false)
     public boolean freezeUser(Long userId){

@@ -1,5 +1,6 @@
 package cn.cherish.mboot.config;
 
+import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import cn.cherish.mboot.extra.shiro.MShiroFilterFactoryBean;
 import cn.cherish.mboot.extra.shiro.MShiroRealm;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,14 @@ import java.util.Map;
 @Slf4j
 @Configuration
 public class ShiroConfiguration {
+
+    /**
+     * ShiroDialect，为了在thymeleaf里使用shiro的标签的bean
+     */
+    @Bean
+    public ShiroDialect shiroDialect() {
+        return new ShiroDialect();
+    }
 
     @Bean
     public EhCacheManager getEhCacheManager() {
@@ -69,7 +78,7 @@ public class ShiroConfiguration {
         // 如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
         shiroFilterFactoryBean.setLoginUrl("/login");
         // 登录成功后要跳转的连接
-        shiroFilterFactoryBean.setSuccessUrl("/user");
+        shiroFilterFactoryBean.setSuccessUrl("/admin");
         shiroFilterFactoryBean.setUnauthorizedUrl("/403");
 
         loadShiroFilterChain(shiroFilterFactoryBean/*, permissionDao*/);
@@ -84,13 +93,19 @@ public class ShiroConfiguration {
         //TODO
         /////////////////////// 下面这些规则配置最好配置到配置文件中 ///////////////////////
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
-        // authc：该过滤器下的页面必须验证后才能访问，它是Shiro内置的一个拦截器org.apache.shiro.web.filter.authc.FormAuthenticationFilter
-        filterChainDefinitionMap.put("/user", "authc");// 这里为了测试，只限制/user，实际开发中请修改为具体拦截的请求规则
-        // anon：它对应的过滤器里面是空的,什么都没做
+        /*
+            authc：该过滤器下的页面必须验证后才能访问，
+        // 它是Shiro内置的一个拦截器org.apache.shiro.web.filter.authc.FormAuthenticationFilter
+            anon：它对应的过滤器里面是空的,什么都没做
+            注：anon，authcBasic，auchc，user是认证过滤器，
+            perms，roles，ssl，rest，port是授权过滤器
+         */
+        filterChainDefinitionMap.put("/admin/**", "authc");
         log.info("##################从数据库读取权限规则，加载到shiroFilter中##################");
         // 这里为了测试，固定写死的值，也可以从数据库或其他配置中读取
-        filterChainDefinitionMap.put("/user/edit/**", "authc,perms[user:edit]");
 
+        // user：org.apache.shiro.web.filter.authc.UserFilter
+        filterChainDefinitionMap.put("/user/**", "user");
         filterChainDefinitionMap.put("/login", "anon");
         filterChainDefinitionMap.put("/logout", "logout");
         filterChainDefinitionMap.put("/**", "anon");

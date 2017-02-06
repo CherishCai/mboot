@@ -9,7 +9,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
-import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.util.WebUtils;
@@ -52,16 +51,15 @@ public class BasicController {
      */
     @GetMapping(value = {"/","/index"})
     public String index(){
-        return "/index";
+        return "index";
     }
 
     /**
      * 管理页面
      */
-    @RequiresAuthentication
     @GetMapping(value = "admin")
     public String admin(){
-        return "/admin/datapanel";
+        return "admin/datapanel";
     }
 
 	/**
@@ -69,7 +67,7 @@ public class BasicController {
 	 */
 	@GetMapping(value = "/login")
 	public String login(){
-		return "/admin/login";
+		return "admin/login";
 	}
 	
 	/**
@@ -79,7 +77,7 @@ public class BasicController {
 	public ModelAndView login(@Validated LoginVO loginVO, BindingResult bindingResult, HttpServletRequest request){
 
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("/admin/login");
+		modelAndView.setViewName("admin/login");
         Map<String, Object> errorMap = new HashMap<>();
         modelAndView.addObject("errorMap", errorMap);
 
@@ -105,44 +103,44 @@ public class BasicController {
             //添加上表单输入数据返回给页面
             modelAndView.addObject("usernameInput", loginVO.getUsername());
             modelAndView.addObject("passwordInput", loginVO.getPassword());
-            return modelAndView;
-		}
 
-		//实现登陆
-		UsernamePasswordToken token = new UsernamePasswordToken(
-				loginVO.getUsername(), CryptographyUtil.cherishSha1(loginVO.getPassword()));
-		//token.setRememberMe(true);
-		Subject subject = SecurityUtils.getSubject();
-		
-		try {
-			//subject.login(token);就会调用 ShiroRealm的 doGetAuthenticationInfo方法
-			subject.login(token);
+		}else {
+			//实现登陆
+			UsernamePasswordToken token = new UsernamePasswordToken(
+					loginVO.getUsername(), CryptographyUtil.cherishSha1(loginVO.getPassword()));
+			//token.setRememberMe(true);
+			Subject subject = SecurityUtils.getSubject();
 
-			Session session = subject.getSession();
-			session.setAttribute("msg", "登陆成功");
-			session.setAttribute("username", loginVO.getUsername());
+			try {
+				//subject.login(token);就会调用 ShiroRealm的 doGetAuthenticationInfo方法
+				subject.login(token);
 
-		} catch (UnknownAccountException uae) {
-			log.debug("账户不存在!");
-            errorMap.put("username","账户或密码错误，请重新输入");
-        } catch (IncorrectCredentialsException ice) {
-            errorMap.put("username","账户或密码错误，请重新输入");
-            log.debug("密码不正确!");
-        } catch (LockedAccountException lae) {
-			log.debug("账户被冻结!");
-            errorMap.put("username","该账户被冻结");
-        }catch(ExcessiveAttemptsException eae){
-			log.debug("错误次数过多");
-            errorMap.put("username","密码错误次数过多，请稍后再试");
-        } catch (AuthenticationException ae) {
-        	token.clear();
-            errorMap.put("username","系统认证错误");
-            log.debug("认证错误!");
-		}
+				Session session = subject.getSession();
+				session.setAttribute("msg", "登陆成功");
+				session.setAttribute("username", loginVO.getUsername());
 
-		if (subject.isAuthenticated()){
-			log.debug("登录认证通过(这里可以进行一些认证通过后的一些系统参数初始化操作)");
-			modelAndView.setViewName("redirect:/admin");
+			} catch (UnknownAccountException uae) {
+				log.debug("账户不存在!");
+				errorMap.put("username","账户或密码错误，请重新输入");
+			} catch (IncorrectCredentialsException ice) {
+				errorMap.put("username","账户或密码错误，请重新输入");
+				log.debug("密码不正确!");
+			} catch (LockedAccountException lae) {
+				log.debug("账户被冻结!");
+				errorMap.put("username","该账户被冻结");
+			}catch(ExcessiveAttemptsException eae){
+				log.debug("错误次数过多");
+				errorMap.put("username","密码错误次数过多，请稍后再试");
+			} catch (AuthenticationException ae) {
+				token.clear();
+				errorMap.put("username","系统认证错误");
+				log.debug("认证错误!");
+			}
+
+			if (subject.isAuthenticated()){
+				log.debug("登录认证通过(这里可以进行一些认证通过后的一些系统参数初始化操作)");
+				modelAndView.setViewName("redirect:/admin");
+			}
 		}
 
 		return modelAndView;
@@ -151,7 +149,7 @@ public class BasicController {
 	@GetMapping("/403")
 	public String unauthorizedRole(){
 		log.debug("------没有权限-------");
-		return "403";
+		return "/error/403";
 	}
 	
 	/**

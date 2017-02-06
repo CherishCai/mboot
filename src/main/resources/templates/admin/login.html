@@ -35,18 +35,18 @@
         <!--<p th:text="${#request.getAttribute('errorMap')}"> errorMap中有什么属性</p>-->
 
         <div class="login-wrap">
-            <input type="text" name="username" class="form-control" placeholder="用户名" autofocus
-                   th:class="'field-error form-control'" th:value="${usernameInput}">
-                <label class="error-label" th:if="${errorMap}" th:text="${errorMap['username']}"></label>
+            <input type="text" name="username" class="form-control" placeholder="登录名" autofocus
+                   required minlength="6" maxlength="16" th:value="${usernameInput}">
+                <label class="error-label" th:text="${errorMap} ? ${errorMap['username']}"></label>
 
             <input type="password" name="password" class="form-control" placeholder="密码"
-                   th:class="'field-error form-control'" th:value="${passwordInput}">
-                <label class="error-label" th:if="${errorMap}" th:text="${errorMap['password']}"></label>
+                   required minlength="6" maxlength="16" th:value="${passwordInput}">
+                <label class="error-label" th:text="${errorMap} ? ${errorMap['password']}"></label>
 
             <input type="text" name="validateCode" class="form-control" placeholder="验证码"
-                   th:class="'field-error'" >
+                   required minlength="4" maxlength="4">
                 <img src="/validateCode">
-                <label class="error-label" th:if="${errorMap}" th:text="${errorMap['validateCodeError']}"></label>
+                <label class="error-label" th:text="${errorMap} ? ${errorMap['validateCodeError']}"></label>
 
 
             <button class="btn btn-lg btn-login btn-block" type="submit">
@@ -71,7 +71,7 @@
                     </div>
                     <div class="modal-body">
                         <p>Enter your e-mail address below to reset your password.</p>
-                        <input type="text" name="email" placeholder="邮箱"
+                        <input type="email" name="email" placeholder="邮箱"
                                autocomplete="off" class="form-control placeholder-no-fix">
 
                     </div>

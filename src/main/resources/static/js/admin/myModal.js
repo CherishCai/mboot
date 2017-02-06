@@ -59,7 +59,7 @@ $(document).ready(function() {
 
 //自行封装的模态框调用函数
 function myModalWarning(warningBody){
-	myModal("white","#FF9900",'警告',warningBody);
+	myModal("white","#FF9900",'提示',warningBody);
 }
 function myModalSuccess(successBody){
 	myModal("white","#00CC00",'成功',successBody);

@@ -33,10 +33,10 @@ public class LoginVO implements java.io.Serializable {
      */
 
     @NotBlank(message ="{user.username}")
-    @Pattern(regexp="^(?![0-9]+$)[0-9A-Za-z]{6,10}$", message="账号必须是6~16位数字和字母的组合")
+    @Pattern(regexp="^(?![0-9]+$)[0-9A-Za-z]{6,10}$", message="账号必须是6~16位字母和数字的组合")
     private String username;
 
-    @Pattern(regexp="^(?![0-9]+$)[0-9A-Za-z]{6,10}$", message="密码必须是6~16位数字和字母的组合")
+    @Pattern(regexp="^(?![0-9]+$)[0-9A-Za-z]{6,10}$", message="密码必须是6~16位字母和数字的组合")
     private String password;
 
 }
