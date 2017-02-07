@@ -37,12 +37,14 @@ public class ShiroConfiguration {
         return em;
     }
 
+    /**
+    *@see cn.cherish.mboot.extra.shiro.MShiroRealm
     @Bean(name = "mShiroRealm")
     public MShiroRealm mShiroRealm(EhCacheManager cacheManager) {
         MShiroRealm realm = new MShiroRealm();
         realm.setCacheManager(cacheManager);
         return realm;
-    }
+    }*/
 
     /**
      * 注册DelegatingFilterProxy（Shiro） 以前是在web.xml中的配置

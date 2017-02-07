@@ -1,14 +1,12 @@
 package cn.cherish.mboot.service;
 
 import cn.cherish.mboot.dal.dto.UserDTO;
-import cn.cherish.mboot.dal.entity.Role;
 import cn.cherish.mboot.dal.entity.User;
 import cn.cherish.mboot.dal.vo.BasicSearchVO;
-import cn.cherish.mboot.dal.vo.UserSaveVO;
-import cn.cherish.mboot.dal.vo.UserSearchVO;
-import cn.cherish.mboot.dal.vo.UserUpdateVO;
+import cn.cherish.mboot.dal.vo.user.UserSaveVO;
+import cn.cherish.mboot.dal.vo.user.UserSearchVO;
+import cn.cherish.mboot.dal.vo.user.UserUpdateVO;
 import cn.cherish.mboot.extra.shiro.CryptographyUtil;
-import cn.cherish.mboot.repository.CustomizedDAO;
 import cn.cherish.mboot.repository.IBaseDAO;
 import cn.cherish.mboot.repository.UserDAO;
 import cn.cherish.mboot.util.ObjectConvertUtil;
@@ -29,14 +27,13 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@Transactional(readOnly = true)
 @CacheConfig(cacheNames = "users")
+@Transactional(readOnly = true)
 public class UserService extends ABaseService<User, Long> {
 
     @Autowired
     private UserDAO userDAO;
-    @Autowired
-    private CustomizedDAO customizedDAO;
+
     private static final String UNKNOW = "未知";
     private static final String AC = "激活/在职";
     private static final String UN = "冻结/离职";
@@ -46,38 +43,53 @@ public class UserService extends ABaseService<User, Long> {
         return userDAO;
     }
 
-    @Cacheable(key="'username_' + #username", unless = "#result==null")
+    @Cacheable(key = "'username_' + #username", unless = "#result==null")
     public User findByUsername(String username) {
+        log.debug("username_{}没有缓存", username);
         return userDAO.findByUsername(username);
+    }
+
+    public boolean exist(String username) {
+        return userDAO.findByUsername(username) != null;
+    }
+
+    @Cacheable(key = "'countAllUser'")
+    public Long getCount() {
+        log.debug("countAllUser没有缓存");
+        return userDAO.count();
     }
 
     @Transactional(readOnly = false)
     @CacheEvict(allEntries = true)
-    public void delete(Long userId) {
-        // TODO 并不是真正的删除，只是改变数据库里某个状态
-        //customizedDAO.freezeUser(userId);
-        User user = this.findById(userId);
+    public void delete(Long id) {
+        // 并不是真正的删除，只是冻结账户
+        User user = findById(id);
         user.setActive(0);
-        this.update(user);
+        update(user);
     }
 
     @Transactional
     @CacheEvict(allEntries = true)
     public void updateByVO(UserUpdateVO userUpdateVO) {
-        User user = this.findById(userUpdateVO.getId());
+        User user = findById(userUpdateVO.getId());
         ObjectConvertUtil.objectCopy(user, userUpdateVO);
         user.setModifiedTime(new Date());
-        this.update(user);
+        update(user);
     }
 
     @Transactional
     public void saveByVO(UserSaveVO userSaveVO) {
+
+        if (exist(userSaveVO.getUsername())) {
+            return;
+        }
+
         User user = new User();
         ObjectConvertUtil.objectCopy(user, userSaveVO);
         user.setCreatedTime(new Date());
         user.setModifiedTime(new Date());
         user.setPassword(CryptographyUtil.cherishSha1(user.getPassword()));
-        this.save(user);
+        save(user);
     }
 
     public Page<UserDTO> findAll(UserSearchVO userSearchVO, BasicSearchVO basicSearchVO) {
@@ -92,17 +104,12 @@ public class UserService extends ABaseService<User, Long> {
             List<UserDTO> userDTOList = userList.stream().map(source -> {
                 UserDTO userDTO = new UserDTO();
                 ObjectConvertUtil.objectCopy(userDTO, source);
-                String roleStr = "";
-                for (Role r : source.getRoles()) {
-                    roleStr += r.getName();
-                }
-                userDTO.setRoleStr(roleStr);
                 userDTO.setActiveStr(source.getActive() == null ? UNKNOW : source.getActive() == 1 ? AC : UN);
                 return userDTO;
             }).collect(Collectors.toList());
 
             //为了计算总数使用缓存，加快搜索速度
-            Long count = this.getCount();
+            Long count = getCount();
             return new PageImpl<>(userDTOList, pageRequest, count);
         }
 
@@ -113,25 +120,10 @@ public class UserService extends ABaseService<User, Long> {
         return userPage.map(source -> {
             UserDTO userDTO = new UserDTO();
             ObjectConvertUtil.objectCopy(userDTO, source);
-            String roleStr = "";
-            for (Role r : source.getRoles()) {
-                roleStr += r.getName();
-            }
-            userDTO.setRoleStr(roleStr);
             userDTO.setActiveStr(source.getActive() == null ? UNKNOW : source.getActive() == 1 ? AC : UN);
             return userDTO;
         });
 
     }
-
-    public boolean exist(String username){
-        return userDAO.findByUsername(username) != null;
-    }
-
-    @Cacheable(key = "'countAllUser'")
-    public Long getCount() {
-        return userDAO.count();
-    }
-
 
 }

@@ -37,7 +37,10 @@ public class User implements java.io.Serializable {
     @Column(name = "telephone", nullable = false, length = 16)
     private String telephone;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "position", nullable = false, length = 16)
+    private String position;
+
+    @Temporal(TemporalType.DATE)
     @Column(name = "hiredate", nullable = false, length = 19)
     private Date hiredate;
 
@@ -56,20 +59,11 @@ public class User implements java.io.Serializable {
     private String description;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "t_user_role", joinColumns = {
             @JoinColumn(name = "user_id", nullable = false)}, inverseJoinColumns = {
             @JoinColumn(name = "role_id", nullable = false)})
     private List<Role> roles = new ArrayList<>();
-
-    @Transient
-    public Set<String> getRolesName() {
-        Set<String> rolesName = new HashSet<>();
-        for(Role role: this.roles){
-            rolesName.add(role.getName());
-        }
-        return rolesName;
-    }
 
     @Override
     public String toString() {

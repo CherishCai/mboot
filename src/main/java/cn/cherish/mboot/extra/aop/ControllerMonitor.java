@@ -9,11 +9,11 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Aspect
 @Component
-public class ServiceMonitor {
+public class ControllerMonitor {
 
-	@After("execution(* cn.cherish.mboot.service..*Service.*(..))")
+	@After("execution(* cn.cherish.mboot.web..*Controller.*(..))")
 	public void logServiceAccess(JoinPoint joinPoint) {
-		log.info("Completed: " + joinPoint);
+		log.info("ControllerMonitor: " + joinPoint);
 	}
 
 }

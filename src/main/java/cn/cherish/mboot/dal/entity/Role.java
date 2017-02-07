@@ -35,21 +35,11 @@ public class Role implements java.io.Serializable {
 	private List<User> users = new ArrayList<>();
 
 	@JsonIgnore
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "t_role_permission", joinColumns = {
 			@JoinColumn(name = "role_id", nullable = false) }, inverseJoinColumns = {
 			@JoinColumn(name = "permission_id", nullable = false) })
 	private List<Permission> permissions = new ArrayList<>();
-
-
-	@Transient
-    public Collection<String> getPermits() {
-		Set<String> permissionsName = new HashSet<>();
-		for(Permission permission: this.permissions){
-			permissionsName.add(permission.getPermit());
-		}
-        return permissionsName;
-    }
 
     @Override
     public String toString() {

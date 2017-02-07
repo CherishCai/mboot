@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="Cherish">
-    <title>员工列表</title>
+    <title>用户列表</title>
 
 </head>
 <body>
@@ -68,7 +68,7 @@
             <div class="col-sm-12">
                 <section class="panel">
                     <header class="panel-heading">
-                        员工信息表格
+                        用户列表
                         <!--<span class="tools pull-right">
 								<a href="javascript:;" class="fa fa-chevron-down"></a>
 								<a href="javascript:;" class="fa fa-times"></a>
@@ -84,9 +84,8 @@
                                 <th>序号</th>
                                 <th>姓名</th>
                                 <th>手机号码</th>
+                                <th>职位</th>
                                 <th>入职时间</th>
-                                <th>角色</th>
-                                <th>创建时间</th>
                                 <th>登陆账号</th>
                                 <th>状态</th>
                                 <th>操作</th>
@@ -97,9 +96,8 @@
                                 <th>序号</th>
                                 <th>姓名</th>
                                 <th>手机号码</th>
+                                <th>职位</th>
                                 <th>入职时间</th>
-                                <th>角色</th>
-                                <th>创建时间</th>
                                 <th>登陆账号</th>
                                 <th>状态</th>
                                 <th>操作</th>
@@ -110,9 +108,8 @@
                                 <td>序号</td>
                                 <td>姓名</td>
                                 <td>手机号码</td>
+                                <th>职位</th>
                                 <th>入职时间</th>
-                                <th>角色</th>
-                                <td>创建时间</td>
                                 <td>登陆账号</td>
                                 <th>状态</th>
                                 <th>操作</th>
@@ -134,16 +131,11 @@
 <div layout:fragment="javascript">
     <script type="text/javascript">
         $(function () {
-
             //菜单的active
-            //你会算下标的,从零开始   0  >  0
-            jQuery('.left-side .active').removeClass('active');
-            $li = $('.left-side .sub-menu-list:eq(0)').find('> li:eq(0)');
-            $li.addClass('active');
-
-            jQuery('.left-side .nav-active').removeClass('nav-active');
-            $menuLi = $('.left-side .menu-list:eq(0)');
-            $menuLi.addClass('nav-active');
+            $('.custom-nav .nav-active').removeClass('nav-active');
+            $('.custom-nav .active').removeClass('active');
+            $("#userMenu").addClass("nav-active");
+            $("#userLi").addClass("active");
         });
 
     </script>

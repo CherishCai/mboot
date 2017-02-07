@@ -34,7 +34,7 @@
                 <section class="panel">
                     <div class="panel-body">
                         <div class=" form">
-                            <form class="cmxform form-horizontal adminex-form" id="commentForm"
+                            <form class="cmxform form-horizontal adminex-form" id="userForm"
                                   method="post" th:action="@{/user/save}" >
 
                                 <div class="form-group">
@@ -92,8 +92,8 @@
                                 <div class="form-group">
                                     <label for="hiredate" class="control-label col-md-2 col-sm-2">入职时间：</label>
                                     <div class="col-md-8 col-sm-8">
-                                        <input type="date" id="hiredate" name="hiredate" class="form-control"
-                                               placeholder="入职时间" required
+                                        <input type="text" id="hiredate" name="hiredate" class="form-control"
+                                               placeholder="入职时间" data-mask="2099-99-99" required
                                                th:value="${user} ? ${#dates.format(user.hiredate,'yyyy-MM-dd')}
                                                                     : ${#dates.format(#dates.createNow(),'yyyy-MM-dd')}"/>
                                         <p class="help-block">
@@ -159,14 +159,10 @@
     <script type="text/javascript">
         $(function () {
             //菜单的active
-            //你会算下标的,从零开始   0  >  0
-            jQuery('.left-side .active').removeClass('active');
-            $li = $('.left-side .sub-menu-list:eq(0)').find('> li:eq(0)');
-            $li.addClass('active');
-
-            jQuery('.left-side .nav-active').removeClass('nav-active');
-            $menuLi = $('.left-side .menu-list:eq(0)');
-            $menuLi.addClass('nav-active');
+            $('.custom-nav .nav-active').removeClass('nav-active');
+            $('.custom-nav .active').removeClass('active');
+            $("#userMenu").addClass("nav-active");
+            $("#userLi").addClass("active");
         });
     </script>
     <p class="msg-block" th:if="${errorMap}">

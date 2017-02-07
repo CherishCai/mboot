@@ -1,5 +1,6 @@
 package cn.cherish.mboot.extra.shiro;
 
+import cn.cherish.mboot.dal.entity.Permission;
 import cn.cherish.mboot.dal.entity.Role;
 import cn.cherish.mboot.dal.entity.User;
 import cn.cherish.mboot.service.UserService;
@@ -8,20 +9,23 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.shiro.authc.*;
-import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Cherish on 2017/1/4.
  */
 @Slf4j
+@Component
 public class MShiroRealm extends AuthorizingRealm {
 
     @Autowired
@@ -48,17 +52,25 @@ public class MShiroRealm extends AuthorizingRealm {
             //权限信息对象info,用来存放查出的用户的所有的角色（role）及权限（permission）
             SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
             //用户的角色集合
-            info.addRoles(user.getRolesName());
+            Set<String> rolesName = new HashSet<>();
+            for(Role role: user.getRoles()){
+                rolesName.add(role.getName());
+            }
+            info.addRoles(rolesName);
             //用户的角色对应的所有权限，如果只使用角色定义访问权限，下面的四行可以不要
             List<Role> roleList = user.getRoles();
             for (Role role : roleList) {
-                info.addStringPermissions(role.getPermits());
+                Set<String> permissionsName = new HashSet<>();
+                for(Permission permission: role.getPermissions()){
+                    permissionsName.add(permission.getPermit());
+                }
+                info.addStringPermissions(permissionsName);
             }
             return info;
         }else {
-            throw new AuthorizationException();
-            // 返回null的话，就会导致任何用户访问被拦截的请求时，都会自动跳转到unauthorizedUrl指定的地址
-            // return null;
+            //throw new AuthorizationException();
+            // 返回null的话，访问被拦截的请求时，都会自动跳转到unauthorizedUrl指定的地址
+             return null;
         }
 
     }

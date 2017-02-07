@@ -1,4 +1,4 @@
-package cn.cherish.mboot.dal.vo;
+package cn.cherish.mboot.dal.vo.user;
 
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro"
+      layout:decorate="layout">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Cherish">
+    <title>权限管理</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <!--body wrapper start-->
+    <div class="wrapper">
+
+        <div class="row">
+            <div class="col-md-12">
+                <section class="panel">
+                    <div class="panel-body">
+                        <div class="form">
+                            <form class="cmxform form-horizontal adminex-form" id="roleForm"
+                                  method="post" th:action="@{/role/save}" >
+
+                                <div class="form-group">
+                                    <label for="rolename" class="control-label col-md-2 col-sm-2">角色名:</label>
+                                    <div class="col-md-8 col-sm-8">
+                                        <input type="text" id="rolename" name="name" class="form-control"
+                                               placeholder="角色名称" minlength="1" maxlength="16" required
+                                               th:value="${role} ? ${role.name}" />
+                                        <p class="help-block">
+                                            <label class="error-label"
+                                                   th:text="${errorMap} ? ${errorMap['name']}"></label>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="description" class="control-label col-md-2 col-sm-2">描述:</label>
+                                    <div class="col-md-8 col-sm-8">
+                                        <textarea id="description" name="description" class="form-control"
+                                                  placeholder="描述/备注" maxlength="1024"
+                                               th:text="${role} ? ${role.description}">
+                                        </textarea>
+                                        <p class="help-block">
+                                            <label class="error-label"
+                                                   th:text="${errorMap} ? ${errorMap['description']}"></label>
+                                        </p>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-8 col-sm-8">
+                                        <button class="btn btn-primary" type="submit">
+                                            <span class="glyphicon glyphicon-saved" aria-hidden="true"></span>
+                                            提交
+                                        </button>
+                                        <button class="btn btn-default" type="reset">
+                                            <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span>
+                                            重置
+                                        </button>
+
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <section class="panel">
+                    <header class="panel-heading">
+                        Multiple Select
+                        <span class="tools pull-right">
+                                <a class="fa fa-chevron-down" href="javascript:;"></a>
+                                <a class="fa fa-times" href="javascript:;"></a>
+                             </span>
+                    </header>
+                    <div class="panel-body">
+                        <form action="#" class="form-horizontal ">
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Default</label>
+
+                                <div class="col-md-9">
+                                    <select multiple="multiple" class="multi-select" id="my_multi_select1"
+                                            name="my_multi_select1[]">
+                                        <option>Dallas Cowboys</option>
+                                        <option>New York Giants</option>
+                                        <option selected>Philadelphia Eagles</option>
+                                        <option selected>Washington Redskins</option>
+                                        <option>Chicago Bears</option>
+                                        <option>Detroit Lions</option>
+                                        <option>Green Bay Packers</option>
+                                        <option>Minnesota Vikings</option>
+                                        <option selected>Atlanta Falcons</option>
+                                        <option>Carolina Panthers</option>
+                                        <option>New Orleans Saints</option>
+                                        <option>Tampa Bay Buccaneers</option>
+                                        <option>Arizona Cardinals</option>
+                                        <option>St. Louis Rams</option>
+                                        <option>San Francisco 49ers</option>
+                                        <option>Seattle Seahawks</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Grouped Options</label>
+
+                                <div class="col-md-9">
+                                    <select multiple="multiple" class="multi-select" id="my_multi_select2"
+                                            name="my_multi_select2[]">
+                                        <optgroup label="NFC EAST">
+                                            <option>Dallas Cowboys</option>
+                                            <option>New York Giants</option>
+                                            <option>Philadelphia Eagles</option>
+                                            <option>Washington Redskins</option>
+                                        </optgroup>
+                                        <optgroup label="NFC NORTH">
+                                            <option>Chicago Bears</option>
+                                            <option>Detroit Lions</option>
+                                            <option>Green Bay Packers</option>
+                                            <option>Minnesota Vikings</option>
+                                        </optgroup>
+                                        <optgroup label="NFC SOUTH">
+                                            <option>Atlanta Falcons</option>
+                                            <option>Carolina Panthers</option>
+                                            <option>New Orleans Saints</option>
+                                            <option>Tampa Bay Buccaneers</option>
+                                        </optgroup>
+                                        <optgroup label="NFC WEST">
+                                            <option>Arizona Cardinals</option>
+                                            <option>St. Louis Rams</option>
+                                            <option>San Francisco 49ers</option>
+                                            <option>Seattle Seahawks</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+<div layout:fragment="javascript">
+    <script type="text/javascript">
+        $(function () {
+            //菜单的active
+            $('.custom-nav .nav-active').removeClass('nav-active');
+            $('.custom-nav .active').removeClass('active');
+            $("#userMenu").addClass("nav-active");
+            $("#roleLi").addClass("active");
+        });
+    </script>
+    <p class="msg-block" th:if="${errorMap}">
+        <script th:if="${errorMap['msg']}" th:inline="javascript">
+            /*<![CDATA[*/
+            var msg = [[${errorMap['msg']}]] ;
+            $(function () {
+                myModalWarning(msg);
+            });
+            /*]]>*/
+        </script>
+    </p>
+</div>
+</body>
+</html>

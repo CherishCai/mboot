@@ -14,17 +14,3 @@ public class CacheConfig {
 
 
 }
-/*
-    缓存类例子
-    @Component
-    @CacheConfig(cacheNames = "countries")
-    public class CountryRepository {
-
-        @Cacheable
-        public Country findByCode(String code) {
-            System.out.println("---> Loading country with code '" + code + "'");
-            return new Country(code);
-        }
-
-    }
-*/

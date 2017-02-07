@@ -3,6 +3,10 @@ package cn.cherish.mboot.web;
 import cn.cherish.mboot.dal.dto.UserDTO;
 import cn.cherish.mboot.dal.entity.User;
 import cn.cherish.mboot.dal.vo.*;
+import cn.cherish.mboot.dal.vo.user.UserModifyPasswordVO;
+import cn.cherish.mboot.dal.vo.user.UserSaveVO;
+import cn.cherish.mboot.dal.vo.user.UserSearchVO;
+import cn.cherish.mboot.dal.vo.user.UserUpdateVO;
 import cn.cherish.mboot.extra.shiro.CryptographyUtil;
 import cn.cherish.mboot.extra.shiro.ShiroUserUtil;
 import cn.cherish.mboot.service.UserService;
@@ -215,7 +219,7 @@ public class UserController extends ABaseController {
      * @return ModelAndView
      */
     @PostMapping("/modifyPassword")
-    public ModelAndView modifyPassword(@Validated ModifyPasswordVO modifyPasswordVO, BindingResult bindingResult) {
+    public ModelAndView modifyPassword(@Validated UserModifyPasswordVO modifyPasswordVO, BindingResult bindingResult) {
 
         ModelAndView mv = new ModelAndView("admin/user/modifyPassword");
         Map<String, Object> errorMap = new HashMap<>();

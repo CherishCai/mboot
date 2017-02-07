@@ -1,7 +1,8 @@
 package cn.cherish.mboot.web;
 
-import cn.cherish.mboot.dal.vo.LoginVO;
+import cn.cherish.mboot.dal.vo.user.UserLoginVO;
 import cn.cherish.mboot.extra.shiro.CryptographyUtil;
+import cn.cherish.mboot.extra.shiro.ShiroUserUtil;
 import cn.cherish.mboot.service.UserService;
 import cn.cherish.mboot.util.ValidateCode;
 import lombok.extern.slf4j.Slf4j;
@@ -74,7 +75,7 @@ public class BasicController {
 	 * 执行登陆
 	 */
 	@PostMapping(value = "/login")
-	public ModelAndView login(@Validated LoginVO loginVO, BindingResult bindingResult, HttpServletRequest request){
+	public ModelAndView login(@Validated UserLoginVO loginVO, BindingResult bindingResult, HttpServletRequest request){
 
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("admin/login");
@@ -117,7 +118,8 @@ public class BasicController {
 
 				Session session = subject.getSession();
 				session.setAttribute("msg", "登陆成功");
-				session.setAttribute("username", loginVO.getUsername());
+				session.setAttribute("username", ShiroUserUtil.getUsername());
+				session.setAttribute("nickname", ShiroUserUtil.getNickname());
 
 			} catch (UnknownAccountException uae) {
 				log.debug("账户不存在!");
@@ -149,7 +151,7 @@ public class BasicController {
 	@GetMapping("/403")
 	public String unauthorizedRole(){
 		log.debug("------没有权限-------");
-		return "/error/403";
+		return "error/403";
 	}
 	
 	/**

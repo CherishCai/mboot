@@ -3,8 +3,8 @@
 Author: Cherish
 -------------------------------------------*/
 
-@import url('/static/tools/dataTables-1.10.12/css/dataTables.bootstrap.css');
-@import url('/static/tools/dataTables-1.10.12/css/responsive.bootstrap.css');
+@import url('/static/tools/dataTables-1.10.12/css/dataTables.bootstrap.min.css');
+@import url('/static/tools/dataTables-1.10.12/css/responsive.bootstrap.min.css');
 
 /*奇数行*/
 tr.odd {

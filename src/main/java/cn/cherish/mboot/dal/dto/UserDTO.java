@@ -20,6 +20,8 @@ public class UserDTO implements java.io.Serializable {
 
     private String telephone;
 
+    private String position;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="UTC")
     private Date hiredate;
 
@@ -32,8 +34,6 @@ public class UserDTO implements java.io.Serializable {
     private String description;
 
     private String activeStr;
-
-    private String roleStr;
 
 
 }
