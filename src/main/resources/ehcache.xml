@@ -20,4 +20,14 @@
            diskPersistent="false"
            overflowToDisk="false"/>
 
+    <!--永久缓存-->
+    <cache name="articles"
+           maxElementsInMemory="1000"
+           memoryStoreEvictionPolicy="LRU"
+           eternal="true"
+           timeToIdleSeconds="1800"
+           timeToLiveSeconds="1800"
+           diskPersistent="false"
+           overflowToDisk="false"/>
+
 </ehcache>

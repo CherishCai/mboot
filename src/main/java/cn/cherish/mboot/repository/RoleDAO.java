@@ -11,6 +11,7 @@ import java.util.List;
  */
 public interface RoleDAO extends IBaseDAO<Role,Long> {
 
+    List<Role> findAll();
 
     Role findByName(String name);
 

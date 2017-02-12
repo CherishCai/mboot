@@ -14,7 +14,6 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -25,15 +24,20 @@ import java.util.Set;
  * Created by Cherish on 2017/1/4.
  */
 @Slf4j
-@Component
 public class MShiroRealm extends AuthorizingRealm {
 
+    /**
+     *  @Autowired 注入userService，UserService不能被动态代理代理，@Transactional等就不起效了
+     *  所以UserSerivece使用@Scope("prototype")
+     * cn.cherish.mboot.config.ShiroConfiguration.shiroFilterFactoryBean()方法中
+     * shiroFilterFactoryBean.setSecurityManager(defaultWebSecurityManager());设置安全管理器出问题，xml的配置方式尽管一样
+     * 这或许是@Bean shiroFilterFactoryBean方式的诟病吧
+     */
     @Autowired
     private UserService userService;
 
     /**`
      * 权限认证，为当前登录的Subject授予角色和权限
-     *
      *  经测试：本例中该方法的调用时机为需授权资源被访问时
      *  经测试：并且每次访问需授权资源时都会执行该方法中的逻辑，这表明本例中默认并未启用AuthorizationCache
      *  经测试：如果连续访问同一个URL（比如刷新），该方法不会被重复调用，Shiro有一个时间间隔（也就是cache时间，在ehcache-shiro.xml中配置），超过这个时间间隔再刷新页面，该方法会被执行
@@ -89,27 +93,26 @@ public class MShiroRealm extends AuthorizingRealm {
         if (user == null) {
             throw new UnknownAccountException("此用户不存在");
         }
-        if(1 !=user.getActive().intValue()){
+        if(1 != user.getActive()){
             throw new LockedAccountException("用户被禁用");
         }
 
 //        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user.getUsername(), user.getPassword(), getName());
-        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(
+        return new SimpleAuthenticationInfo(
                 new ShiroUser(user.getId(), user.getUsername(), user.getNickname()),//user.getUsername()
                 user.getPassword(), getName());
-        return info;
     }
 
     /**
      * 自定义Authentication对象，使得Subject除了携带用户的登录名外还可以携带更多信息.
      */
-    public static class ShiroUser implements Serializable {
+    static class ShiroUser implements Serializable {
         private static final long serialVersionUID = -1373760761780840081L;
         public Long id;
         public String username;
         public String nickname;
 
-        public ShiroUser(Long id, String username, String nickname) {
+        private ShiroUser(Long id, String username, String nickname) {
             this.id = id;
             this.username = username;
             this.nickname = nickname;
@@ -159,3 +162,4 @@ public class MShiroRealm extends AuthorizingRealm {
     }
 
 }
+

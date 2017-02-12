@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +27,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
+@Scope("prototype")//Shiro的配置影响到了动态代理，现在就这样吧，可以去看MShiroRealm
 @Service
 @CacheConfig(cacheNames = "users")
 @Transactional(readOnly = true)
@@ -59,8 +61,8 @@ public class UserService extends ABaseService<User, Long> {
         return userDAO.count();
     }
 
-    @Transactional(readOnly = false)
     @CacheEvict(allEntries = true)
+    @Transactional(readOnly = false)
     public void delete(Long id) {
         // 并不是真正的删除，只是冻结账户
         User user = findById(id);
@@ -68,8 +70,8 @@ public class UserService extends ABaseService<User, Long> {
         update(user);
     }
 
-    @Transactional
     @CacheEvict(allEntries = true)
+    @Transactional
     public void updateByVO(UserUpdateVO userUpdateVO) {
         User user = findById(userUpdateVO.getId());
         ObjectConvertUtil.objectCopy(user, userUpdateVO);

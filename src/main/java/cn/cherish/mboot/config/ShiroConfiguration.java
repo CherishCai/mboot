@@ -31,20 +31,23 @@ public class ShiroConfiguration {
     }
 
     @Bean
-    public EhCacheManager getEhCacheManager() {
+    public EhCacheManager shiroEhcacheManager() {
         EhCacheManager em = new EhCacheManager();
         em.setCacheManagerConfigFile("classpath:ehcache-shiro.xml");
         return em;
     }
 
     /**
-    *@see cn.cherish.mboot.extra.shiro.MShiroRealm
+     * @see cn.cherish.mboot.extra.shiro.MShiroRealm
+     * need cacheManager 缓存管理器
+     * @return MShiroRealm
+     */
     @Bean(name = "mShiroRealm")
-    public MShiroRealm mShiroRealm(EhCacheManager cacheManager) {
+    public MShiroRealm mShiroRealm() {
         MShiroRealm realm = new MShiroRealm();
-        realm.setCacheManager(cacheManager);
+        realm.setCacheManager(shiroEhcacheManager());
         return realm;
-    }*/
+    }
 
     /**
      * 注册DelegatingFilterProxy（Shiro） 以前是在web.xml中的配置
@@ -69,29 +72,31 @@ public class ShiroConfiguration {
      * ShiroFilter
      * 在这里可以同时注入一个数据库管理的权限对象，
      * 然后读取数据库相关配置，配置到 shiroFilterFactoryBean 的访问规则中。
-     * @param securityManager 安全管理器
+     * need securityManager 安全管理器
      */
     @Bean(name = "shiroFilter")
-    public ShiroFilterFactoryBean getShiroFilterFactoryBean(DefaultWebSecurityManager securityManager/*, permissionDao*/) {
-
+    public ShiroFilterFactoryBean shiroFilterFactoryBean() {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new MShiroFilterFactoryBean();
         // 必须设置 SecurityManager
-        shiroFilterFactoryBean.setSecurityManager(securityManager);
+        shiroFilterFactoryBean.setSecurityManager(defaultWebSecurityManager());
         // 如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
         shiroFilterFactoryBean.setLoginUrl("/login");
         // 登录成功后要跳转的连接
         shiroFilterFactoryBean.setSuccessUrl("/admin");
         shiroFilterFactoryBean.setUnauthorizedUrl("/403");
 
-        loadShiroFilterChain(shiroFilterFactoryBean/*, permissionDao*/);
+        //注入下面方法的Map
+        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap());
+
         return shiroFilterFactoryBean;
     }
 
     /**
      * 加载shiroFilter权限控制规则（可以从数据库读取然后配置）
-     * 例如 loadShiroFilterChain(shiroFilterFactoryBean, permissionDao);
+     * eg. 注入permissionDAO
      */
-    private void loadShiroFilterChain(ShiroFilterFactoryBean shiroFilterFactoryBean/*, permissionDao*/) {
+    @Bean(name = "filterChainDefinitionMap")
+    public Map<String, String>  filterChainDefinitionMap() {
         //TODO
         /////////////////////// 下面这些规则配置最好配置到配置文件中 ///////////////////////
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
@@ -112,38 +117,38 @@ public class ShiroConfiguration {
         filterChainDefinitionMap.put("/logout", "logout");
         filterChainDefinitionMap.put("/**", "anon");
 
-        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
+        return filterChainDefinitionMap;
     }
 
     @Bean(name = "securityManager")
-    public DefaultWebSecurityManager getDefaultWebSecurityManager(MShiroRealm mShiroRealm, EhCacheManager cacheManager) {
+    public DefaultWebSecurityManager defaultWebSecurityManager() {
         DefaultWebSecurityManager dwsm = new DefaultWebSecurityManager();
-        dwsm.setRealm(mShiroRealm);
-//      <!-- 用户授权/认证信息Cache, 采用EhCache 缓存 -->
-        dwsm.setCacheManager(cacheManager);
+        dwsm.setRealm(mShiroRealm());
+        //用户授权/认证信息Cache, 采用EhCache 缓存
+        dwsm.setCacheManager(shiroEhcacheManager());
         return dwsm;
     }
 
     @Bean(name = "lifecycleBeanPostProcessor")
-    public LifecycleBeanPostProcessor getLifecycleBeanPostProcessor() {
+    public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
         return new LifecycleBeanPostProcessor();
     }
 
-    // Enabling Shiro Annotations 代理 以下两个是为了springmvc中的权限注解生效
+    /**
+     * Enabling Shiro Annotations 代理 以下两个是为了springmvc中的权限注解生效
+     */
     @Bean
-    public DefaultAdvisorAutoProxyCreator getDefaultAdvisorAutoProxyCreator() {
+    public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
         DefaultAdvisorAutoProxyCreator daap = new DefaultAdvisorAutoProxyCreator();
         daap.setProxyTargetClass(true);
         return daap;
     }
 
     @Bean
-    public AuthorizationAttributeSourceAdvisor getAuthorizationAttributeSourceAdvisor(DefaultWebSecurityManager securityManager) {
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor() {
         AuthorizationAttributeSourceAdvisor aasa = new AuthorizationAttributeSourceAdvisor();
-        aasa.setSecurityManager(securityManager);
+        aasa.setSecurityManager(defaultWebSecurityManager());
         return aasa;
     }
-
-
 
 }

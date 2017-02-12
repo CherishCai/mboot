@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro"
+      layout:decorate="layout">
+<head>
+    <meta charset="utf-8">
+    <meta name="author" content="Cherish">
+    <title>文章列表</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+
+    <!--body wrapper start-->
+    <div class="wrapper">
+
+        <div class="row">
+            <div class="col-sm-12">
+                <section class="panel">
+                    <header class="panel-heading">
+                        文章列表
+                    </header>
+                    <div class="panel-body">
+                        <button type="button" id="otable_new" class="btn btn-primary">添加 <i class="fa fa-plus"></i>
+                        </button>
+                        <!-- table -->
+                        <table id="otable" class="table" cellspacing="0" width="100%">
+                            <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>标题</th>
+                                <th>阅读量</th>
+                                <th>发布时间</th>
+                                <th>修改时间</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tfoot>
+                            <tr>
+                                <th>序号</th>
+                                <th>标题</th>
+                                <th>阅读量</th>
+                                <th>发布时间</th>
+                                <th>修改时间</th>
+                                <th>操作</th>
+                            </tr>
+                            </tfoot>
+                            <tbody>
+                            <tr>
+                                <th>序号</th>
+                                <th>标题</th>
+                                <th>阅读量</th>
+                                <th>发布时间</th>
+                                <th>修改时间</th>
+                                <th>操作</th>
+                            </tr>
+                            </tbody>
+
+                        </table>
+                        <!-- table end -->
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    <!--body wrapper end-->
+
+</div>
+
+<!--将被layout引入的js-->
+<div layout:fragment="javascript">
+    <script type="text/javascript">
+        $(function () {
+            //菜单的active
+            $('.custom-nav .nav-active').removeClass('nav-active');
+            $('.custom-nav .active').removeClass('active');
+            $("#infoMenu").addClass("nav-active");
+            $("#articleLi").addClass("active");
+        });
+
+    </script>
+    <script src="/static/js/admin/dataTableConstant.js" type="text/javascript"></script>
+    <script src="/static/js/admin/articleManage.js" type="text/javascript"></script>
+</div>
+
+</body>
+</html>

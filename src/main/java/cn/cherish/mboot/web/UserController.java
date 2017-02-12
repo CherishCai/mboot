@@ -52,7 +52,7 @@ public class UserController extends ABaseController {
      * 返回新增用户的页面
      */
     @GetMapping("/add")
-    @RequiresPermissions("user:save")
+    @RequiresPermissions("user:add")
     public ModelAndView addForm(){
         ModelAndView mv = new ModelAndView("admin/user/add");
         return mv;
@@ -61,7 +61,7 @@ public class UserController extends ABaseController {
     /**
      * 返回修改用户信息的页面
      */
-    @GetMapping("/{userId}")
+    @GetMapping("/{userId}/update")
     @RequiresPermissions("user:update")
     public ModelAndView updateForm(@PathVariable("userId") Long userId){
         ModelAndView mv = new ModelAndView("admin/user/edit");
@@ -114,10 +114,10 @@ public class UserController extends ABaseController {
      * @param userId 用户ID
      * @return JSON
      */
-    @DeleteMapping("/{userId}")
+    @DeleteMapping("/{userId}/delete")
     @ResponseBody
-    @RequiresPermissions("user:del")
-    public Map delUser(@PathVariable("userId") Long userId){
+    @RequiresPermissions("user:delete")
+    public Map delete(@PathVariable("userId") Long userId){
         try {
             userService.delete(userId);
 
@@ -136,7 +136,7 @@ public class UserController extends ABaseController {
      */
     @PostMapping("/update")
     @RequiresPermissions("user:update")
-    public ModelAndView updateUser(@Validated UserUpdateVO userUpdateVO, BindingResult bindingResult){
+    public ModelAndView update(@Validated UserUpdateVO userUpdateVO, BindingResult bindingResult){
 
         ModelAndView mv = new ModelAndView("admin/user/edit");
         Map<String, Object> errorMap = new HashMap<>();
@@ -176,8 +176,8 @@ public class UserController extends ABaseController {
      * @return ModelAndView
      */
     @PostMapping("/save")
-    @RequiresPermissions("user:save")
-    public ModelAndView saveUser(@Validated UserSaveVO userSaveVO, BindingResult bindingResult){
+    @RequiresPermissions("user:add")
+    public ModelAndView save(@Validated UserSaveVO userSaveVO, BindingResult bindingResult){
 
         ModelAndView mv = new ModelAndView("admin/user/add");
         Map<String, Object> errorMap = new HashMap<>();

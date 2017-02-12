@@ -154,11 +154,12 @@
     $('#otable').on('click', 'a.op_delete', function (e) {
         e.preventDefault();
 
+		var nRow = $(this).parents('tr')[0];
+		var id = oTable.row(nRow).id();
+
         myConfirm("你确定要删除吗?",function(){
-            var nRow = $(this).parents('tr')[0];
-            var id = oTable.row(nRow).id();
             //向服务器提交删除请求
-            var url = "/user/"+id;
+            var url = "/user/"+id+"/delete";
             var result = delAjax(url);
 
             if(result.success){
@@ -178,6 +179,6 @@
         /* Get the row as a parent of the link that was clicked on */
         var nRow = $(this).parents('tr')[0];
         var id = oTable.row(nRow).id();
-        var url = "/user/" + id;
+        var url = "/user/" + id + "/update";
         window.open(url, "_self");
     });

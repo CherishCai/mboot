@@ -60,7 +60,7 @@ public class MShiroFilterFactoryBean extends ShiroFilterFactoryBean {
         return new MSpringShiroFilter((WebSecurityManager) securityManager, chainResolver);
     }
 
-    private final class MSpringShiroFilter extends AbstractShiroFilter {
+    private final class  MSpringShiroFilter extends AbstractShiroFilter {
 
         protected MSpringShiroFilter(WebSecurityManager webSecurityManager, FilterChainResolver resolver) {
             super();

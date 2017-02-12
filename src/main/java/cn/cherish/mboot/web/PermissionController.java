@@ -6,7 +6,7 @@ import cn.cherish.mboot.dal.vo.BasicSearchVO;
 import cn.cherish.mboot.dal.vo.permission.PermissionSaveVO;
 import cn.cherish.mboot.dal.vo.permission.PermissionUpdateVO;
 import cn.cherish.mboot.service.PermissionService;
-import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("permission")
-@RequiresAuthentication
+@RequiresRoles("super")
 public class PermissionController extends ABaseController {
 
     private static Logger LOGGER = LoggerFactory.getLogger(PermissionController.class);
@@ -53,7 +53,7 @@ public class PermissionController extends ABaseController {
     /**
      * 返回修改信息页面
      */
-    @GetMapping("/{permissionId}")
+    @GetMapping("/{permissionId}/update")
     public ModelAndView updateForm(@PathVariable("permissionId") Long permissionId){
         ModelAndView mv = new ModelAndView("admin/permission/edit");
         Permission permission = permissionService.findById(permissionId);
@@ -87,7 +87,7 @@ public class PermissionController extends ABaseController {
      * @param permissionId ID
      * @return JSON
      */
-    @DeleteMapping("/{permissionId}")
+    @DeleteMapping("/{permissionId}/delete")
     @ResponseBody
     public Map delpermission(@PathVariable("permissionId") Long permissionId){
 

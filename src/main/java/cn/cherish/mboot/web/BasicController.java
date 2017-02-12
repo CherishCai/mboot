@@ -4,6 +4,7 @@ import cn.cherish.mboot.dal.vo.user.UserLoginVO;
 import cn.cherish.mboot.extra.shiro.CryptographyUtil;
 import cn.cherish.mboot.extra.shiro.ShiroUserUtil;
 import cn.cherish.mboot.service.UserService;
+import cn.cherish.mboot.util.QiniuUploadUtil;
 import cn.cherish.mboot.util.ValidateCode;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -170,15 +171,28 @@ public class BasicController {
 		ImageIO.write(bim, "JPEG", response.getOutputStream());
 	}
 
+	/**
+	 * 应该添加权限
+	 * @return qiniuToken
+	 */
+	@GetMapping("qiniuToken")
+	@ResponseBody
+	public Map qiniuToken(){
+		Map<String, Object> map = new HashMap<>(1);
+		String uptoken = QiniuUploadUtil.getUpToken();
+		map.put("uptoken", uptoken);
+		return map;
+	}
+
+	//文件存放路径
+	private static final String FILE_PATH = "F:/cherish";
+
 	@PostMapping("/imageUpload")
 	@ResponseBody
-	public Map upload(@RequestParam("editormd-image-file") MultipartFile multipartFile, HttpServletRequest request){
-		Map<String, Object> map = new HashMap<>(5);
-		map.put("success", 0);//0 | 1, // 0 表示上传失败，1 表示上传成功
-		map.put("message", "提示的信息，上传成功或上传失败及错误信息等。");
-
+	public String upload(@RequestParam("wangEditorH5File") MultipartFile multipartFile, HttpServletRequest request){
+		String url = "";
 		if (!multipartFile.isEmpty()) {
-			File directory = new File("/cherish");
+			File directory = new File(FILE_PATH);
 
 			if (!directory.exists()) {
 				directory.mkdirs();
@@ -194,22 +208,18 @@ public class BasicController {
 //				new File(directory,newFIleName));
 				String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 						+ request.getContextPath() + "/";
-				map.put("success", 1);
-				map.put("message", "掂过碌蔗！");
-				map.put("url", basePath+"imageDownload?filename="+newFIleName);
+				url = basePath + "imageDownload?filename=" + newFIleName;
 			} catch (IOException e) {
 				e.printStackTrace();
-				map.put("success", 0);
-				map.put("message", "错误!");
 			}
 
 		} // end if
-		return map;
+		return url;
 	}
 
 	@GetMapping("/imageDownload")
 	public ResponseEntity<byte[]> downloadImage(@RequestParam("filename") String filename, HttpServletResponse response) throws IOException {
-		File file = new File("/cherish", filename);
+		File file = new File(FILE_PATH, filename);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentDispositionFormData("attachment", filename);

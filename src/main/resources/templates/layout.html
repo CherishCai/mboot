@@ -79,10 +79,10 @@
                         <p shiro:hasPermission="user:show">
                             <li id="userLi"><a th:href="@{/user}"> 用户列表</a></li>
                         </p>
-                        <p shiro:hasRole="admin">
+                        <p shiro:hasRole="super">
                             <li id="roleLi"><a th:href="@{/role}"> 角色列表</a></li>
                         </p>
-                        <p shiro:hasRole="admin">
+                        <p shiro:hasRole="super">
                             <li id="permitLi"><a th:href="@{/permission}"> 权限列表</a></li>
                         </p>
                         <p shiro:hasRole="super">
@@ -91,11 +91,13 @@
                     </ul></li>
                 </p>
 
-                <li class="menu-list" id="msgMenu"><a href=""><i class="fa fa-area-chart"></i>
-                    <span> 资讯管理</span></a>
-                    <ul class="sub-menu-list">
-                        <li id="newsLi"><a th:href="@{/news}"> 企业新闻</a></li>
-                    </ul></li>
+                <p shiro:hasAnyPermissions="info:show">
+                    <li class="menu-list" id="infoMenu"><a href=""><i class="fa fa-area-chart"></i>
+                        <span> 资讯管理</span></a>
+                        <ul class="sub-menu-list">
+                            <li id="articleLi"><a th:href="@{/article}"> 文章列表</a></li>
+                        </ul></li>
+                </p>
 
             </ul>
             <!--sidebar nav end-->

@@ -6,7 +6,7 @@ import cn.cherish.mboot.dal.vo.BasicSearchVO;
 import cn.cherish.mboot.dal.vo.role.RoleSaveVO;
 import cn.cherish.mboot.dal.vo.role.RoleUpdateVO;
 import cn.cherish.mboot.service.RoleService;
-import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("role")
-@RequiresAuthentication
+@RequiresRoles("super")
 public class RoleController extends ABaseController {
 
     private static Logger LOGGER = LoggerFactory.getLogger(RoleController.class);
@@ -53,7 +53,7 @@ public class RoleController extends ABaseController {
     /**
      * 返回修改信息页面
      */
-    @GetMapping("/{roleId}")
+    @GetMapping("/{roleId}/update")
     public ModelAndView updateForm(@PathVariable("roleId") Long roleId){
         ModelAndView mv = new ModelAndView("admin/role/edit");
         Role role = roleService.findById(roleId);
@@ -87,9 +87,9 @@ public class RoleController extends ABaseController {
      * @param roleId ID
      * @return JSON
      */
-    @DeleteMapping("/{roleId}")
+    @DeleteMapping("/{roleId}/delete")
     @ResponseBody
-    public Map delrole(@PathVariable("roleId") Long roleId){
+    public Map delete(@PathVariable("roleId") Long roleId){
 
         try {
             roleService.delete(roleId);
@@ -107,7 +107,7 @@ public class RoleController extends ABaseController {
      * @return ModelAndView
      */
     @PostMapping("/update")
-    public ModelAndView updaterole(@Validated RoleUpdateVO roleUpdateVO, BindingResult bindingResult){
+    public ModelAndView update(@Validated RoleUpdateVO roleUpdateVO, BindingResult bindingResult){
 
         ModelAndView mv = new ModelAndView("admin/role/edit");
         Map<String, Object> errorMap = new HashMap<>();
@@ -147,7 +147,7 @@ public class RoleController extends ABaseController {
      * @return ModelAndView
      */
     @PostMapping("/save")
-    public ModelAndView saverole(@Validated RoleSaveVO roleSaveVO, BindingResult bindingResult){
+    public ModelAndView save(@Validated RoleSaveVO roleSaveVO, BindingResult bindingResult){
 
         ModelAndView mv = new ModelAndView("admin/role/add");
         Map<String, Object> errorMap = new HashMap<>();
