@@ -101,11 +101,11 @@ public class UserController extends ABaseController {
         try {
             Page<UserDTO> page = userService.findAll(userSearchVO, basicSearchVO);
 
-            return getReturnMap(Boolean.TRUE, basicSearchVO.getDraw(), page);
+            return returnMap(Boolean.TRUE, basicSearchVO.getDraw(), page);
         } catch (Exception e) {
             e.printStackTrace();
             LOGGER.error("获取用户列表失败:", e.getMessage());
-            return getReturnMap(Boolean.FALSE, BUSY_MSG, null);
+            return returnMap(Boolean.FALSE, BUSY_MSG, null);
         }
     }
 
@@ -121,11 +121,11 @@ public class UserController extends ABaseController {
         try {
             userService.delete(userId);
 
-            return getReturnMap(Boolean.TRUE, "删除成功", null);
+            return returnMap(Boolean.TRUE, "删除成功", null);
         } catch (Exception e) {
             e.printStackTrace();
             LOGGER.error("删除失败:{}", e.getMessage());
-            return getReturnMap(Boolean.FALSE, "删除失败", null);
+            return returnMap(Boolean.FALSE, "删除失败", null);
         }
     }
 

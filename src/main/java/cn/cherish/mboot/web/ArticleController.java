@@ -47,11 +47,11 @@ public class ArticleController extends ABaseController {
         try {
             ArticleDTO article = articleService.findOne(articleId);
 
-            return getReturnMap(Boolean.TRUE, "查看文章详情", article);
+            return returnMap(Boolean.TRUE, "查看文章详情", article);
         } catch (Exception e) {
             e.printStackTrace();
             LOGGER.error("获取列表失败:", e.getMessage());
-            return getReturnMap(Boolean.FALSE, BUSY_MSG, null);
+            return returnMap(Boolean.FALSE, BUSY_MSG, null);
         }
     }
 
@@ -97,11 +97,11 @@ public class ArticleController extends ABaseController {
         try {
             Page<ArticleDTO> page = articleService.findAll(basicSearchVO);
 
-            return getReturnMap(Boolean.TRUE, basicSearchVO.getDraw(), page);
+            return returnMap(Boolean.TRUE, basicSearchVO.getDraw(), page);
         } catch (Exception e) {
             e.printStackTrace();
             LOGGER.error("获取列表失败:", e.getMessage());
-            return getReturnMap(Boolean.FALSE, BUSY_MSG, null);
+            return returnMap(Boolean.FALSE, BUSY_MSG, null);
         }
     }
 
@@ -117,11 +117,11 @@ public class ArticleController extends ABaseController {
 
         try {
             articleService.delete(articleId);
-            return getReturnMap(Boolean.TRUE, "删除成功", null);
+            return returnMap(Boolean.TRUE, "删除成功", null);
         } catch (Exception e) {
             e.printStackTrace();
             LOGGER.error("删除失败:{}", e.getMessage());
-            return getReturnMap(Boolean.FALSE, "删除失败", null);
+            return returnMap(Boolean.FALSE, "删除失败", null);
         }
     }
 

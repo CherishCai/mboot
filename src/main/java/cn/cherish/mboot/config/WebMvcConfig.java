@@ -1,7 +1,9 @@
 package cn.cherish.mboot.config;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -16,6 +18,11 @@ import java.util.Properties;
 @Slf4j
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
+
+    @Bean
+    public LocalValidatorFactoryBean localValidatorFactoryBean(){
+        return new LocalValidatorFactoryBean();
+    }
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
