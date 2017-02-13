@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Aspect
 @Component
-public class ControllerMonitor {
+public class ControllerAspect {
 
-	@After("execution(* cn.cherish.mboot.web..*Controller.*(..))")
+	@After("execution(public * cn.cherish.mboot.web.*Controller.*(..))")
 	public void logServiceAccess(JoinPoint joinPoint) {
 		log.info("ControllerMonitor: " + joinPoint);
 	}
