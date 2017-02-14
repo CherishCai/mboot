@@ -84,7 +84,7 @@ public class DruidDataSourceConfiguration {
         //添加过滤规则.
         filterRegistrationBean.addUrlPatterns("/*");
         //添加忽略的格式信息.
-        filterRegistrationBean.addInitParameter("exclusions","*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*");
+        filterRegistrationBean.addInitParameter("exclusions","/static/**,*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*");
         return filterRegistrationBean;
     }
 

@@ -24,7 +24,7 @@
 
 <div class="container">
 
-    <form class="form-signin" action="/login" method="POST">
+    <form class="form-signin" action="/login" method="POST" th:object="${loginVO}">
         <div class="form-signin-heading text-center">
             <h1 class="sign-title">登陆界面</h1>
             <img src="/static/image/myself.jpg" alt="LOGO"/>

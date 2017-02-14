@@ -177,11 +177,9 @@ public class BasicController {
 	 */
 	@GetMapping("qiniuToken")
 	@ResponseBody
-	public Map qiniuToken(){
-		Map<String, Object> map = new HashMap<>(1);
+	public String qiniuToken(){
 		String uptoken = QiniuUploadUtil.getUpToken();
-		map.put("uptoken", uptoken);
-		return map;
+		return "{\"uptoken\":\"" + uptoken + "\"}";
 	}
 
 	//文件存放路径
