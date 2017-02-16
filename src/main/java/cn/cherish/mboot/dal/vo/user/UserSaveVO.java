@@ -25,6 +25,9 @@ public class UserSaveVO implements java.io.Serializable {
     @Pattern(regexp = "^[1][34578][0-9]{9}$", message = "请输入正确的手机号码")
     private String telephone;
 
+    @Length(min = 1 ,max = 32 ,message = "{user.position}")
+    private String position;
+
     @DateTimeFormat(pattern="yyyy-MM-dd",iso = DateTimeFormat.ISO.DATE)
 //    @Past(message = "入职时间该在今天之前")
     private Date hiredate;

@@ -3,9 +3,9 @@
 Author: Cherish
 -------------------------------------------*/
 
-@import url('/static/tools/bootstrap-3.3.7/css/bootstrap.min.css');
+@import url('/tools/bootstrap-3.3.7/css/bootstrap.min.css');
 @import url('./bootstrap-reset.css');
-@import url('/static/tools/font-awesome-4.6.3/css/font-awesome.min.css');
+@import url('/tools/font-awesome-4.6.3/css/font-awesome.min.css');
 /*
 @import url(http://fonts.useso.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic);
 */
@@ -61,7 +61,7 @@ hr {
 -------------------------------*/
 
 .login-body {
-    background: #65cea7 url("/static/image/login-bg.jpg") no-repeat fixed;
+    background: #65cea7 url("/image/login-bg.jpg") no-repeat fixed;
     background-size: cover;
     width: 100%;
     height: 100%;
@@ -319,17 +319,17 @@ hr {
 }
 
 .custom-nav > li.menu-list > a {
-    background: transparent url(/static/image/plus-white.png) no-repeat 93% center;
+    background: transparent url(/image/plus-white.png) no-repeat 93% center;
 }
 
 .custom-nav > li.menu-list > a:hover {
     background-color: #353f4f;
-    background-image: url(/static/image/plus.png);
+    background-image: url(/image/plus.png);
 }
 
 .custom-nav > li.nav-active > a {
     background-color: #353f4f;
-    background-image: url(/static/image/minus.png);
+    background-image: url(/image/minus.png);
     color: #65cea7;
 }
 
@@ -338,7 +338,7 @@ hr {
 }
 
 .custom-nav > li.nav-active > a:hover {
-    background-image: url(/static/image/minus.png);
+    background-image: url(/image/minus.png);
 }
 
 .custom-nav > li.active > a,
@@ -349,15 +349,15 @@ hr {
 }
 
 .custom-nav > li.menu-list.active > a {
-    background-image: url(/static/image/plus.png);
+    background-image: url(/image/plus.png);
 }
 
 .custom-nav > li.nav-active.active > a {
-    background-image: url(/static/image/minus.png);
+    background-image: url(/image/minus.png);
 }
 
 .custom-nav > li.nav-active.active > a:hover {
-    background-image: url(/static/image/minus.png);
+    background-image: url(/image/minus.png);
 }
 
 .custom-nav li .fa {
@@ -2551,7 +2551,7 @@ table.display tr.even.gradeX, table.display tr.gradeX, tr.even.gradeU td.sorting
 }
 
 input.spinner[type="text"], input.spinner[type="password"], input.spinner[type="datetime"], input.spinner[type="datetime-local"], input.spinner[type="date"], input.spinner[type="month"], input.spinner[type="time"], input.spinner[type="week"], input.spinner[type="number"], input.spinner[type="email"], input.spinner[type="url"], input.spinner[type="search"], input.spinner[type="tel"], input.spinner[type="color"] {
-    background: url("/static/image/input-spinner.gif") right no-repeat !important;
+    background: url("/image/input-spinner.gif") right no-repeat !important;
 }
 
 /*--------------------
@@ -2821,7 +2821,7 @@ div.tagsinput span.tag a {
 --------------------------*/
 
 .lock-screen {
-    background: #6fc4a5 url("/static/image/lockscreen-bg.jpg") no-repeat fixed;
+    background: #6fc4a5 url("/image/lockscreen-bg.jpg") no-repeat fixed;
     background-size: cover;
     width: 100%;
     height: 100%;

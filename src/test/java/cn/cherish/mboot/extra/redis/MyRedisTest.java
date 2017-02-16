@@ -16,7 +16,7 @@ import java.util.Set;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class MyReidsTest {
+public class MyRedisTest {
 
     @Autowired
     private StringRedisTemplate redisTemplate;

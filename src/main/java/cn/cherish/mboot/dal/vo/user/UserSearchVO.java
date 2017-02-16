@@ -14,6 +14,8 @@ public class UserSearchVO implements java.io.Serializable {
 
     private String telephone;
 
+    private String position;
+
     @DateTimeFormat(pattern="yyyy-MM-dd",iso = DateTimeFormat.ISO.DATE)
     private Date hiredate;
 

@@ -3,8 +3,8 @@
 Author: Cherish
 -------------------------------------------*/
 
-@import url('/static/tools/dataTables-1.10.12/css/dataTables.bootstrap.min.css');
-@import url('/static/tools/dataTables-1.10.12/css/responsive.bootstrap.min.css');
+@import url('/tools/dataTables-1.10.12/css/dataTables.bootstrap.min.css');
+@import url('/tools/dataTables-1.10.12/css/responsive.bootstrap.min.css');
 
 /*奇数行*/
 tr.odd {
@@ -25,9 +25,9 @@ input.small{
 	vertical-align: middle;
 }
 td.details-control {
-    background: url('/static/images/details_open.png') no-repeat center center;
+    background: url('/images/details_open.png') no-repeat center center;
     cursor: pointer;
 }
 tr.shown td.details-control {
-    background: url('/static/images/details_close.png') no-repeat center center;
+    background: url('/images/details_close.png') no-repeat center center;
 }
