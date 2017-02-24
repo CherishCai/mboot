@@ -6,7 +6,6 @@ import cn.cherish.mboot.extra.shiro.ShiroUserUtil;
 import cn.cherish.mboot.service.UserService;
 import cn.cherish.mboot.util.QiniuUploadUtil;
 import cn.cherish.mboot.util.ValidateCode;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -39,7 +38,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@Slf4j
 @Controller
 public class BasicController extends ABaseController {
 
@@ -85,7 +83,7 @@ public class BasicController extends ABaseController {
 		String submitCode = WebUtils.getCleanParam(request, "validateCode");
 		//判断验证码
 		if (StringUtils.isBlank(submitCode) || !StringUtils.equalsIgnoreCase(code,submitCode.toLowerCase())) {
-			log.debug("验证码不正确");
+			LOGGER.debug("验证码不正确");
             errorMap.put("validateCodeError", "验证码不正确");
             //添加上表单输入数据返回给页面
             modelAndView.addObject("usernameInput", loginVO.getUsername());
@@ -117,25 +115,25 @@ public class BasicController extends ABaseController {
 				session.setAttribute("nickname", ShiroUserUtil.getNickname());
 
 			} catch (UnknownAccountException uae) {
-				log.debug("账户不存在!");
+				LOGGER.debug("账户不存在!");
 				errorMap.put("username","账户或密码错误，请重新输入");
 			} catch (IncorrectCredentialsException ice) {
 				errorMap.put("username","账户或密码错误，请重新输入");
-				log.debug("密码不正确!");
+				LOGGER.debug("密码不正确!");
 			} catch (LockedAccountException lae) {
-				log.debug("账户被冻结!");
+				LOGGER.debug("账户被冻结!");
 				errorMap.put("username","该账户被冻结");
 			}catch(ExcessiveAttemptsException eae){
-				log.debug("错误次数过多");
+				LOGGER.debug("错误次数过多");
 				errorMap.put("username","密码错误次数过多，请稍后再试");
 			} catch (AuthenticationException ae) {
 				token.clear();
 				errorMap.put("username","系统认证错误");
-				log.debug("认证错误!");
+				LOGGER.debug("认证错误!");
 			}
 
 			if (subject.isAuthenticated()){
-				log.debug("登录认证通过(这里可以进行一些认证通过后的一些系统参数初始化操作)");
+				LOGGER.debug("登录认证通过(这里可以进行一些认证通过后的一些系统参数初始化操作)");
 				modelAndView.setViewName("redirect:/admin");
 			}
 		}
@@ -145,7 +143,7 @@ public class BasicController extends ABaseController {
 
 	@GetMapping("/403")
 	public String unauthorizedRole(){
-		log.debug("------没有权限-------");
+		LOGGER.debug("------没有权限-------");
 		return "error/403";
 	}
 	

@@ -80,7 +80,7 @@
                             <li id="userLi"><a th:href="@{/user}"> 用户列表</a></li>
                         </p>
                         <p shiro:hasPermission="user:show">
-                            <li id="customerLi"><a th:href="@{/templates/admin/customer}"> 客户列表</a></li>
+                            <li id="customerLi"><a th:href="@{/customer}"> 客户列表</a></li>
                         </p>
                         <p shiro:hasRole="super">
                             <li id="roleLi"><a th:href="@{/role}"> 角色列表</a></li>

@@ -1,5 +1,6 @@
 package cn.cherish.mboot.web;
 
+import cn.cherish.mboot.dal.MResponse;
 import cn.cherish.mboot.dal.dto.CustomerDTO;
 import cn.cherish.mboot.dal.entity.Customer;
 import cn.cherish.mboot.dal.vo.BasicSearchVO;
@@ -7,8 +8,6 @@ import cn.cherish.mboot.dal.vo.customer.CustomerSearchVO;
 import cn.cherish.mboot.dal.vo.customer.CustomerVO;
 import cn.cherish.mboot.service.CustomerService;
 import org.apache.shiro.authz.annotation.RequiresRoles;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -27,8 +26,6 @@ import java.util.Map;
 @RequestMapping("customer")
 @RequiresRoles("admin")
 public class CustomerController extends ABaseController {
-
-    private static Logger LOGGER = LoggerFactory.getLogger(CustomerController.class);
 
     @Autowired
     private CustomerService customerService;

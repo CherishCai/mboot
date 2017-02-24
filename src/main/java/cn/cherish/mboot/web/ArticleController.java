@@ -1,13 +1,12 @@
 package cn.cherish.mboot.web;
 
+import cn.cherish.mboot.dal.MResponse;
 import cn.cherish.mboot.dal.dto.ArticleDTO;
 import cn.cherish.mboot.dal.entity.Article;
 import cn.cherish.mboot.dal.vo.ArticleVO;
 import cn.cherish.mboot.dal.vo.BasicSearchVO;
 import cn.cherish.mboot.service.ArticleService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -27,8 +26,6 @@ import java.util.Map;
 @Controller
 @RequestMapping("article")
 public class ArticleController extends ABaseController {
-
-    private static Logger LOGGER = LoggerFactory.getLogger(ArticleController.class);
 
     @Autowired
     private ArticleService articleService;

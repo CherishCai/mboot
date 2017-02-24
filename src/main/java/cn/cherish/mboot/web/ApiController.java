@@ -11,8 +11,6 @@ import cn.cherish.mboot.service.WeixinUserService;
 import cn.cherish.mboot.util.SessionUtil;
 import com.wx.pay.business.ResultNotify;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,7 +27,6 @@ import java.util.Map;
 @RequestMapping(value = "/api")
 public class ApiController extends ABaseController {
 
-	private static Logger LOGGER = LoggerFactory.getLogger(ApiController.class);
 
 	private WeixinUserService weixinUserService;
 	private CustomerService customerService;

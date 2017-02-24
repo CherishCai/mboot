@@ -1,8 +1,7 @@
 package cn.cherish.mboot.web;
 
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,11 +18,10 @@ import java.util.List;
 /**
  * Created by Cherish on 2017/1/4.
  */
+@Slf4j
 @Controller
 @RequestMapping(value = "/demo")//SwaggerConfig 例子
 public class SwaggerDemoController {
-
-    private Logger logger = LoggerFactory.getLogger(SwaggerDemoController.class);
 
     /**
      * 可以直接使用@ResponseBody响应JSON
@@ -37,7 +35,7 @@ public class SwaggerDemoController {
     @ApiOperation(value="测试-getCount", notes="getCount更多说明")
     public ModelMap getCount(HttpServletRequest request,
                              HttpServletResponse response) {
-        logger.info(">>>>>>>> begin getCount >>>>>>>>");
+        log.info(">>>>>>>> begin getCount >>>>>>>>");
         ModelMap map = new ModelMap();
         map.addAttribute("count", 158);
 
@@ -92,8 +90,8 @@ public class SwaggerDemoController {
 //    @ResponseBody
 //    @RequestMapping(value = "/jsonTest2", method = RequestMethod.POST)
 //    public ModelMap jsonTest2(@RequestBody Demo demo) {
-//        logger.info("demoName：" + demo.getName());
-//        logger.info("demoContent：" + demo.getContent());
+//        log.info("demoName：" + demo.getName());
+//        log.info("demoContent：" + demo.getContent());
 //        ModelMap map = new ModelMap();
 //        map.addAttribute("result", "ok");
 //        return map;
@@ -110,7 +108,7 @@ public class SwaggerDemoController {
     @ResponseBody
     @RequestMapping(value = "/jsonTest6", method = RequestMethod.POST)
     public ModelMap jsonTest6(@RequestParam("name") String demoName, @RequestParam String content) {
-        logger.info("demoName：" + demoName);
+        log.info("demoName：" + demoName);
         ModelMap map = new ModelMap();
         map.addAttribute("name",demoName + "AAA");
         map.addAttribute("content",content + "BBB");
@@ -138,7 +136,7 @@ public class SwaggerDemoController {
 //    @RequestMapping(value = "/jsonTest5", method = RequestMethod.POST)
 //    public ModelMap jsonTest5(@RequestBody JSONObject jsonObject) {
 //        String name = jsonObject.getString("name");
-//        logger.info("demoName：" + name);
+//        log.info("demoName：" + name);
 //        ModelMap map = new ModelMap();
 //        map.addAttribute("demoName",name);
 //        return map;

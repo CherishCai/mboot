@@ -1,7 +1,6 @@
 package cn.cherish.mboot.web;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import cn.cherish.mboot.dal.MResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.validation.BindingResult;
@@ -19,7 +18,7 @@ import java.util.Map;
  */
 public class ABaseController {
 
-	private Logger LOGGER = LoggerFactory.getLogger(getClass());
+	protected Logger LOGGER = LoggerFactory.getLogger(getClass());
 
 	protected static final Integer PAGE_SIZE = 20;
 	protected static final Integer NOT_LOGIN_CODE = 100;
@@ -53,14 +52,6 @@ public class ABaseController {
 		return map;
 	}
 
-	@Data
-	@AllArgsConstructor
-	protected class MResponse<T> implements java.io.Serializable {
-		private static final long serialVersionUID = -222983483999088181L;
-		private Integer code;
-		private Boolean success;
-		private String message;
-		private T data;
-	}
+
 
 }

@@ -4,8 +4,6 @@ import cn.cherish.mboot.dal.vo.su.SuperRolePermissionVO;
 import cn.cherish.mboot.dal.vo.su.SuperUserRoleVO;
 import cn.cherish.mboot.service.SuperService;
 import org.apache.shiro.authz.annotation.RequiresRoles;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,8 +26,6 @@ import java.util.Map;
 @RequestMapping("super")
 @RequiresRoles("super")
 public class SuperController extends ABaseController {
-
-    private static Logger LOGGER = LoggerFactory.getLogger(SuperController.class);
 
     @Autowired
     private SuperService superService;

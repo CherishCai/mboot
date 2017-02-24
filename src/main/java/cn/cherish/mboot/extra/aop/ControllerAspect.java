@@ -1,5 +1,6 @@
 package cn.cherish.mboot.extra.aop;
 
+import cn.cherish.mboot.dal.MResponse;
 import cn.cherish.mboot.extra.enums.ErrorCode;
 import cn.cherish.mboot.extra.exception.ServiceException;
 import com.google.common.base.Throwables;
@@ -16,8 +17,6 @@ import org.springframework.util.StopWatch;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import javax.validation.ConstraintViolation;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 @Slf4j
@@ -40,13 +39,13 @@ public class ControllerAspect {
      * 对返回JSON 的做切面，不包括后台模板ModelAndView那种
      * @return Map
      */
-	@Around("execution(public java.util.Map" +
+	@Around("execution(public cn.cherish.mboot.dal.MResponse" +
 			" cn.cherish.mboot.web.*Controller.*(..))")
-	public Map serviceAccess(ProceedingJoinPoint joinPoint) {
+	public MResponse serviceAccess(ProceedingJoinPoint joinPoint) {
 		//计时
 		StopWatch stopwatch = new StopWatch();
 		stopwatch.start();
-		Map response = null;
+		MResponse<String> response = null;
 		//获得接口名
 		String interfaceName = joinPoint.getSignature().getDeclaringTypeName();
 		//获得方法名
@@ -62,31 +61,27 @@ public class ControllerAspect {
 				//参数校验
 				validate(argObject);
 				//业务执行
-				response = (Map) joinPoint.proceed();
+				response = (MResponse) joinPoint.proceed();
 				stopwatch.stop();
 				log.info("Finish handling {}, RESULT: {}, ELAPSED: {}", controllerName, response, stopwatch);
 			} catch (Throwable throwable) {
 				if (throwable instanceof ServiceException) {
 					//逻辑错误
 					ServiceException e = (ServiceException) throwable;
-					response = new HashMap();
-                    response.put("code", e.getCode());
-                    response.put("message", e.getMessage());
-                    stopwatch.stop();
+					response = new MResponse(Integer.valueOf(e.getCode()), Boolean.FALSE, e.getMessage(), null);
+					stopwatch.stop();
 					log.info("Failed to call {}, RESULT: {}, ELAPSED: {}", controllerName, response, stopwatch);
 				} else if (throwable instanceof DataAccessException) {
 					//数据库有问题
-					response = new HashMap();
-                    response.put("code", ErrorCode.ERROR_CODE_500_002.getCode());
-                    response.put("message", ErrorCode.ERROR_CODE_500_002.getDesc());
+					response = new MResponse(Integer.valueOf(ErrorCode.ERROR_CODE_500_002.getCode()), Boolean.FALSE,
+							ErrorCode.ERROR_CODE_500_002.getDesc(), null);
 					stopwatch.stop();
 					log.info("Failed to call {}, RESULT: {}, ELAPSED: {}", controllerName, response, stopwatch);
 					log.error("Failed to call {}, RESULT: {}, CAUSE: {}", controllerName, response, Throwables.getStackTraceAsString(throwable));
 				} else {
 					//内部错误
-					response = new HashMap();
-                    response.put("code", ErrorCode.ERROR_CODE_500_001.getCode());
-                    response.put("message", ErrorCode.ERROR_CODE_500_001.getDesc());
+					response = new MResponse(Integer.valueOf(ErrorCode.ERROR_CODE_500_001.getCode()), Boolean.FALSE,
+							ErrorCode.ERROR_CODE_500_001.getDesc(), null);
 					stopwatch.stop();
 					log.info("Failed to call {}, RESULT: {}, ELAPSED: {}", controllerName, response, stopwatch);
 					log.error("Failed to call {}, RESULT: {}, CAUSE: {}", controllerName, response, Throwables.getStackTraceAsString(throwable));
