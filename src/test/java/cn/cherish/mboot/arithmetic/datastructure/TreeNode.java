@@ -1,6 +1,6 @@
 package cn.cherish.mboot.arithmetic.datastructure;
 
-class TreeNode {
+public class TreeNode {
 
 	private long value;
 	private TreeNode left;

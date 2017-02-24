@@ -2,7 +2,7 @@ package cn.cherish.mboot.web;
 
 import cn.cherish.mboot.dal.dto.UserDTO;
 import cn.cherish.mboot.dal.entity.User;
-import cn.cherish.mboot.dal.vo.*;
+import cn.cherish.mboot.dal.vo.BasicSearchVO;
 import cn.cherish.mboot.dal.vo.user.UserModifyPasswordVO;
 import cn.cherish.mboot.dal.vo.user.UserSaveVO;
 import cn.cherish.mboot.dal.vo.user.UserSearchVO;
@@ -19,13 +19,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -96,16 +94,16 @@ public class UserController extends ABaseController {
      */
     @GetMapping("/page")
     @ResponseBody
-    public Map toPage(BasicSearchVO basicSearchVO, UserSearchVO userSearchVO){
+    public MResponse toPage(BasicSearchVO basicSearchVO, UserSearchVO userSearchVO){
 
         try {
             Page<UserDTO> page = userService.findAll(userSearchVO, basicSearchVO);
 
-            return returnMap(Boolean.TRUE, basicSearchVO.getDraw(), page);
+            return buildResponse(Boolean.TRUE, basicSearchVO.getDraw(), page);
         } catch (Exception e) {
             e.printStackTrace();
-            LOGGER.error("获取用户列表失败:", e.getMessage());
-            return returnMap(Boolean.FALSE, BUSY_MSG, null);
+            LOGGER.error("获取用户列表失败: {}", e.getMessage());
+            return buildResponse(Boolean.FALSE, BUSY_MSG, null);
         }
     }
 
@@ -117,15 +115,15 @@ public class UserController extends ABaseController {
     @DeleteMapping("/{userId}/delete")
     @ResponseBody
     @RequiresPermissions("user:delete")
-    public Map delete(@PathVariable("userId") Long userId){
+    public MResponse delete(@PathVariable("userId") Long userId){
         try {
             userService.delete(userId);
 
-            return returnMap(Boolean.TRUE, "删除成功", null);
+            return buildResponse(Boolean.TRUE, "删除成功", null);
         } catch (Exception e) {
             e.printStackTrace();
             LOGGER.error("删除失败:{}", e.getMessage());
-            return returnMap(Boolean.FALSE, "删除失败", null);
+            return buildResponse(Boolean.FALSE, "删除失败", null);
         }
     }
 
@@ -148,10 +146,7 @@ public class UserController extends ABaseController {
         }
 
         if (bindingResult.hasErrors()) {
-            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-            for (FieldError error : fieldErrors) {
-                errorMap.put(error.getField(), error.getDefaultMessage());
-            }
+            errorMap.putAll(getErrors(bindingResult));
             mv.addObject("user", userUpdateVO);
 
         }else {
@@ -184,10 +179,7 @@ public class UserController extends ABaseController {
         mv.addObject("errorMap", errorMap);
 
         if (bindingResult.hasErrors()) {
-            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-            for (FieldError error : fieldErrors) {
-                errorMap.put(error.getField(), error.getDefaultMessage());
-            }
+            errorMap.putAll(getErrors(bindingResult));
             mv.addObject("user", userSaveVO);
 
         }else {
@@ -227,10 +219,7 @@ public class UserController extends ABaseController {
 
         //表单验证是否通过
         if (bindingResult.hasErrors()) {
-            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-            for (FieldError error : fieldErrors) {
-                errorMap.put(error.getField(), error.getDefaultMessage());
-            }
+            errorMap.putAll(getErrors(bindingResult));
 
         }else {
             if (StringUtils.isBlank(modifyPasswordVO.getPassword())

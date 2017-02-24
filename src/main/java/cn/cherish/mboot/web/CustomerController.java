@@ -1,11 +1,12 @@
 package cn.cherish.mboot.web;
 
-import cn.cherish.mboot.dal.dto.ArticleDTO;
-import cn.cherish.mboot.dal.entity.Article;
-import cn.cherish.mboot.dal.vo.ArticleVO;
+import cn.cherish.mboot.dal.dto.CustomerDTO;
+import cn.cherish.mboot.dal.entity.Customer;
 import cn.cherish.mboot.dal.vo.BasicSearchVO;
-import cn.cherish.mboot.service.ArticleService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import cn.cherish.mboot.dal.vo.customer.CustomerSearchVO;
+import cn.cherish.mboot.dal.vo.customer.CustomerVO;
+import cn.cherish.mboot.service.CustomerService;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,44 +20,22 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**
- * 文章控制器
  * Created by Cherish on 2017/1/6.
  */
 @Controller
-@RequestMapping("article")
-public class ArticleController extends ABaseController {
+@RequestMapping("customer")
+@RequiresRoles("admin")
+public class CustomerController extends ABaseController {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(ArticleController.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(CustomerController.class);
 
     @Autowired
-    private ArticleService articleService;
-
-    /**
-     * 对外开放的查看文章详情
-     * @param articleId 文章ID
-     * @return JSON
-     */
-    @GetMapping("/{articleId}")
-    @ResponseBody
-    public MResponse findOne(@PathVariable Long articleId){
-
-        try {
-            ArticleDTO article = articleService.findOne(articleId);
-
-            return buildResponse(Boolean.TRUE, "查看文章详情", article);
-        } catch (Exception e) {
-            e.printStackTrace();
-            LOGGER.error("获取列表失败:", e.getMessage());
-            return buildResponse(Boolean.FALSE, BUSY_MSG, null);
-        }
-    }
+    private CustomerService customerService;
 
     @GetMapping
-    @RequiresPermissions("info:show")
     public ModelAndView index(){
-        ModelAndView mv = new ModelAndView("admin/article/list");
+        ModelAndView mv = new ModelAndView("admin/customer/list");
         return mv;
     }
 
@@ -64,21 +43,19 @@ public class ArticleController extends ABaseController {
      * 返回新增页面
      */
     @GetMapping("/add")
-    @RequiresPermissions("info:add")
     public ModelAndView addForm(){
-        ModelAndView mv = new ModelAndView("admin/article/add");
+        ModelAndView mv = new ModelAndView("admin/customer/add");
         return mv;
     }
 
     /**
      * 返回修改信息页面
      */
-    @GetMapping("/{articleId}/update")
-    @RequiresPermissions("info:update")
-    public ModelAndView updateForm(@PathVariable("articleId") Long articleId){
-        ModelAndView mv = new ModelAndView("admin/article/edit");
-        Article article = articleService.findById(articleId);
-        mv.addObject(article);
+    @GetMapping("/{customerId}/update")
+    public ModelAndView updateForm(@PathVariable("customerId") Long customerId){
+        ModelAndView mv = new ModelAndView("admin/customer/edit");
+        Customer customer = customerService.findById(customerId);
+        mv.addObject(customer);
         return mv;
     }
 
@@ -90,10 +67,10 @@ public class ArticleController extends ABaseController {
      */
     @GetMapping("/page")
     @ResponseBody
-    public MResponse toPage(BasicSearchVO basicSearchVO){
+    public MResponse toPage(BasicSearchVO basicSearchVO, CustomerSearchVO customerSearchVO){
 
         try {
-            Page<ArticleDTO> page = articleService.findAll(basicSearchVO);
+            Page<CustomerDTO> page = customerService.findAll(basicSearchVO, customerSearchVO);
 
             return buildResponse(Boolean.TRUE, basicSearchVO.getDraw(), page);
         } catch (Exception e) {
@@ -105,16 +82,15 @@ public class ArticleController extends ABaseController {
 
     /**
      * 删除
-     * @param articleId ID
+     * @param customerId ID
      * @return JSON
      */
-    @DeleteMapping("/{articleId}/delete")
-    @RequiresPermissions("info:delete")
+    @DeleteMapping("/{customerId}/delete")
     @ResponseBody
-    public MResponse delete(@PathVariable("articleId") Long articleId){
+    public MResponse delete(@PathVariable("customerId") Long customerId){
 
         try {
-            articleService.delete(articleId);
+            customerService.delete(customerId);
             return buildResponse(Boolean.TRUE, "删除成功", null);
         } catch (Exception e) {
             e.printStackTrace();
@@ -125,31 +101,30 @@ public class ArticleController extends ABaseController {
 
     /**
      * 更改信息
-     * @param articleVO 更新信息
+     * @param customerVO 更新信息
      * @return ModelAndView
      */
     @PostMapping("/update")
-    @RequiresPermissions("info:update")
-    public ModelAndView update(@Validated ArticleVO articleVO, BindingResult bindingResult){
+    public ModelAndView update(@Validated CustomerVO customerVO, BindingResult bindingResult){
 
-        ModelAndView mv = new ModelAndView("admin/article/edit");
+        ModelAndView mv = new ModelAndView("admin/customer/edit");
         Map<String, Object> errorMap = new HashMap<>();
         mv.addObject("errorMap", errorMap);
 
-        if(articleVO == null || articleVO.getId() == null){
+        if(customerVO == null || customerVO.getId() == null){
             errorMap.put("msg", "数据错误");
             return mv;
         }
 
         if (bindingResult.hasErrors()) {
             errorMap.putAll(getErrors(bindingResult));
-            mv.addObject("article", articleVO);
+            mv.addObject("customer", customerVO);
 
         }else {
             try {
-                articleService.updateByVO(articleVO);
+                customerService.updateByVO(customerVO);
 
-                mv.addObject("article", articleService.findById(articleVO.getId()));
+                mv.addObject("customer", customerService.findById(customerVO.getId()));
                 errorMap.put("msg", "修改成功");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -163,24 +138,23 @@ public class ArticleController extends ABaseController {
 
     /**
      * 保存新用户
-     * @param articleVO 保存的信息
+     * @param customerVO 保存的信息
      * @return ModelAndView
      */
     @PostMapping("/save")
-    @RequiresPermissions("info:add")
-    public ModelAndView save(@Validated ArticleVO articleVO, BindingResult bindingResult){
+    public ModelAndView save(@Validated CustomerVO customerVO, BindingResult bindingResult){
 
-        ModelAndView mv = new ModelAndView("admin/article/add");
+        ModelAndView mv = new ModelAndView("admin/customer/add");
         Map<String, Object> errorMap = new HashMap<>();
         mv.addObject("errorMap", errorMap);
 
         if (bindingResult.hasErrors()) {
             errorMap.putAll(getErrors(bindingResult));
-            mv.addObject("article", articleVO);
+            mv.addObject("customer", customerVO);
 
         }else {
             try {
-                articleService.saveByVO(articleVO);
+                customerService.saveByVO(customerVO);
                 errorMap.put("msg", "添加成功");
 
             } catch (Exception e) {
@@ -193,6 +167,15 @@ public class ArticleController extends ABaseController {
         return mv;
     }
 
+    /**
+     * 提交密码修改请求
+     * @return ModelAndView
+     */
+    @PostMapping("/modifyPassword")
+    public ModelAndView modifyPassword() {
+
+        return null;
+    }
 
 
 }

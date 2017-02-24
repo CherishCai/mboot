@@ -1,6 +1,14 @@
 package cn.cherish.mboot.web;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -10,6 +18,8 @@ import java.util.Map;
  * @version 1.0
  */
 public class ABaseController {
+
+	private Logger LOGGER = LoggerFactory.getLogger(getClass());
 
 	protected static final Integer PAGE_SIZE = 20;
 	protected static final Integer NOT_LOGIN_CODE = 100;
@@ -21,20 +31,36 @@ public class ABaseController {
 
 	protected static final String BUSY_MSG = "系统繁忙";
 
-	protected Map returnMap(Integer code, String message, Object data) {
-		return returnMap(code, null, message, data);
+	protected MResponse buildResponse(Integer code, String message, Object data) {
+		return buildResponse(code, null, message, data);
 	}
 	
-	protected Map returnMap(Boolean success, String message, Object data) {
-		return returnMap(null, success, message, data);
+	protected MResponse buildResponse(Boolean success, String message, Object data) {
+		return buildResponse(null, success, message, data);
 	}
 
-	protected Map returnMap(Integer code, Boolean success, String message, Object data) {
-		Map<String, Object> map = new HashMap<>(5);
-		map.put("code", code);
-		map.put("success", success);
-		map.put("message", message);
-		map.put("data", data);
+	protected MResponse buildResponse(Integer code, Boolean success, String message, Object data) {
+		return new MResponse(code, success, message, data);
+	}
+
+	protected Map<String, String> getErrors(BindingResult result) {
+		Map<String, String> map = new HashMap<>();
+		List<FieldError> list = result.getFieldErrors();
+		for (FieldError error : list) {
+			LOGGER.debug("error: {} -> {}", error.getField(), error.getDefaultMessage());
+			map.put(error.getField(), error.getDefaultMessage());
+		}
 		return map;
 	}
+
+	@Data
+	@AllArgsConstructor
+	protected class MResponse<T> implements java.io.Serializable {
+		private static final long serialVersionUID = -222983483999088181L;
+		private Integer code;
+		private Boolean success;
+		private String message;
+		private T data;
+	}
+
 }

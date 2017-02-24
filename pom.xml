@@ -121,7 +121,11 @@
 			<artifactId>druid</artifactId>
 			<version>1.0.27</version>
 		</dependency>
-
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.24</version>
+		</dependency>
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>

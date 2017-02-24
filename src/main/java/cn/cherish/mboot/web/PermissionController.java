@@ -13,13 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -69,16 +67,16 @@ public class PermissionController extends ABaseController {
      */
     @GetMapping("/page")
     @ResponseBody
-    public Map toPage(BasicSearchVO basicSearchVO){
+    public MResponse toPage(BasicSearchVO basicSearchVO){
 
         try {
             Page<PermissionDTO> page = permissionService.findAll(basicSearchVO);
 
-            return returnMap(Boolean.TRUE, basicSearchVO.getDraw(), page);
+            return buildResponse(Boolean.TRUE, basicSearchVO.getDraw(), page);
         } catch (Exception e) {
             e.printStackTrace();
-            LOGGER.error("获取列表失败:", e.getMessage());
-            return returnMap(Boolean.FALSE, BUSY_MSG, null);
+            LOGGER.error("获取列表失败: {}", e.getMessage());
+            return buildResponse(Boolean.FALSE, BUSY_MSG, null);
         }
     }
 
@@ -89,15 +87,15 @@ public class PermissionController extends ABaseController {
      */
     @DeleteMapping("/{permissionId}/delete")
     @ResponseBody
-    public Map delpermission(@PathVariable("permissionId") Long permissionId){
+    public MResponse delpermission(@PathVariable("permissionId") Long permissionId){
 
         try {
             permissionService.delete(permissionId);
-            return returnMap(Boolean.TRUE, "删除成功", null);
+            return buildResponse(Boolean.TRUE, "删除成功", null);
         } catch (Exception e) {
             e.printStackTrace();
             LOGGER.error("删除失败:{}", e.getMessage());
-            return returnMap(Boolean.FALSE, "删除失败", null);
+            return buildResponse(Boolean.FALSE, "删除失败", null);
         }
     }
 
@@ -119,10 +117,7 @@ public class PermissionController extends ABaseController {
         }
 
         if (bindingResult.hasErrors()) {
-            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-            for (FieldError error : fieldErrors) {
-                errorMap.put(error.getField(), error.getDefaultMessage());
-            }
+            errorMap.putAll(getErrors(bindingResult));
             mv.addObject("permission", permissionUpdateVO);
 
         }else {
@@ -154,10 +149,7 @@ public class PermissionController extends ABaseController {
         mv.addObject("errorMap", errorMap);
 
         if (bindingResult.hasErrors()) {
-            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-            for (FieldError error : fieldErrors) {
-                errorMap.put(error.getField(), error.getDefaultMessage());
-            }
+            errorMap.putAll(getErrors(bindingResult));
             mv.addObject("permission", permissionSaveVO);
 
         }else {

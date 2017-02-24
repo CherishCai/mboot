@@ -26,6 +26,8 @@ public class JsonMapper {
 
 	private ObjectMapper mapper;
 
+	public static final JsonMapper INSTANCE = new JsonMapper();
+
 	public JsonMapper() {
 		this(null);
 	}

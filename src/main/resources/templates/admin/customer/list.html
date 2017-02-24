@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro"
+      layout:decorate="layout">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="author" content="Cherish">
+    <title>客户列表</title>
+
+</head>
+<body>
+
+<div layout:fragment="content">
+
+    <!--body wrapper start-->
+    <div class="wrapper">
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- well -->
+                <div class="well">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="input-group">
+										<span class="input-group-addon"> <label for="telephone">手机号码：</label>
+										</span> <input name="telephone" id="telephone" type="number"
+                                                       class="form-control" placeholder="手机号码">
+                            </div>
+                            <!-- /input-group -->
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+										<span class="input-group-addon"> <label for="nickname">呢称：</label>
+										</span> <input name="nickname" id="nickname" type="text"
+                                                       class="form-control" placeholder="呢称">
+                            </div>
+                            <!-- /input-group -->
+                        </div>
+
+                        <div class="col-sm-5">
+                            <div class="input-group">
+                                <button id="btn_search" type="button" class="btn btn-primary">
+                                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                    查询
+                                </button>
+                                <button id="btn_reset" type="button" class="btn btn-warning">
+                                    <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span>
+                                    重置
+                                </button>
+                                <button id="btn_fresh" type="button" class="btn btn-info">
+                                    <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                                    刷新
+                                </button>
+                            </div>
+                            <!-- /input-group -->
+                        </div>
+
+                    </div>
+                    <!-- /.row -->
+                </div>
+                <!-- /.well -->
+            </div>
+        </div><!-- row end -->
+
+        <div class="row">
+            <div class="col-sm-12">
+                <section class="panel">
+                    <header class="panel-heading">
+                        客户列表
+                        <!--<span class="tools pull-right">
+								<a href="javascript:;" class="fa fa-chevron-down"></a>
+								<a href="javascript:;" class="fa fa-times"></a>
+                        </span>-->
+                    </header>
+                    <div class="panel-body">
+                        <button type="button" id="otable_new" class="btn btn-primary">添加 <i class="fa fa-plus"></i>
+                        </button>
+                        <!-- table -->
+                        <table id="otable" class="table" cellspacing="0" width="100%">
+                            <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>呢称</th>
+                                <th>手机号码</th>
+                                <th>创建时间</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tfoot>
+                            <tr>
+                                <th>序号</th>
+                                <th>呢称</th>
+                                <th>手机号码</th>
+                                <th>创建时间</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                            </tfoot>
+                            <tbody>
+                            <tr>
+                                <th>序号</th>
+                                <th>呢称</th>
+                                <th>手机号码</th>
+                                <th>创建时间</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                            </tbody>
+
+                        </table>
+                        <!-- table end -->
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    <!--body wrapper end-->
+
+</div>
+
+<!--将被layout引入的js-->
+<div layout:fragment="javascript">
+    <script type="text/javascript">
+        $(function () {
+            //菜单的active
+            $('.custom-nav .nav-active').removeClass('nav-active');
+            $('.custom-nav .active').removeClass('active');
+            $("#userMenu").addClass("nav-active");
+            $("#customerLi").addClass("active");
+        });
+
+    </script>
+    <script src="/js/admin/dataTableConstant.js" type="text/javascript"></script>
+    <script src="/js/admin/customerManage.js" type="text/javascript"></script>
+</div>
+
+</body>
+</html>

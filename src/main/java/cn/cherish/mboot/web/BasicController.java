@@ -21,7 +21,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,12 +37,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Slf4j
 @Controller
-public class BasicController {
+public class BasicController extends ABaseController {
 
 	@Autowired
 	private UserService userService;
@@ -97,11 +95,7 @@ public class BasicController {
 
 		//表单验证是否通过
 		if (bindingResult.hasErrors()) {
-			List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-            for (FieldError error : fieldErrors) {
-                errorMap.put(error.getField(), error.getDefaultMessage());
-                log.debug("Login fieldErrors:{} -> {}", error.getField(), error.getDefaultMessage());
-            }
+			errorMap.putAll(getErrors(bindingResult));
             //添加上表单输入数据返回给页面
             modelAndView.addObject("usernameInput", loginVO.getUsername());
             modelAndView.addObject("passwordInput", loginVO.getPassword());

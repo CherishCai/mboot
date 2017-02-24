@@ -1,28 +1,13 @@
 package cn.cherish.mboot.util;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,7 +24,7 @@ import java.util.regex.Pattern;
  * @Create Date :  2016-01-23
  * @Version : 1.0
  */
-public class StringUtils {
+public class MStringUtils {
 
 	
 	/**
@@ -69,7 +54,7 @@ public class StringUtils {
 		}
 
 		S = S + 0.005; // 把它加0.005,为了预防浮点数的四舍五入造成的误差
-		String Result = "", odxs, odxc, temp1, temp2;
+		String result = "", odxs, odxc, temp1, temp2;
 		int integer, Point, ormb;
 		odxs = "零壹贰叁肆伍陆柒捌玖";
 		odxc = "分角圆拾佰仟万拾佰仟亿拾佰仟万拾佰仟亿拾佰仟";
@@ -77,40 +62,40 @@ public class StringUtils {
 			integer = (int) S; // 取得他的整数部分
 			Point = (int) (100 * (S - (float) integer)); // 取得他的小数部分
 			if (integer == 0)
-				Result = "零圆"; // 如果整数为0,则显示零圆
+				result = "零圆"; // 如果整数为0,则显示零圆
 			for (int i = 1; integer > 0; i++) {
 				ormb = (integer % 10); // 取得他的个位
 				temp1 = odxs.substring(ormb, ormb + 1);// 根据相应的值取得他的大写
 				temp2 = odxc.substring(i + 1, i + 2); // 根据循环次数确定他的单位
-				Result = temp1 + temp2 + Result;
+				result = temp1 + temp2 + result;
 				integer = integer / 10;
 			}
 			ormb = (Point / 10); // 取得角
 			for (int i = 1; i > -1; i--) {
 				temp1 = odxs.substring(ormb, ormb + 1);// 根据相应的值取得他的大写
 				temp2 = odxc.substring(i, i + 1); // 根据循环次数确定他的单位
-				Result = Result + temp1 + temp2;
+				result = result + temp1 + temp2;
 				ormb = Point % 10; // 取得分
 			}
-			 //System.out.print("Result frist: "+Result);
-            Result= Result.replaceAll("零仟","零");
-            Result= Result.replaceAll("零佰","零");
-            Result= Result.replaceAll("零拾","零");
-            while(Result.indexOf("零零")>-1)
+			 //System.out.print("result frist: "+result);
+            result= result.replaceAll("零仟","零");
+            result= result.replaceAll("零佰","零");
+            result= result.replaceAll("零拾","零");
+            while(result.indexOf("零零")>-1)
             {
-            	Result= Result.replaceAll("零零","零");
+            	result= result.replaceAll("零零","零");
             }
-            Result = Result.replaceAll("零圆","圆");
-            Result = Result.replaceAll("零万","万");
-            if("圆零角零分".equals(Result))
+            result = result.replaceAll("零圆","圆");
+            result = result.replaceAll("零万","万");
+            if("圆零角零分".equals(result))
             {
-            	Result="零圆零角零分";
+            	result="零圆零角零分";
             }
-	          //  System.out.print("Result second: "+Result);
+	          //  System.out.print("result second: "+result);
 		} catch (Exception se) {
 			se.printStackTrace();
 		}
-		return Result;
+		return result;
 	}
 	
 	/**
@@ -135,7 +120,7 @@ public class StringUtils {
 	 */
 	public static java.sql.Timestamp convertStringToDate(String value){
 		java.sql.Timestamp sd = null;
-		java.util.Date ud = null;
+		Date ud = null;
 		if(value!=null && value!=""){
 			try {
 				SimpleDateFormat sdf=null;
@@ -151,7 +136,7 @@ public class StringUtils {
 				e.printStackTrace();
 			}
 		}
-		ud = new java.util.Date(System.currentTimeMillis());
+		ud = new Date(System.currentTimeMillis());
 		sd = new java.sql.Timestamp(ud.getTime());
 		return sd;
 	}
@@ -501,10 +486,10 @@ public class StringUtils {
 	}
 
 	public static boolean isEqual(String o, String c) {
-		if (StringUtils.isEmpty(o)) {
+		if (MStringUtils.isEmpty(o)) {
 			o = "";
 		}
-		if (StringUtils.isEmpty(c)) {
+		if (MStringUtils.isEmpty(c)) {
 			c = "";
 		}
 		return o.equals(c);
@@ -711,20 +696,20 @@ public class StringUtils {
 		return isMatche(checkStr, regex);
 	}
 
+	public static boolean isMatcheIP(String ip) {
+		String patterStr = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
+		return isMatche(ip, patterStr);
+	}
+
 	// 防止如包含误判. 如判断"1234,222"是否包含"123",如果直接用String.indexOf()方法,会认为包含
 	// 我们在源字符串和子字符串的前后都加上分隔标志,变成判断",1234,222,"中是否包含",123,",这样就不会误判了
 
 	/**
-	 * @Title: isIndexOf
-	 * @Description: 判断包含关系
-	 * @param str
-	 *            源字符串
-	 * @param subStr
-	 *            子字符串
-	 * @param splitFlag
-	 *            源字符串的分隔标志
+	 * 判断包含关系
+	 * @param str 源字符串
+	 * @param subStr 子字符串
+	 * @param splitFlag 源字符串的分隔标志
 	 * @return true 包含 false 不包含
-	 * @throws
 	 */
 	public static boolean isIndexOf(String str, String subStr, String splitFlag) {
 
@@ -744,7 +729,7 @@ public class StringUtils {
 		String tmpStr = splitFlag + str + splitFlag;
 		String tmpSubStr = splitFlag + subStr + splitFlag;
 
-		return tmpStr.indexOf(tmpSubStr) >= 0;
+		return tmpStr.contains(tmpSubStr);
 
 	}
 
@@ -842,22 +827,8 @@ public class StringUtils {
 		return value;
 	}
 
-	public static void main1(String[] args) {
-		System.out.println(StringUtils.isFloat("0"));
-		System.out.println(StringUtils.isFloat("4.3"));
-		System.out.println(StringUtils.isFloat("43.4"));
-		System.out.println(StringUtils.isFloat("4.3.4"));
-		System.out.println(StringUtils.isFloat("-2.3"));
-		System.out.println(StringUtils.genRandowNum(2));
-
-		// System.out.println(isNum("-2"));
-	}
-
 	/**
 	 * 克隆String
-	 * 
-	 * @param warn
-	 * @return
 	 */
 	public static Object cloneMySelf(Object object) {
 		Object cloneObj = null;
@@ -915,7 +886,7 @@ public class StringUtils {
 	}
 
 	// 把一个key:val|..格式的String拼凑成HashMap
-	public static HashMap StringToHashMap(String str) {
+	public static HashMap stringToHashMap(String str) {
 		if (str == null || str.equals(""))
 			return null;
 		String[] _hashmap = str.split("\\|");
@@ -960,8 +931,7 @@ public class StringUtils {
 	}
 
 	/**
-	 * //根据随机数长度生成随机数
-	 * 
+	 * 根据随机数长度生成随机数
 	 * @param pwdLen
 	 * @return
 	 */
@@ -1001,23 +971,21 @@ public class StringUtils {
 	/**
 	 * 例如字符串为str='1,2,3,,4,3,2,5,,,2,7'经过处理后的结果为str='1,2,3,4,5,7'
 	 * 
-	 * @param orginalStr
-	 *            数组
-	 * @param seperator
-	 *            分割符
+	 * @param orginalStr 数组
+	 * @param seperator 分割符
 	 * @return
 	 */
 	public static String removeRedundancyItem(String orginalStr,
 			String seperator) {
 		String retStr = "";
 		int i = 0;
-		if (StringUtils.isEmpty(orginalStr) || StringUtils.isEmpty(seperator)) {
+		if (MStringUtils.isEmpty(orginalStr) || MStringUtils.isEmpty(seperator)) {
 			return retStr;
 		}
 		String str[] = orginalStr.split(seperator);
 		for (String string : str) {
-			if (StringUtils.isNotEmpty(string)) {
-				if (retStr.indexOf(string) > -1) {
+			if (MStringUtils.isNotEmpty(string)) {
+				if (retStr.contains(string)) {
 					continue;
 				} else {
 					if (i != 0)
@@ -1039,7 +1007,7 @@ public class StringUtils {
 		if (str == null)
 			return "";
 		// 1.不存在需要转换则直接返回
-		if (str.indexOf("{") < 0)
+		if (!str.contains("{"))
 			return str;
 		if (KeyVals == null || KeyVals.isEmpty())
 			return str;
@@ -1194,8 +1162,7 @@ public class StringUtils {
 	}
 
 	// 取xml属性内容 add by xiaof
-	public static String toXmlAttr(String src, String headTag, String EndTag,
-			String xmlAttr) {
+	public static String toXmlAttr(String src, String headTag, String EndTag, String xmlAttr) {
 		String attr = "";
 		String regex = "<" + headTag + " [^>]*" + xmlAttr
 				+ "=\"([^\"]+?)\"[^>]*" + EndTag + ">";
@@ -1204,14 +1171,14 @@ public class StringUtils {
 		try {
 			while (matcher.find()) {
 				attr = matcher.group(1);
-				if (StringUtils.isNotEmpty(attr)) {
+				if (MStringUtils.isNotEmpty(attr)) {
 					return attr;
 				}
 			}
 		} catch (Exception e) {
 		}
 
-		if (StringUtils.isEmpty(attr)) {
+		if (MStringUtils.isEmpty(attr)) {
 			attr = "";
 		}
 		return attr;
@@ -1222,7 +1189,7 @@ public class StringUtils {
 			return "";
 		}
 		for (String val : defValue) {
-			if (StringUtils.isNotEmpty(val)) {
+			if (MStringUtils.isNotEmpty(val)) {
 				return val;
 			}
 		}
@@ -1258,15 +1225,15 @@ public class StringUtils {
 	}
 
 	public static String leftPad(String str, int size) {
-		return StringUtils.leftPad(str, size);
+		return MStringUtils.leftPad(str, size);
 	}
 
 	public static String leftPad(String str, int size, char padChar) {
-		return StringUtils.leftPad(str, size, padChar);
+		return MStringUtils.leftPad(str, size, padChar);
 	}
 
 	public static String rightPad(String str, Integer size, char padChar) {
-		return StringUtils.rightPad(str, size, padChar);
+		return MStringUtils.rightPad(str, size, padChar);
 	}
 
 	public static boolean equals(String str1, String str2) {
@@ -1289,8 +1256,7 @@ public class StringUtils {
 
 	/**  
      * 分转换为元.  
-     *   
-     * @param fen 分  
+     * @param fen 分
      * @return 元  
      */  
     public static String fen2Yuan(final String fen) {  
@@ -1335,14 +1301,14 @@ public class StringUtils {
         return fen;  
     }  
 	
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 
-		StringUtils.replaceAll("erer(erer(", "(", " ( ");
+		MStringUtils.replaceAll("erer(erer(", "(", " ( ");
 
-		StringUtils.replaceAll("erer(erer(erer", "(", " ( ");
+		MStringUtils.replaceAll("erer(erer(erer", "(", " ( ");
 
-		System.out.println(StringUtils.fen2Yuan("1"));
-	}
+		System.out.println(MStringUtils.fen2Yuan("1"));
+	}*/
 	//特殊字符替换方法XMJ
 	//DATE:201506031622
 	public static String repalceSpecialCharacter(String specialCharacter){
@@ -1371,7 +1337,7 @@ public class StringUtils {
 	 * @return
 	 */
 	public static String convertToUpperCase(String str){
-		if(StringUtils.isEmpty(str)) return null;
+		if(MStringUtils.isEmpty(str)) return null;
 		return str.replaceFirst(str.substring(0, 1),str.substring(0, 1).toUpperCase()) ;
 	}
 }
