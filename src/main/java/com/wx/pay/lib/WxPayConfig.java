@@ -6,24 +6,24 @@ public class WxPayConfig {
 	 * 微信公众号信息配置 APPID：绑定支付的APPID（必须配置） MCHID：商户号（必须配置）
 	 * KEY：商户支付密钥，参考开户邮件设置（必须配置） APPSECRET：公众帐号secert（仅JSAPI支付的时候需要配置）
 	 */
-	public static String APPID = "wx23d240cb3f35694d";
-	public static String MCHID = "1280124901";
-	public static String KEY = "c605848e86ffe21004223c8b026b1024";
-	public static String APPSECRET = "c605848e86ffe21004223c8b026b1241";
+	public static String APPID = "APPID";
+	public static String MCHID = "MCHID";
+	public static String KEY = "KEY";
+	public static String APPSECRET = "APPSECRET";
 
 	// =======【证书路径设置】=====================================
 	/*
 	 * 证书路径,注意应该填写绝对路径（仅退款、撤销订单时需要）
 	 */
 	public static String SSLCERT_PATH = "apiclient_cert.p12";
-	public static String SSLCERT_PASSWORD = "1233410002";
+	public static String SSLCERT_PASSWORD = "SSLCERT_PASSWORD";
 
 	// =======【支付结果通知url】=====================================
 	/*
 	 * 支付结果通知回调url，用于商户接收支付结果
 	 */
-	public static String NOTIFY_URL = "http://www.iguangxiong.cn/springsolo/api/notify";
-    public static String redirect_url="http://wxpay.sxdit.cn/example/ProductPage.jsp";
+	public static String NOTIFY_URL = "http://ip/api/notify";
+    public static String redirect_url="http://ip/example/ProductPage.jsp";
 	// =======【商户系统后台机器IP】=====================================
 	/*
 	 * 此参数可手动配置也可在程序中自动获取
@@ -34,7 +34,7 @@ public class WxPayConfig {
 	/*
 	 * 默认IP和端口号分别为0.0.0.0和0，此时不开启代理（如有需要才设置）
 	 */
-	public static String PROXY_URL = "http://10.152.18.220:8080";
+	public static String PROXY_URL = "http://ip:8080";
 
 	// =======【上报信息配置】===================================
 	/*
