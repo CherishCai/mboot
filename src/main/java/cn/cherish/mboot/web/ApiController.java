@@ -9,7 +9,6 @@ import cn.cherish.mboot.extra.weixinjs.Sign;
 import cn.cherish.mboot.service.CustomerService;
 import cn.cherish.mboot.service.WeixinUserService;
 import cn.cherish.mboot.util.SessionUtil;
-import com.wx.pay.business.ResultNotify;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -116,37 +115,6 @@ public class ApiController extends ABaseController {
 		
 		return data;
 	}
-
-	/**
-	 * 客户付款后的回调接口
-	 * @param request
-	 * @param response
-	 * @throws Exception
-	 * @date 2016年8月17日 上午10:33:31
-	 */
-	@RequestMapping("/notify")
-	public void notify(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		
-		ResultNotify resultNotify = new ResultNotify(request, response);
-		resultNotify.ProcessNotify();
-		LOGGER.info("付款回调通知，付款单号：{}", resultNotify.out_trade_no);
-		if (resultNotify.out_trade_no != null) {
-			// out_trade_no为订单id
-			try {
-//				orderService.paySuccess(resultNotify.out_trade_no);
-//
-//				//TODO websocket通知管理员
-//				WebsocketMessageDto websocketMessageDto = new WebsocketMessageDto(
-//						Long.parseLong(resultNotify.out_trade_no),"pay","该预约订单已付款");
-//				myWebSocketHandler.sendMessageToUsers(new TextMessage(JSON.toJSONString(websocketMessageDto)));
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				LOGGER.error("付款回调修改数据库中的订单状态失败：{}", e.getMessage());
-			}
-		}
-	}
-
 
 
 }

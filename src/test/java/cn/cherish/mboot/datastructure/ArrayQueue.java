@@ -1,7 +1,7 @@
-package cn.cherish.mboot.arithmetic.datastructure;
+package cn.cherish.mboot.datastructure;
 
 
-import cn.cherish.mboot.arithmetic.exception.MyException;
+import cn.cherish.mboot.datastructure.exception.DataStructureException;
 
 @Deprecated
 public class ArrayQueue<T> implements Queue<T> {
@@ -21,20 +21,20 @@ public class ArrayQueue<T> implements Queue<T> {
 		this.values = new Object[capacity];
 	}
 
-	public void insert(T value) throws MyException {
+	public void insert(T value) throws DataStructureException {
 		if (!isFull()) {
 			values[rear] = value;
 			rear++;
 			size++;
 		}else {
-			throw new MyException("队列已满");
+			throw new DataStructureException("队列已满");
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	public T remove() throws MyException {
+	public T remove() throws DataStructureException {
 		if (isEmpty()) {
-			throw new MyException("队列为空");
+			throw new DataStructureException("队列为空");
 		}
 		T oldValue = (T)values[front];
 		front++;
@@ -43,9 +43,9 @@ public class ArrayQueue<T> implements Queue<T> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public T peek() throws MyException {
+	public T peek() throws DataStructureException {
 		if (isEmpty()) {
-			throw new MyException("队列为空!");
+			throw new DataStructureException("队列为空!");
 		}
 		return (T)values[front];
 	}
@@ -73,7 +73,7 @@ public class ArrayQueue<T> implements Queue<T> {
 		for (int i = 0; i < 22; i++) {
 			try {
 				arrayQueue.insert("你妹" + (i + 1));
-			} catch (MyException e) {
+			} catch (DataStructureException e) {
 				e.printStackTrace();
 			}
 		}
@@ -82,7 +82,7 @@ public class ArrayQueue<T> implements Queue<T> {
 			
 			System.out.println(arrayQueue.peek());
 			System.out.println(arrayQueue.peek());
-		} catch (MyException e) {
+		} catch (DataStructureException e) {
 			e.printStackTrace();
 		}
 

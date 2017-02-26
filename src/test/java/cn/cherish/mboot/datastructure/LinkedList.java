@@ -1,4 +1,4 @@
-package cn.cherish.mboot.arithmetic.datastructure;
+package cn.cherish.mboot.datastructure;
 
 public class LinkedList<T> {
 

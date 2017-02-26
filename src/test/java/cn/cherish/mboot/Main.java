@@ -5,9 +5,14 @@ package cn.cherish.mboot;
  */
 public class Main {
     public static void main(String[] args) {
-        Integer a = null;
+        /*Integer a = null;
         int b = a;
-        System.out.println("b = " + b);
+        System.out.println("b = " + b);*/
+        String s = "hh";
+        s += 'a';
+        System.out.println("s = " + s);
+        Integer.valueOf(59);
     }
 
 }
+

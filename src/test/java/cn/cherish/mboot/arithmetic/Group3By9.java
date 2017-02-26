@@ -15,35 +15,30 @@ public class Group3By9 {
     private static int[] cols = new int[MAX_COL_ROW]; //定义cols数组，记录每一组的人员
 
     public static void main(String[] args) {
-
         fun(0);
         System.out.println("总组合数 = " + count);
     }
 
     private static void fun(int col){
-        if (col >= MAX_COL_ROW || col <= 0 ) return;
+        if (col > MAX_COL_ROW || col < 0 ) return;
 
         //遍历该列所有被选过的人，并用rows数组记录，被选rows[i]=true
         boolean[] rows = new boolean[MAX_COL_ROW];
         for (int i = 0; i < col; i++) {
             rows[cols[i]] = true;
         }
-
         for (int i = 0; i < MAX_COL_ROW; i++) {
             //判断该行的人员是否已被选
             if (!rows[i]) continue;
             //设置当前列所选所在行数
             cols[col] = i;
-
             //累计方案个数
             count++;
             //打印组合信息
             printChessBoard();
-
             //继续下一列
             fun(++col);
         }
-
     }
 
     private static void printChessBoard(){

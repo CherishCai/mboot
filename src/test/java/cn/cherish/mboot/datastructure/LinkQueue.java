@@ -1,7 +1,7 @@
-package cn.cherish.mboot.arithmetic.datastructure;
+package cn.cherish.mboot.datastructure;
 
 
-import cn.cherish.mboot.arithmetic.exception.MyException;
+import cn.cherish.mboot.datastructure.exception.DataStructureException;
 
 public class LinkQueue<T> implements Queue<T> {
 	
@@ -27,9 +27,9 @@ public class LinkQueue<T> implements Queue<T> {
 		size++;
 	}
 
-	public T remove() throws MyException {
+	public T remove() throws DataStructureException {
 		if (isEmpty()) {
-			throw new MyException("队列为空");
+			throw new DataStructureException("队列为空");
 		}
 		LinkNode<T> oldFirst = first;
 		first = oldFirst.getNext();
@@ -37,9 +37,9 @@ public class LinkQueue<T> implements Queue<T> {
 		return oldFirst.getValue();
 	}
 
-	public T peek() throws MyException {
+	public T peek() throws DataStructureException {
 		if (isEmpty()) {
-			throw new MyException("队列为空!");
+			throw new DataStructureException("队列为空!");
 		}
 		return first.getValue();
 	}
@@ -68,7 +68,7 @@ public class LinkQueue<T> implements Queue<T> {
 			System.out.println(queue.peek());
 			System.out.println(queue.remove());
 			System.out.println(queue.peek());
-		} catch (MyException e) {
+		} catch (DataStructureException e) {
 			e.printStackTrace();
 		}
 		System.out.println(queue.size());

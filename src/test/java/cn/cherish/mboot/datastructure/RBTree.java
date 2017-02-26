@@ -1,6 +1,6 @@
-package cn.cherish.mboot.arithmetic.datastructure;
+package cn.cherish.mboot.datastructure;
 
-import cn.cherish.mboot.arithmetic.exception.MyException;
+import cn.cherish.mboot.datastructure.exception.DataStructureException;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -8,16 +8,16 @@ import java.util.List;
 
 
 /**
- * 蔡梦缘之二叉树搜索树
+ * 蔡梦缘之红黑树实现平衡树
  * @author caimengyuan
  *
  */
-public class BinaryTree {
+public class RBTree {
 
 	private Node root;
 	private int size;
 	
-	public BinaryTree(){
+	public RBTree(){
 		root = null;
 		size = 0;
 	}
@@ -63,9 +63,9 @@ public class BinaryTree {
 		}
 		size++;
 	}
-	public boolean removeNode(long val) throws MyException {
+	public boolean removeNode(long val) throws DataStructureException {
 		if (root == null) {
-			throw new MyException("树为空！");
+			throw new DataStructureException("树为空！");
 		}else {
 			Node currentNode = root;
 			Node parentNode = root;
@@ -180,6 +180,11 @@ public class BinaryTree {
 		return successor;
 	}
 
+	@SuppressWarnings("unused")
+	private void changeColor(Node currentNode){
+		
+	}
+	
 	public long minimum(){
 		Node currentNode = root;
 		if (currentNode == null) {
@@ -234,26 +239,28 @@ public class BinaryTree {
 		long value;
 		Node left;
 		Node right;
+		boolean isRed;
 		
 		public Node(long value) {
 			this.value = value;
 			this.left = null;
 			this.right = null;
+			this.isRed = true;
 		}
 		
 	}//class Node
 	
 	public static void main(String[] args) {
-		BinaryTree binaryTree = new BinaryTree();
+		RBTree rbTree = new RBTree();
 		long start0 = System.currentTimeMillis();
 		for (int j = 0; j < 100; j++) {
-			binaryTree.addNode((long)(Math.random()*50));
-//			binaryTree.addNode(7);
+			rbTree.addNode((long)(Math.random()*50));
+//			rbTree.addNode(j);
 		}
 		long end0 = System.currentTimeMillis();
 		System.out.println("插入耗时："+(end0-start0));
 		long start1 = System.currentTimeMillis();
-		List<Node> nodeList = binaryTree.sequence();
+		List<Node> nodeList = rbTree.sequence();
 		Iterator<Node> it = nodeList.iterator();
 		while(it.hasNext()){
 			System.out.print(it.next().value + "  ");
@@ -262,23 +269,23 @@ public class BinaryTree {
 		long end1 = System.currentTimeMillis();
 		System.out.println("中序取出耗时："+(end1-start1));
 		
-		System.out.print("最小值："+ binaryTree.minimum());
-		System.out.println("   最大值："+ binaryTree.maximum());
+		System.out.print("最小值："+ rbTree.minimum());
+		System.out.println("   最大值："+ rbTree.maximum());
 		
 		try {
-			System.out.println("删除6行不行？"+binaryTree.removeNode(6));
-			System.out.println("删除7行不行？"+binaryTree.removeNode(7));
-			System.out.println("删除18行不行？"+binaryTree.removeNode(18));
-		} catch (MyException e) {
+			System.out.println("删除6行不行？"+rbTree.removeNode(6));
+			System.out.println("删除7行不行？"+rbTree.removeNode(7));
+			System.out.println("删除18行不行？"+rbTree.removeNode(18));
+		} catch (DataStructureException e) {
 			e.printStackTrace();
 		}
 		
-		nodeList = binaryTree.sequence();
+		nodeList = rbTree.sequence();
 		Iterator<Node> iterator = nodeList.iterator();
 		while(iterator.hasNext()){
 			System.out.print(iterator.next().value + "  ");
 		}
 		System.out.println();
-		System.out.println("size:"+binaryTree.size());
+		System.out.println("size:"+rbTree.size());
 	}
 }

@@ -1,7 +1,7 @@
-package cn.cherish.mboot.arithmetic.datastructure;
+package cn.cherish.mboot.datastructure;
 
 
-import cn.cherish.mboot.arithmetic.exception.MyException;
+import cn.cherish.mboot.datastructure.exception.DataStructureException;
 
 /**
  * 蔡梦缘实现的栈
@@ -38,39 +38,39 @@ public class Stack<T> {
 	
 	/**
 	 * @return
-	 * @throws MyException
+	 * @throws DataStructureException
 	 */
 	@SuppressWarnings("unchecked")
-	public T peek() throws MyException {
+	public T peek() throws DataStructureException {
 		if (!isEmpty()) {
 			return (T) objects[top];
 		}else {
-			throw new MyException("栈为空！");
+			throw new DataStructureException("栈为空！");
 		}
 	}
 	/**
 	 * @param object
-	 * @throws MyException
+	 * @throws DataStructureException
 	 */
-	public void push(T object) throws MyException{
+	public void push(T object) throws DataStructureException {
 		if (!isFill()) {
 			objects[++top] = object;
 		}else {
-			throw new MyException("不好意思，栈已满！");
+			throw new DataStructureException("不好意思，栈已满！");
 		}
 	}
 	/**
 	 * @return
-	 * @throws MyException
+	 * @throws DataStructureException
 	 */
 	@SuppressWarnings("unchecked")
-	public T pop() throws MyException{
+	public T pop() throws DataStructureException {
 		if (!isEmpty()) {
 			T object = (T) objects[top];
 			top--;
 			return object;
 		}else {
-			throw new MyException("栈为空！");
+			throw new DataStructureException("栈为空！");
 		}
 	}
 	/**
@@ -100,7 +100,7 @@ public class Stack<T> {
 		for (int i = 0; i < 23; i++) {
 			try {
 				stack.push(i+"个");
-			} catch (MyException e) {
+			} catch (DataStructureException e) {
 				e.printStackTrace();
 			}
 		}
@@ -109,7 +109,7 @@ public class Stack<T> {
 			System.out.println(stack.pop());
 			System.out.println(stack.pop());
 			System.out.println(stack.peek());
-		} catch (MyException e) {
+		} catch (DataStructureException e) {
 			e.printStackTrace();
 		}
 		System.out.println("栈里含有："+stack.size());
