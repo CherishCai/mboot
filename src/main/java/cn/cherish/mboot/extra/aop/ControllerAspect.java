@@ -37,7 +37,7 @@ public class ControllerAspect {
 
     /**
      * 对返回JSON 的做切面，不包括后台模板ModelAndView那种
-     * @return Map
+     * @return MResponse
      */
 	@Around("execution(public cn.cherish.mboot.dal.MResponse" +
 			" cn.cherish.mboot.web.*Controller.*(..))")
@@ -45,7 +45,7 @@ public class ControllerAspect {
 		//计时
 		StopWatch stopwatch = new StopWatch();
 		stopwatch.start();
-		MResponse<String> response = null;
+		MResponse response = null;
 		//获得接口名
 		String interfaceName = joinPoint.getSignature().getDeclaringTypeName();
 		//获得方法名
@@ -68,19 +68,19 @@ public class ControllerAspect {
 				if (throwable instanceof ServiceException) {
 					//逻辑错误
 					ServiceException e = (ServiceException) throwable;
-					response = new MResponse(Integer.valueOf(e.getCode()), Boolean.FALSE, e.getMessage(), null);
+					response = new MResponse<>(Integer.valueOf(e.getCode()), Boolean.FALSE, e.getMessage(), null);
 					stopwatch.stop();
 					log.info("Failed to call {}, RESULT: {}, ELAPSED: {}", controllerName, response, stopwatch);
 				} else if (throwable instanceof DataAccessException) {
 					//数据库有问题
-					response = new MResponse(Integer.valueOf(ErrorCode.ERROR_CODE_500_002.getCode()), Boolean.FALSE,
+					response = new MResponse<>(Integer.valueOf(ErrorCode.ERROR_CODE_500_002.getCode()), Boolean.FALSE,
 							ErrorCode.ERROR_CODE_500_002.getDesc(), null);
 					stopwatch.stop();
 					log.info("Failed to call {}, RESULT: {}, ELAPSED: {}", controllerName, response, stopwatch);
 					log.error("Failed to call {}, RESULT: {}, CAUSE: {}", controllerName, response, Throwables.getStackTraceAsString(throwable));
 				} else {
 					//内部错误
-					response = new MResponse(Integer.valueOf(ErrorCode.ERROR_CODE_500_001.getCode()), Boolean.FALSE,
+					response = new MResponse<>(Integer.valueOf(ErrorCode.ERROR_CODE_500_001.getCode()), Boolean.FALSE,
 							ErrorCode.ERROR_CODE_500_001.getDesc(), null);
 					stopwatch.stop();
 					log.info("Failed to call {}, RESULT: {}, ELAPSED: {}", controllerName, response, stopwatch);

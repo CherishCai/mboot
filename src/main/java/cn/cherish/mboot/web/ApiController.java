@@ -107,11 +107,12 @@ public class ApiController extends ABaseController {
 	@ResponseBody
 	public Map getJssdkInitData(HttpServletRequest request, String url) {
 		Map<String, String> data =  null;
-		
+
+		//TODO 该做token缓存
 		if(StringUtils.isNotBlank(url))
-			data = Sign.sign(request.getServletContext(), url);
+			data = Sign.sign(url);
 		else
-			data = Sign.sign(request.getServletContext(), WeixinConfig.getValue("indexURL"));
+			data = Sign.sign(WeixinConfig.getValue("indexURL"));
 		
 		return data;
 	}

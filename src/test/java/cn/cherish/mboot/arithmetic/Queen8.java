@@ -1,8 +1,5 @@
 package cn.cherish.mboot.arithmetic;
 
-/**
- * Created by Cherish on 2017/2/9.
- */
 public class Queen8 {
 
     public static int num = 0; //累计方案总数

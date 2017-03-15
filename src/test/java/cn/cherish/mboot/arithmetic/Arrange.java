@@ -1,9 +1,9 @@
 package cn.cherish.mboot.arithmetic;
 
 /**
- * 全排列
+ * 排列
  */
-public class Permutation {
+public class Arrange {
 
     public static void main(String[] args) {
         char[] data = "ABCDEFGHIJ".toCharArray();

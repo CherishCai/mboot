@@ -30,8 +30,10 @@ public class MergeSort {
 		
 		//对目前的排序
 		int n = left,increaseLeft = left,increaseRight = middle+1;
+		int leftTemp,rightTemp;
 		while(n <= right){
-			int leftTemp = Integer.MAX_VALUE,rightTemp = Integer.MAX_VALUE;
+			leftTemp = Integer.MAX_VALUE;
+			rightTemp = Integer.MAX_VALUE;
 			if (increaseLeft <= middle) {
 				leftTemp = arr[increaseLeft];
 			}

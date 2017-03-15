@@ -1,9 +1,12 @@
 package cn.cherish.mboot.extra.weixin4j;
 
-import java.io.FileNotFoundException;
+import com.google.common.base.Throwables;
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.IOException;
 import java.util.Properties;
 
+@Slf4j
 public class WeixinConfig {
 
 	public WeixinConfig() {
@@ -13,10 +16,8 @@ public class WeixinConfig {
 	static {
 		try {
 			props.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("weixin.properties"));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error("init Fail ", Throwables.getStackTraceAsString(e));
 		}
 	}
 

@@ -1,5 +1,8 @@
 package cn.cherish.mboot.arithmetic;
 
+/**
+ * 勾股定理，求一个斜边可以有两个整数的直角边，
+ */
 public class Pythagorean {
 
     public static void main(String[] args) {

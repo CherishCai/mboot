@@ -1,42 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <include resource="org/springframework/boot/logging/logback/base.xml" />
-
-    <logger name="org.springframework.web" level="INFO"/>
-    <logger name="cn.cherish" level="TRACE" />
 
     <springProfile name="dev">
-        <logger name="cn.cherish" level="DEBUG" />
-        <logger name="org.hibernate" level="DEBUG" />
-        <logger name="org.springframework.web" level="DEBUG"/>
-
-        <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
             <encoder>
-                <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} [%file : %line] - %msg %n</Pattern>
+                <pattern>%cyan(%date{HH:mm:ss.SSS}) %magenta() %highlight(%-5level) %blue([%file : %line])
+                    %boldGreen(%msg%n)
+                </pattern>
             </encoder>
-            <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-                <level>TRACE</level>
-            </filter>
         </appender>
+        <!-- project default level -->
+        <logger name="cn.cherish.mboot" level="DEBUG"/>
+        <root level="INFO">
+            <appender-ref ref="console"/>
+        </root>
     </springProfile>
 
     <springProfile name="prod">
-        <logger name="cn.cherish" level="WARN" />
-        <logger name="org.hibernate" level="WARN" />
-        <logger name="org.springframework.web" level="WARN"/>
-
-        <appender name="dailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <File>../logs/mboot.log</File>
+        <appender name="rollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>../logs/mboot.log</file>
             <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-                <!-- daily rollover -->
-                <FileNamePattern>../logs/mboot.%d{yyyy-MM-dd}.log</FileNamePattern>
-                <!-- keep 30 days' worth of history -->
-                <maxHistory>30</maxHistory>
+                <fileNamePattern>../logs/mboot.%d{yyyy-MM-dd}.log</fileNamePattern>
             </rollingPolicy>
             <encoder>
-                <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} [%file : %line] - %msg %n</Pattern>
+                <pattern>%date{HH:mm:ss.SSS} [%thread] %-5level %logger{36} [%file : %line] - %msg%n
+                </pattern>
             </encoder>
         </appender>
+        <!-- project default level -->
+        <logger name="cn.cherish.mboot" level="INFO"/>
+        <root level="INFO">
+            <appender-ref ref="rollingFile"/>
+        </root>
     </springProfile>
 
 

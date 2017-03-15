@@ -71,8 +71,8 @@ public class QiniuUploadUtil {
         }
     }
 
-    public static void main(String args[]) throws IOException {
+    /*public static void main(String args[]) throws IOException {
         upload("", "");
-    }
+    }*/
 
 }
