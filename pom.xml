@@ -175,6 +175,13 @@
 			<artifactId>qiniu-java-sdk</artifactId>
 			<version>7.2.3</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>itextpdf</artifactId>
+			<version>5.5.10</version>
+		</dependency>
+
 
 
 

@@ -7,15 +7,20 @@ import java.util.concurrent.locks.ReentrantLock;
  * Created by Cherish on 2017/3/14.
  */
 public class BoundedBuffer {
-    private final ReentrantLock lock = new ReentrantLock();
-    final Condition notEmpty = lock.newCondition();
-    final Condition notFull = lock.newCondition();
+    public BoundedBuffer(){
+//        throw new NullPointerException();
+    }
+    private final ReentrantLock putLock = new ReentrantLock();
+    final Condition notFull = putLock.newCondition();
 
-    final Object[] items = new Object[100];
+    private final ReentrantLock takeLock = new ReentrantLock();
+    final Condition notEmpty = takeLock.newCondition();
+
+    final Object[] items = new Object[10];
     volatile int putptr, takeptr, count;
 
     private void signalNotEmpty() {
-        final ReentrantLock takeLock = this.lock;
+        final ReentrantLock takeLock = this.takeLock;
         takeLock.lock();
         try {
             notEmpty.signal();
@@ -24,8 +29,18 @@ public class BoundedBuffer {
         }
     }
 
+    private void signalNotFull() {
+        final ReentrantLock putLock = this.putLock;
+        putLock.lock();
+        try {
+            notFull.signal();
+        } finally {
+            putLock.unlock();
+        }
+    }
+
     public void put(Object x) throws InterruptedException {
-        lock.lock();
+        putLock.lock();
         try {
             while (count == items.length)
                 notFull.await();
@@ -36,28 +51,32 @@ public class BoundedBuffer {
             if (count + 1 < items.length)
                 notFull.signal();
 
-            notEmpty.signal();
         } finally {
-            lock.unlock();
+            putLock.unlock();
         }
         if (count == 0)
             signalNotEmpty();
     }
 
     public Object take() throws InterruptedException {
-        lock.lock();
+        takeLock.lock();
+        Object x;
         try {
             while (count == 0)
                 notEmpty.await();
-            Object x = items[takeptr];
+            x = items[takeptr];
             if (++takeptr == items.length) takeptr = 0;
             --count;
             System.out.println("消费了一个，当前可消费的产品有：" + count);
-            notFull.signal();
-            return x;
+            if (count > 0) {
+                notEmpty.signal();
+            }
         } finally {
-            lock.unlock();
+            takeLock.unlock();
         }
+        if (count < items.length)
+            signalNotFull();
+        return x;
     }
 
     public class PutThread extends Thread {
@@ -91,9 +110,11 @@ public class BoundedBuffer {
 
     public static void main(String[] args) {
         final BoundedBuffer test = new BoundedBuffer();
+
         test.new PutThread().start();
         test.new PutThread().start();
         test.new PutThread().start();
+
         test.new GetThread().start();
         test.new GetThread().start();
         test.new GetThread().start();

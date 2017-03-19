@@ -3,9 +3,11 @@ package cn.cherish.mboot;
 import com.alibaba.druid.pool.DruidDataSource;
 import sun.misc.Unsafe;
 
+import java.io.FileInputStream;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.LongAdder;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -61,6 +63,7 @@ public class NeedToRead {
         BlockingQueue lbQueue = new LinkedBlockingQueue();
 
         ConcurrentMap concurrentMap = new ConcurrentHashMap();
+        LongAdder longAdder = new LongAdder();
 
         ReentrantLock lock = new ReentrantLock();
         ReentrantReadWriteLock readWriteLock = new ReentrantReadWriteLock();
@@ -70,6 +73,17 @@ public class NeedToRead {
         ExecutorService threadPoolExecutor =
                 new ThreadPoolExecutor(5, 10, 5,
                         TimeUnit.SECONDS, new LinkedBlockingQueue<>());
+
+        FutureTask<Integer> futureTask = new FutureTask(()->{
+            return new Random().nextInt(100);
+        });
+        final String returnObj = "";
+        futureTask = new FutureTask(() -> {
+
+        }, returnObj);
+
+
+        FileInputStream fileInputStream;
 
         Field theUnsafe = null;
         try {
