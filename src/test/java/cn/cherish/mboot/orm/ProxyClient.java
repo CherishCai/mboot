@@ -87,6 +87,8 @@ public class ProxyClient {
                 Thread.currentThread().getContextClassLoader()
                 , new Class[]{UserDao.class}
                 , (proxy, method, args) -> {
+                    UserDao dao = (UserDao) proxy;
+                    System.out.println("dao.getClass() = " + dao.getClass());
                     SQL sqlA = method.getAnnotation(SQL.class);
                     String type = sqlA.type();
                     String sql = sqlA.value();
@@ -139,6 +141,7 @@ public class ProxyClient {
                     }
                 });
         //User user = userDao.seleteById(1);
+        System.out.println("userDao.getClass() = " + userDao.getClass());
         ioc.put(UserDao.class, userDao);
     }
 
