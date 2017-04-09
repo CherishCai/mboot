@@ -3,8 +3,8 @@ package cn.cherish.mboot.web;
 import cn.cherish.mboot.dal.MResponse;
 import cn.cherish.mboot.dal.dto.ArticleDTO;
 import cn.cherish.mboot.dal.entity.Article;
-import cn.cherish.mboot.dal.vo.ArticleVO;
-import cn.cherish.mboot.dal.vo.BasicSearchVO;
+import cn.cherish.mboot.dal.request.ArticleReq;
+import cn.cherish.mboot.dal.request.BasicSearchReq;
 import cn.cherish.mboot.service.ArticleService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,7 +87,7 @@ public class ArticleController extends ABaseController {
      */
     @GetMapping("/page")
     @ResponseBody
-    public MResponse toPage(BasicSearchVO basicSearchVO){
+    public MResponse toPage(BasicSearchReq basicSearchVO){
 
         try {
             Page<ArticleDTO> page = articleService.findAll(basicSearchVO);
@@ -127,7 +127,7 @@ public class ArticleController extends ABaseController {
      */
     @PostMapping("/update")
     @RequiresPermissions("info:update")
-    public ModelAndView update(@Validated ArticleVO articleVO, BindingResult bindingResult){
+    public ModelAndView update(@Validated ArticleReq articleVO, BindingResult bindingResult){
 
         ModelAndView mv = new ModelAndView("admin/article/edit");
         Map<String, Object> errorMap = new HashMap<>();
@@ -165,7 +165,7 @@ public class ArticleController extends ABaseController {
      */
     @PostMapping("/save")
     @RequiresPermissions("info:add")
-    public ModelAndView save(@Validated ArticleVO articleVO, BindingResult bindingResult){
+    public ModelAndView save(@Validated ArticleReq articleVO, BindingResult bindingResult){
 
         ModelAndView mv = new ModelAndView("admin/article/add");
         Map<String, Object> errorMap = new HashMap<>();

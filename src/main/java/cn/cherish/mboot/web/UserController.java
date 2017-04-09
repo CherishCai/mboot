@@ -3,13 +3,13 @@ package cn.cherish.mboot.web;
 import cn.cherish.mboot.dal.MResponse;
 import cn.cherish.mboot.dal.dto.UserDTO;
 import cn.cherish.mboot.dal.entity.User;
-import cn.cherish.mboot.dal.vo.BasicSearchVO;
-import cn.cherish.mboot.dal.vo.user.UserModifyPasswordVO;
-import cn.cherish.mboot.dal.vo.user.UserSaveVO;
-import cn.cherish.mboot.dal.vo.user.UserSearchVO;
-import cn.cherish.mboot.dal.vo.user.UserUpdateVO;
-import cn.cherish.mboot.extra.shiro.CryptographyUtil;
-import cn.cherish.mboot.extra.shiro.ShiroUserUtil;
+import cn.cherish.mboot.dal.request.BasicSearchReq;
+import cn.cherish.mboot.dal.request.user.UserModifyPasswordReq;
+import cn.cherish.mboot.dal.request.user.UserSaveReq;
+import cn.cherish.mboot.dal.request.user.UserSearchReq;
+import cn.cherish.mboot.dal.request.user.UserUpdateReq;
+import cn.cherish.mboot.common.shiro.CryptographyUtil;
+import cn.cherish.mboot.common.shiro.ShiroUserUtil;
 import cn.cherish.mboot.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
@@ -91,7 +91,7 @@ public class UserController extends ABaseController {
      */
     @GetMapping("/page")
     @ResponseBody
-    public MResponse toPage(BasicSearchVO basicSearchVO, UserSearchVO userSearchVO){
+    public MResponse toPage(BasicSearchReq basicSearchVO, UserSearchReq userSearchVO){
 
         try {
             Page<UserDTO> page = userService.findAll(userSearchVO, basicSearchVO);
@@ -131,7 +131,7 @@ public class UserController extends ABaseController {
      */
     @PostMapping("/update")
     @RequiresPermissions("user:update")
-    public ModelAndView update(@Validated UserUpdateVO userUpdateVO, BindingResult bindingResult){
+    public ModelAndView update(@Validated UserUpdateReq userUpdateVO, BindingResult bindingResult){
 
         ModelAndView mv = new ModelAndView("admin/user/edit");
         Map<String, Object> errorMap = new HashMap<>();
@@ -169,7 +169,7 @@ public class UserController extends ABaseController {
      */
     @PostMapping("/save")
     @RequiresPermissions("user:add")
-    public ModelAndView save(@Validated UserSaveVO userSaveVO, BindingResult bindingResult){
+    public ModelAndView save(@Validated UserSaveReq userSaveVO, BindingResult bindingResult){
 
         ModelAndView mv = new ModelAndView("admin/user/add");
         Map<String, Object> errorMap = new HashMap<>();
@@ -208,7 +208,7 @@ public class UserController extends ABaseController {
      * @return ModelAndView
      */
     @PostMapping("/modifyPassword")
-    public ModelAndView modifyPassword(@Validated UserModifyPasswordVO modifyPasswordVO, BindingResult bindingResult) {
+    public ModelAndView modifyPassword(@Validated UserModifyPasswordReq modifyPasswordVO, BindingResult bindingResult) {
 
         ModelAndView mv = new ModelAndView("admin/user/modifyPassword");
         Map<String, Object> errorMap = new HashMap<>();

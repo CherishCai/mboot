@@ -2,9 +2,9 @@ package cn.cherish.mboot.service;
 
 import cn.cherish.mboot.dal.dto.PermissionDTO;
 import cn.cherish.mboot.dal.entity.Permission;
-import cn.cherish.mboot.dal.vo.BasicSearchVO;
-import cn.cherish.mboot.dal.vo.permission.PermissionSaveVO;
-import cn.cherish.mboot.dal.vo.permission.PermissionUpdateVO;
+import cn.cherish.mboot.dal.request.BasicSearchReq;
+import cn.cherish.mboot.dal.request.permission.PermissionSaveReq;
+import cn.cherish.mboot.dal.request.permission.PermissionUpdateReq;
 import cn.cherish.mboot.repository.IBaseDAO;
 import cn.cherish.mboot.repository.PermissionDAO;
 import cn.cherish.mboot.util.ObjectConvertUtil;
@@ -29,7 +29,7 @@ public class PermissionService extends ABaseService<Permission, Long> {
         return permissionDAO;
     }
 
-    public Page<PermissionDTO> findAll(BasicSearchVO basicSearchVO) {
+    public Page<PermissionDTO> findAll(BasicSearchReq basicSearchVO) {
 
         int pageNumber = basicSearchVO.getStartIndex() / basicSearchVO.getPageSize() + 1;
         Page<Permission> permissionPage = this.findAll(pageNumber, basicSearchVO.getPageSize());
@@ -42,7 +42,7 @@ public class PermissionService extends ABaseService<Permission, Long> {
     }
 
     @Transactional
-    public void updateByVO(PermissionUpdateVO permissionUpdateVO) {
+    public void update(PermissionUpdateReq permissionUpdateVO) {
 
         Permission permission = this.findById(permissionUpdateVO.getId());
         ObjectConvertUtil.objectCopy(permission, permissionUpdateVO);
@@ -54,7 +54,7 @@ public class PermissionService extends ABaseService<Permission, Long> {
     }
 
     @Transactional
-    public void saveByVO(PermissionSaveVO permissionSaveVO) {
+    public void save(PermissionSaveReq permissionSaveVO) {
 
         Permission permission = new Permission();
         ObjectConvertUtil.objectCopy(permission, permissionSaveVO);

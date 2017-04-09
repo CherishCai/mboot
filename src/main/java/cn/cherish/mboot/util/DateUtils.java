@@ -9,7 +9,9 @@ import java.util.Date;
 /**
  * 严格的日期转换setLenient(false);
  * setLenient
- * public void setLenient(boolean lenient)指定日期/时间解析是否不严格。进行不严格解析时，解析程序可以使用启发式的方法来解释与此对象的格式不精确匹配的输入。进行严格解析时，输入必须匹配此对象的格式。
+ * public void setLenient(boolean lenient)指定日期/时间解析是否不严格。
+ * 进行不严格解析时，解析程序可以使用启发式的方法来解释与此对象的格式不精确匹配的输入。
+ * 进行严格解析时，输入必须匹配此对象的格式。
  * 参数：
  * lenient - 为 true 时，解析过程是不严格的
  * 不会自动将错误日期转换为正确的日期
@@ -24,36 +26,38 @@ public class DateUtils {
     public static final String DATE_FORMAT = "yyyy-MM-dd";
     public static final String DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
     public static final String DATE_ALL = "yyyyMMddHHmmssS";
+    public static final String TIME_FORMAT = "HH:mm:ss";
+    public static final String HM = "HH:mm";
 
-    public static Long strDateToNum(String paramString) throws Exception {
-        if (paramString == null)
+    public static Long strDateToNum(String param) throws Exception {
+        if (param == null)
             return null;
-        String[] arrayOfString = null;
+        String[] strings = null;
         String str = "";
-        if (paramString.indexOf("-") >= 0) {
-            arrayOfString = paramString.split("-");
-            for (int i = 0; i < arrayOfString.length; ++i)
-                str = str + arrayOfString[i];
-            return Long.valueOf(Long.parseLong(str));
+        if (param.contains("-")) {
+            strings = param.split("-");
+            for (int i = 0; i < strings.length; ++i)
+                str = str + strings[i];
+            return Long.parseLong(str);
         }
-        return Long.valueOf(Long.parseLong(paramString));
+        return Long.parseLong(param);
     }
 
-    public static Long strDateToNum1(String paramString) throws Exception {
-        if (paramString == null)
+    public static Long strDateToNum1(String param) throws Exception {
+        if (param == null)
             return null;
-        String[] arrayOfString = null;
+        String[] strings = null;
         String str = "";
-        if (paramString.indexOf("-") >= 0) {
-            arrayOfString = paramString.split("-");
-            for (int i = 0; i < arrayOfString.length; ++i)
-                if (arrayOfString[i].length() == 1)
-                    str = str + "0" + arrayOfString[i];
+        if (param.contains("-")) {
+            strings = param.split("-");
+            for (int i = 0; i < strings.length; ++i)
+                if (strings[i].length() == 1)
+                    str = str + "0" + strings[i];
                 else
-                    str = str + arrayOfString[i];
-            return Long.valueOf(Long.parseLong(str));
+                    str = str + strings[i];
+            return Long.parseLong(str);
         }
-        return Long.valueOf(Long.parseLong(paramString));
+        return Long.parseLong(param);
     }
 
     public static String numDateToStr(Long paramLong) {
@@ -66,26 +70,23 @@ public class DateUtils {
         return str;
     }
 
-    public static Date stringToDate(String paramString1, String paramString2) throws Exception {
-        SimpleDateFormat localSimpleDateFormat = new SimpleDateFormat(
-                paramString2);
-        localSimpleDateFormat.setLenient(false);
+    public static Date stringToDate(String paramStr, String pattern) throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        sdf.setLenient(false);
         try {
-            return localSimpleDateFormat.parse(paramString1);
-        } catch (ParseException localParseException) {
-            throw new Exception("解析日期字符串时出错！");
+            return sdf.parse(paramStr);
+        } catch (ParseException e) {
+            throw new Exception("解析日期字符串时出错！", e);
         }
     }
 
-    public static String dateToString(Date paramDate, String paramString) {
-        SimpleDateFormat localSimpleDateFormat = new SimpleDateFormat(
-                paramString);
-        localSimpleDateFormat.setLenient(false);
-        return localSimpleDateFormat.format(paramDate);
+    public static String dateToString(Date paramDate, String pattern) {
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        sdf.setLenient(false);
+        return sdf.format(paramDate);
     }
 
-    public static Date compactStringToDate(String paramString)
-            throws Exception {
+    public static Date compactStringToDate(String paramString) throws Exception {
         return stringToDate(paramString, "yyyyMMdd");
     }
 
@@ -102,100 +103,101 @@ public class DateUtils {
     }
 
     public static int getDaysBetween(Date paramDate1, Date paramDate2) throws Exception {
-        Calendar localCalendar1 = Calendar.getInstance();
-        Calendar localCalendar2 = Calendar.getInstance();
-        localCalendar1.setTime(paramDate1);
-        localCalendar2.setTime(paramDate2);
-        if (localCalendar1.after(localCalendar2))
+        Calendar c1 = Calendar.getInstance();
+        Calendar c2 = Calendar.getInstance();
+        c1.setTime(paramDate1);
+        c2.setTime(paramDate2);
+        if (c1.after(c2))
             throw new Exception("起始日期小于终止日期!");
-        int i = localCalendar2.get(6) - localCalendar1.get(6);
-        int j = localCalendar2.get(1);
-        if (localCalendar1.get(1) != j) {
-            localCalendar1 = (Calendar) localCalendar1.clone();
+        int i = c2.get(6) - c1.get(6);
+        int j = c2.get(1);
+        if (c1.get(1) != j) {
+            c1 = (Calendar) c1.clone();
             do {
-                i += localCalendar1.getActualMaximum(6);
-                localCalendar1.add(1, 1);
-            } while (localCalendar1.get(1) != j);
+                i += c1.getActualMaximum(6);
+                c1.add(1, 1);
+            } while (c1.get(1) != j);
         }
         return i;
     }
 
-    public static Date addDays(Date paramDate, int paramInt)
-            throws Exception {
-        Calendar localCalendar = Calendar.getInstance();
-        localCalendar.setTime(paramDate);
-        int i = localCalendar.get(6);
-        localCalendar.set(6, i + paramInt);
-        return localCalendar.getTime();
+    public static Date addDays(int differDate) {
+        return addDays(null, differDate);
     }
 
-    public static Date addDays(String paramString1, String paramString2, int paramInt) throws Exception {
-        Calendar localCalendar = Calendar.getInstance();
-        Date localDate = stringToDate(paramString1, paramString2);
-        localCalendar.setTime(localDate);
-        int i = localCalendar.get(6);
-        localCalendar.set(6, i + paramInt);
-        return localCalendar.getTime();
+    public static Date addDays(Date paramDate, int differDate) {
+        Calendar c = Calendar.getInstance();
+        if (paramDate != null) {
+            c.setTime(paramDate);
+        }
+        int i = c.get(6);
+        c.set(6, i + differDate);
+        return c.getTime();
     }
 
-    public static java.sql.Date getSqlDate(Date paramDate)
-            throws Exception {
-        java.sql.Date localDate = new java.sql.Date(paramDate.getTime());
-        return localDate;
+    public static Date addDays(String dateStr, String pattern, int differDate) throws Exception {
+        Calendar calendar = Calendar.getInstance();
+        Date localDate = stringToDate(dateStr, pattern);
+        calendar.setTime(localDate);
+        int i = calendar.get(6);
+        calendar.set(6, i + differDate);
+        return calendar.getTime();
+    }
+
+    public static java.sql.Date getSqlDate(Date paramDate) {
+        return new java.sql.Date(paramDate.getTime());
     }
 
     public static String formatDate(Date paramDate) {
         if (paramDate == null)
             return null;
-        SimpleDateFormat localSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        localSimpleDateFormat.setLenient(false);
-        return localSimpleDateFormat.format(paramDate);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        sdf.setLenient(false);
+        return sdf.format(paramDate);
     }
 
     public static String formatDateTime(Date paramDate) {
         if (paramDate == null)
             return null;
-        SimpleDateFormat localSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        localSimpleDateFormat.setLenient(false);
-        return localSimpleDateFormat.format(paramDate);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sdf.setLenient(false);
+        return sdf.format(paramDate);
     }
 
-    public static Date parseDate(String paramString)
-            throws Exception {
+    public static Date parseDate(String paramString) throws Exception {
         if ((paramString == null) || (paramString.trim().equals("")))
             return null;
-        SimpleDateFormat localSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        localSimpleDateFormat.setLenient(false);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        sdf.setLenient(false);
         try {
-            return localSimpleDateFormat.parse(paramString);
-        } catch (ParseException localParseException) {
-            throw new Exception("日期解析出错！", localParseException);
+            return sdf.parse(paramString);
+        } catch (ParseException e) {
+            throw new Exception("日期解析出错！", e);
         }
     }
 
-    public static Date parseDateTime(String paramString)
-            throws Exception {
+    public static Date parseDateTime(String paramString) throws Exception {
         if ((paramString == null) || (paramString.trim().equals("")))
             return null;
-        SimpleDateFormat localSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        localSimpleDateFormat.setLenient(false);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sdf.setLenient(false);
         try {
-            return localSimpleDateFormat.parse(paramString);
-        } catch (ParseException localParseException) {
-            throw new Exception("时间解析异常！", localParseException);
+            return sdf.parse(paramString);
+        } catch (ParseException e) {
+            throw new Exception("时间解析异常！", e);
         }
     }
 
     public static Integer getYM(String paramString) throws Exception {
         if (paramString == null)
             return null;
-        SimpleDateFormat localSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        localSimpleDateFormat.setLenient(false);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        sdf.setLenient(false);
         Date localDate;
         try {
-            localDate = localSimpleDateFormat.parse(paramString);
-        } catch (ParseException localParseException) {
-            throw new Exception("时间解析异常！", localParseException);
+            localDate = sdf.parse(paramString);
+        } catch (ParseException e) {
+            throw new Exception("时间解析异常！", e);
         }
         return getYM(localDate);
     }
@@ -203,52 +205,43 @@ public class DateUtils {
     public static Integer getYM(Date paramDate) {
         if (paramDate == null)
             return null;
-        Calendar localCalendar = Calendar.getInstance();
-        localCalendar.setTime(paramDate);
-        int i = localCalendar.get(1);
-        int j = localCalendar.get(2) + 1;
-        return new Integer(i * 100 + j);
+        Calendar c = Calendar.getInstance();
+        c.setTime(paramDate);
+        int i = c.get(1);
+        int j = c.get(2) + 1;
+        return i * 100 + j;
     }
 
     public static int addMonths(int paramInt1, int paramInt2) {
-        Calendar localCalendar = Calendar.getInstance();
-        localCalendar.set(1, paramInt1 / 100);
-        localCalendar.set(2, paramInt1 % 100 - 1);
-        localCalendar.set(5, 1);
-        localCalendar.add(2, paramInt2);
-        return getYM(localCalendar.getTime()).intValue();
+        Calendar c = Calendar.getInstance();
+        c.set(1, paramInt1 / 100);
+        c.set(2, paramInt1 % 100 - 1);
+        c.set(5, 1);
+        c.add(2, paramInt2);
+        return getYM(c.getTime());
     }
 
-    public static Date addMonths(Date paramDate,
-                                 int paramInt) {
-        Calendar localCalendar = Calendar.getInstance();
-        localCalendar.setTime(paramDate);
-        localCalendar.add(2, paramInt);
-        return localCalendar.getTime();
+    public static Date addMonths(Date paramDate, int paramInt) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(paramDate);
+        c.add(2, paramInt);
+        return c.getTime();
     }
 
     public static int monthsBetween(int paramInt1, int paramInt2) {
-        int i = paramInt2 / 100 * 12 + paramInt2 % 100
+        return paramInt2 / 100 * 12 + paramInt2 % 100
                 - (paramInt1 / 100 * 12 + paramInt1 % 100);
-        return i;
     }
 
     public static int monthsBetween(Date paramDate1, Date paramDate2) {
-        return monthsBetween(getYM(paramDate1).intValue(), getYM(paramDate2).intValue());
+        return monthsBetween(getYM(paramDate1), getYM(paramDate2));
     }
 
     public static String getChineseDate(Calendar paramCalendar) {
         int i = paramCalendar.get(1);
         int j = paramCalendar.get(2);
         int k = paramCalendar.get(5);
-        StringBuffer localStringBuffer = new StringBuffer();
-        localStringBuffer.append(i);
-        localStringBuffer.append("年");
-        localStringBuffer.append(j + 1);
-        localStringBuffer.append("月");
-        localStringBuffer.append(k);
-        localStringBuffer.append("日");
-        return localStringBuffer.toString();
+        return String.valueOf(i) + "年" + (j + 1) + "月" + k + "日";
     }
 
     public static String getChineseWeekday(Calendar paramCalendar) {

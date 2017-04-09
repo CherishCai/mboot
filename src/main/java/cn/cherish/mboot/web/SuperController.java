@@ -1,7 +1,7 @@
 package cn.cherish.mboot.web;
 
-import cn.cherish.mboot.dal.vo.su.SuperRolePermissionVO;
-import cn.cherish.mboot.dal.vo.su.SuperUserRoleVO;
+import cn.cherish.mboot.dal.request.su.SuperRolePermissionReq;
+import cn.cherish.mboot.dal.request.su.SuperUserRoleReq;
 import cn.cherish.mboot.service.SuperService;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +63,7 @@ public class SuperController extends ABaseController {
      * @return ModelAndView
      */
     @PostMapping("/updateUserRole")
-    public ModelAndView updateUserRole(@Validated SuperUserRoleVO superUserRoleVO, BindingResult bindingResult){
+    public ModelAndView updateUserRole(@Validated SuperUserRoleReq superUserRoleVO, BindingResult bindingResult){
 
         ModelAndView mv = new ModelAndView("admin/super/manage");
         Map<String, Object> errorMap = new HashMap<>();
@@ -99,7 +99,7 @@ public class SuperController extends ABaseController {
      * @return ModelAndView
      */
     @PostMapping("/updateRolePermission")
-   public ModelAndView updateRolePermission(@Validated SuperRolePermissionVO superRolePermissionVO, BindingResult bindingResult){
+   public ModelAndView updateRolePermission(@Validated SuperRolePermissionReq superRolePermissionVO, BindingResult bindingResult){
 
         ModelAndView mv = new ModelAndView("admin/super/manage");
         Map<String, Object> errorMap = new HashMap<>();

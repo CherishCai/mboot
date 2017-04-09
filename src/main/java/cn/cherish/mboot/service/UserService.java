@@ -2,11 +2,11 @@ package cn.cherish.mboot.service;
 
 import cn.cherish.mboot.dal.dto.UserDTO;
 import cn.cherish.mboot.dal.entity.User;
-import cn.cherish.mboot.dal.vo.BasicSearchVO;
-import cn.cherish.mboot.dal.vo.user.UserSaveVO;
-import cn.cherish.mboot.dal.vo.user.UserSearchVO;
-import cn.cherish.mboot.dal.vo.user.UserUpdateVO;
-import cn.cherish.mboot.extra.shiro.CryptographyUtil;
+import cn.cherish.mboot.dal.request.BasicSearchReq;
+import cn.cherish.mboot.dal.request.user.UserSaveReq;
+import cn.cherish.mboot.dal.request.user.UserSearchReq;
+import cn.cherish.mboot.dal.request.user.UserUpdateReq;
+import cn.cherish.mboot.common.shiro.CryptographyUtil;
 import cn.cherish.mboot.repository.IBaseDAO;
 import cn.cherish.mboot.repository.UserDAO;
 import cn.cherish.mboot.util.ObjectConvertUtil;
@@ -72,7 +72,7 @@ public class UserService extends ABaseService<User, Long> {
 
     @CacheEvict(allEntries = true)
     @Transactional
-    public void updateByVO(UserUpdateVO userUpdateVO) {
+    public void update(UserUpdateReq userUpdateVO) {
         User user = findById(userUpdateVO.getId());
         ObjectConvertUtil.objectCopy(user, userUpdateVO);
         user.setModifiedTime(new Date());
@@ -80,7 +80,7 @@ public class UserService extends ABaseService<User, Long> {
     }
 
     @Transactional
-    public void saveByVO(UserSaveVO userSaveVO) {
+    public void save(UserSaveReq userSaveVO) {
 
         if (exist(userSaveVO.getUsername())) {
             return;
@@ -94,7 +94,7 @@ public class UserService extends ABaseService<User, Long> {
         save(user);
     }
 
-    public Page<UserDTO> findAll(UserSearchVO userSearchVO, BasicSearchVO basicSearchVO) {
+    public Page<UserDTO> findAll(UserSearchReq userSearchVO, BasicSearchReq basicSearchVO) {
 
         int pageNumber = basicSearchVO.getStartIndex() / basicSearchVO.getPageSize() + 1;
         PageRequest pageRequest = super.buildPageRequest(pageNumber, basicSearchVO.getPageSize());

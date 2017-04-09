@@ -41,6 +41,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         //明明配置了shiroFilterFactoryBean.setUnauthorizedUrl("/403");
         // 不起效也是奇葩，它就是要抛异常 >> org.apache.shiro.authz.UnauthorizedException
         properties.setProperty("org.apache.shiro.authz.UnauthorizedException", "redirect:/403");
+        //登陆过期后，跳回登陆界面
+        properties.setProperty("org.apache.shiro.authz.AuthorizationException", "redirect:/login");
         simpleMappingExceptionResolver.setExceptionMappings(properties);
 
         exceptionResolvers.add(simpleMappingExceptionResolver);

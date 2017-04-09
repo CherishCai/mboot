@@ -3,9 +3,9 @@ package cn.cherish.mboot.web;
 import cn.cherish.mboot.dal.MResponse;
 import cn.cherish.mboot.dal.dto.PermissionDTO;
 import cn.cherish.mboot.dal.entity.Permission;
-import cn.cherish.mboot.dal.vo.BasicSearchVO;
-import cn.cherish.mboot.dal.vo.permission.PermissionSaveVO;
-import cn.cherish.mboot.dal.vo.permission.PermissionUpdateVO;
+import cn.cherish.mboot.dal.request.BasicSearchReq;
+import cn.cherish.mboot.dal.request.permission.PermissionSaveReq;
+import cn.cherish.mboot.dal.request.permission.PermissionUpdateReq;
 import cn.cherish.mboot.service.PermissionService;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +64,7 @@ public class PermissionController extends ABaseController {
      */
     @GetMapping("/page")
     @ResponseBody
-    public MResponse toPage(BasicSearchVO basicSearchVO){
+    public MResponse toPage(BasicSearchReq basicSearchVO){
 
         try {
             Page<PermissionDTO> page = permissionService.findAll(basicSearchVO);
@@ -102,7 +102,7 @@ public class PermissionController extends ABaseController {
      * @return ModelAndView
      */
     @PostMapping("/update")
-    public ModelAndView updatepermission(@Validated PermissionUpdateVO permissionUpdateVO, BindingResult bindingResult){
+    public ModelAndView updatepermission(@Validated PermissionUpdateReq permissionUpdateVO, BindingResult bindingResult){
 
         ModelAndView mv = new ModelAndView("admin/permission/edit");
         Map<String, Object> errorMap = new HashMap<>();
@@ -139,7 +139,7 @@ public class PermissionController extends ABaseController {
      * @return ModelAndView
      */
     @PostMapping("/save")
-    public ModelAndView savepermission(@Validated PermissionSaveVO permissionSaveVO, BindingResult bindingResult){
+    public ModelAndView savepermission(@Validated PermissionSaveReq permissionSaveVO, BindingResult bindingResult){
 
         ModelAndView mv = new ModelAndView("admin/permission/add");
         Map<String, Object> errorMap = new HashMap<>();

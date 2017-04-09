@@ -47,7 +47,7 @@ public abstract class ABaseService<E, PK extends Serializable> {
      * eg. public class UserService extends ABaseService<User, Long>
      */
     public ABaseService() {
-        this.clazz = Reflections.getClassGenricType(getClass());
+        this.clazz = Reflections.getClassGenericType(getClass());
     }
 
     @Transactional(readOnly = false)

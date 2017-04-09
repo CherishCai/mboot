@@ -1,13 +1,13 @@
 package cn.cherish.mboot.web;
 
-import cn.cherish.mboot.dal.entity.WeixinUser;
-import cn.cherish.mboot.extra.weixin4j.OAuthInfo;
-import cn.cherish.mboot.extra.weixin4j.UserInfo;
-import cn.cherish.mboot.extra.weixin4j.WeixinConfig;
-import cn.cherish.mboot.extra.weixin4j.WeixinUtil;
-import cn.cherish.mboot.extra.weixinjs.Sign;
+import cn.cherish.mboot.dal.entity.WxUser;
+import cn.cherish.mboot.common.weixin4j.OAuthInfo;
+import cn.cherish.mboot.common.weixin4j.UserInfo;
+import cn.cherish.mboot.common.weixin4j.WeixinConfig;
+import cn.cherish.mboot.common.weixin4j.WeixinUtil;
+import cn.cherish.mboot.common.weixinjs.Sign;
 import cn.cherish.mboot.service.CustomerService;
-import cn.cherish.mboot.service.WeixinUserService;
+import cn.cherish.mboot.service.WxService;
 import cn.cherish.mboot.util.SessionUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -27,7 +27,7 @@ import java.util.Map;
 public class ApiController extends ABaseController {
 
 
-	private WeixinUserService weixinUserService;
+	private WxService weixinUserService;
 	private CustomerService customerService;
 
 	/**
@@ -60,7 +60,7 @@ public class ApiController extends ABaseController {
 	public void authCallback(String code, HttpSession session, HttpServletResponse response) {
 		
 		OAuthInfo oAuthInfo = WeixinUtil.getOAuthOpenid(code);
-		WeixinUser weixinUser = null;
+		WxUser weixinUser = null;
 		try {
 			weixinUser = weixinUserService.findByOpenid(oAuthInfo.getOpenid());
 		} catch (NoResultException e1) {
@@ -71,7 +71,7 @@ public class ApiController extends ABaseController {
 		try {
 			if (weixinUser == null || weixinUser.getId() == null) {
 				UserInfo userInfo = WeixinUtil.getUserInfo(oAuthInfo.getOpenid(), oAuthInfo.getAccessToken());
-				weixinUser = new WeixinUser();
+				weixinUser = new WxUser();
 				weixinUser.setOpenid(oAuthInfo.getOpenid());
 				if (userInfo != null) {
 					weixinUser.setCity(userInfo.getCity());
@@ -84,7 +84,7 @@ public class ApiController extends ABaseController {
 				weixinUser = weixinUserService.save(weixinUser);
 			}
 
-			SessionUtil.addWeixinUser(weixinUser);
+			SessionUtil.addWxUser(weixinUser);
 
 			//如果还没有关联用户的，要去注册一个客户作为绑定
 			if (customerService.findByWeixinUserId(weixinUser.getId()) != null) {

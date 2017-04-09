@@ -1,7 +1,7 @@
 package cn.cherish.mboot;
 
 import cn.cherish.mboot.dal.entity.User;
-import cn.cherish.mboot.extra.shiro.MShiroRealm;
+import cn.cherish.mboot.common.shiro.MShiroRealm;
 import cn.cherish.mboot.service.PermissionService;
 import cn.cherish.mboot.service.RoleService;
 import cn.cherish.mboot.service.UserService;

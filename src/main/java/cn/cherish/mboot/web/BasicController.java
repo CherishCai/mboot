@@ -1,8 +1,8 @@
 package cn.cherish.mboot.web;
 
-import cn.cherish.mboot.dal.vo.user.UserLoginVO;
-import cn.cherish.mboot.extra.shiro.CryptographyUtil;
-import cn.cherish.mboot.extra.shiro.ShiroUserUtil;
+import cn.cherish.mboot.dal.request.user.UserLoginReq;
+import cn.cherish.mboot.common.shiro.CryptographyUtil;
+import cn.cherish.mboot.common.shiro.ShiroUserUtil;
 import cn.cherish.mboot.service.UserService;
 import cn.cherish.mboot.util.QiniuUploadUtil;
 import cn.cherish.mboot.util.ValidateCode;
@@ -72,7 +72,7 @@ public class BasicController extends ABaseController {
 	 * 执行登陆
 	 */
 	@PostMapping(value = "/login")
-	public ModelAndView login(@Validated UserLoginVO loginVO, BindingResult bindingResult, HttpServletRequest request){
+	public ModelAndView login(@Validated UserLoginReq loginVO, BindingResult bindingResult, HttpServletRequest request){
 
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("admin/login");

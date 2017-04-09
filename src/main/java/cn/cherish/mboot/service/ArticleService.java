@@ -2,8 +2,8 @@ package cn.cherish.mboot.service;
 
 import cn.cherish.mboot.dal.dto.ArticleDTO;
 import cn.cherish.mboot.dal.entity.Article;
-import cn.cherish.mboot.dal.vo.ArticleVO;
-import cn.cherish.mboot.dal.vo.BasicSearchVO;
+import cn.cherish.mboot.dal.request.ArticleReq;
+import cn.cherish.mboot.dal.request.BasicSearchReq;
 import cn.cherish.mboot.repository.ArticleDAO;
 import cn.cherish.mboot.repository.IBaseDAO;
 import cn.cherish.mboot.util.ObjectConvertUtil;
@@ -44,7 +44,7 @@ public class ArticleService extends ABaseService<Article, Long> {
         super.delete(articleId);
     }
 
-    public Page<ArticleDTO> findAll(BasicSearchVO basicSearchVO) {
+    public Page<ArticleDTO> findAll(BasicSearchReq basicSearchVO) {
 
         int pageNumber = basicSearchVO.getStartIndex() / basicSearchVO.getPageSize() + 1;
         Page<Article> newsPage = this.findAll(pageNumber, basicSearchVO.getPageSize());
@@ -58,7 +58,7 @@ public class ArticleService extends ABaseService<Article, Long> {
 
     @CacheEvict(allEntries = true)
     @Transactional
-    public void updateByVO(ArticleVO newsVO) {
+    public void update(ArticleReq newsVO) {
         Article news = this.findById(newsVO.getId());
         ObjectConvertUtil.objectCopy(news, newsVO);
         news.setModifiedTime(new Date());
@@ -69,7 +69,7 @@ public class ArticleService extends ABaseService<Article, Long> {
     }
 
     @Transactional
-    public void saveByVO(ArticleVO newsVO) {
+    public void save(ArticleReq newsVO) {
         Article news = new Article();
         ObjectConvertUtil.objectCopy(news, newsVO);
         news.setCreatedTime(new Date());

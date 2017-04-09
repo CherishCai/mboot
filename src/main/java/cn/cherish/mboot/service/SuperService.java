@@ -8,8 +8,8 @@ import cn.cherish.mboot.dal.dto.su.SuperUserRoleDTO;
 import cn.cherish.mboot.dal.entity.Permission;
 import cn.cherish.mboot.dal.entity.Role;
 import cn.cherish.mboot.dal.entity.User;
-import cn.cherish.mboot.dal.vo.su.SuperRolePermissionVO;
-import cn.cherish.mboot.dal.vo.su.SuperUserRoleVO;
+import cn.cherish.mboot.dal.request.su.SuperRolePermissionReq;
+import cn.cherish.mboot.dal.request.su.SuperUserRoleReq;
 import cn.cherish.mboot.repository.PermissionDAO;
 import cn.cherish.mboot.repository.RoleDAO;
 import cn.cherish.mboot.repository.UserDAO;
@@ -67,7 +67,7 @@ public class SuperService {
     }
 
     @Transactional
-    public void updateUserRole(SuperUserRoleVO superUserRoleVO) {
+    public void updateUserRole(SuperUserRoleReq superUserRoleVO) {
 
         String username = superUserRoleVO.getUsername();
         List<Long> roleIds = superUserRoleVO.getRoleIds();
@@ -114,7 +114,7 @@ public class SuperService {
     }
 
     @Transactional
-    public void updateRolePermission(SuperRolePermissionVO superRolePermissionVO) {
+    public void updateRolePermission(SuperRolePermissionReq superRolePermissionVO) {
         String rolename = superRolePermissionVO.getRolename();
         List<Long> permissionIds = superRolePermissionVO.getPermissionIds();
 

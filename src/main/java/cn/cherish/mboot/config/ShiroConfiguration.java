@@ -1,8 +1,8 @@
 package cn.cherish.mboot.config;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
-import cn.cherish.mboot.extra.shiro.MShiroFilterFactoryBean;
-import cn.cherish.mboot.extra.shiro.MShiroRealm;
+import cn.cherish.mboot.common.shiro.MShiroFilterFactoryBean;
+import cn.cherish.mboot.common.shiro.MShiroRealm;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
@@ -38,7 +38,7 @@ public class ShiroConfiguration {
     }
 
     /**
-     * @see cn.cherish.mboot.extra.shiro.MShiroRealm
+     * @see cn.cherish.mboot.common.shiro.MShiroRealm
      * need cacheManager 缓存管理器
      * @return MShiroRealm
      */

@@ -3,9 +3,9 @@ package cn.cherish.mboot.web;
 import cn.cherish.mboot.dal.MResponse;
 import cn.cherish.mboot.dal.dto.RoleDTO;
 import cn.cherish.mboot.dal.entity.Role;
-import cn.cherish.mboot.dal.vo.BasicSearchVO;
-import cn.cherish.mboot.dal.vo.role.RoleSaveVO;
-import cn.cherish.mboot.dal.vo.role.RoleUpdateVO;
+import cn.cherish.mboot.dal.request.BasicSearchReq;
+import cn.cherish.mboot.dal.request.role.RoleSaveReq;
+import cn.cherish.mboot.dal.request.role.RoleUpdateReq;
 import cn.cherish.mboot.service.RoleService;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +64,7 @@ public class RoleController extends ABaseController {
      */
     @GetMapping("/page")
     @ResponseBody
-    public MResponse toPage(BasicSearchVO basicSearchVO){
+    public MResponse toPage(BasicSearchReq basicSearchVO){
 
         try {
             Page<RoleDTO> page = roleService.findAll(basicSearchVO);
@@ -102,7 +102,7 @@ public class RoleController extends ABaseController {
      * @return ModelAndView
      */
     @PostMapping("/update")
-    public ModelAndView update(@Validated RoleUpdateVO roleUpdateVO, BindingResult bindingResult){
+    public ModelAndView update(@Validated RoleUpdateReq roleUpdateVO, BindingResult bindingResult){
 
         ModelAndView mv = new ModelAndView("admin/role/edit");
         Map<String, Object> errorMap = new HashMap<>();
@@ -139,7 +139,7 @@ public class RoleController extends ABaseController {
      * @return ModelAndView
      */
     @PostMapping("/save")
-    public ModelAndView save(@Validated RoleSaveVO roleSaveVO, BindingResult bindingResult){
+    public ModelAndView save(@Validated RoleSaveReq roleSaveVO, BindingResult bindingResult){
 
         ModelAndView mv = new ModelAndView("admin/role/add");
         Map<String, Object> errorMap = new HashMap<>();

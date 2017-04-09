@@ -2,10 +2,10 @@ package cn.cherish.mboot.service;
 
 import cn.cherish.mboot.dal.dto.CustomerDTO;
 import cn.cherish.mboot.dal.entity.Customer;
-import cn.cherish.mboot.dal.vo.BasicSearchVO;
-import cn.cherish.mboot.dal.vo.customer.CustomerSearchVO;
-import cn.cherish.mboot.dal.vo.customer.CustomerVO;
-import cn.cherish.mboot.extra.shiro.CryptographyUtil;
+import cn.cherish.mboot.dal.request.BasicSearchReq;
+import cn.cherish.mboot.dal.request.customer.CustomerSearchReq;
+import cn.cherish.mboot.dal.request.customer.CustomerReq;
+import cn.cherish.mboot.common.shiro.CryptographyUtil;
 import cn.cherish.mboot.repository.CustomerDAO;
 import cn.cherish.mboot.repository.IBaseDAO;
 import cn.cherish.mboot.util.ObjectConvertUtil;
@@ -59,7 +59,7 @@ public class CustomerService extends ABaseService<Customer, Long> {
         super.delete(customerId);
     }
 
-    public Page<CustomerDTO> findAll(BasicSearchVO basicSearchVO, CustomerSearchVO customerSearchVO) {
+    public Page<CustomerDTO> findAll(BasicSearchReq basicSearchVO, CustomerSearchReq customerSearchVO) {
 
         int pageNumber = basicSearchVO.getStartIndex() / basicSearchVO.getPageSize() + 1;
         PageRequest pageRequest = super.buildPageRequest(pageNumber, basicSearchVO.getPageSize());
@@ -93,7 +93,7 @@ public class CustomerService extends ABaseService<Customer, Long> {
     }
 
     @Transactional
-    public void updateByVO(CustomerVO customerVO) {
+    public void update(CustomerReq customerVO) {
         Customer customer = this.findById(customerVO.getId());
         if (customer == null) return;
 
@@ -104,7 +104,7 @@ public class CustomerService extends ABaseService<Customer, Long> {
     }
 
     @Transactional
-    public Customer saveByVO(CustomerVO customerVO) {
+    public Customer save(CustomerReq customerVO) {
         Customer customer = new Customer();
         ObjectConvertUtil.objectCopy(customer, customerVO);
         customer.setPassword(CryptographyUtil.cherishSha1(customer.getPassword()));

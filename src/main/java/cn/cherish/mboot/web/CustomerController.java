@@ -3,9 +3,9 @@ package cn.cherish.mboot.web;
 import cn.cherish.mboot.dal.MResponse;
 import cn.cherish.mboot.dal.dto.CustomerDTO;
 import cn.cherish.mboot.dal.entity.Customer;
-import cn.cherish.mboot.dal.vo.BasicSearchVO;
-import cn.cherish.mboot.dal.vo.customer.CustomerSearchVO;
-import cn.cherish.mboot.dal.vo.customer.CustomerVO;
+import cn.cherish.mboot.dal.request.BasicSearchReq;
+import cn.cherish.mboot.dal.request.customer.CustomerSearchReq;
+import cn.cherish.mboot.dal.request.customer.CustomerReq;
 import cn.cherish.mboot.service.CustomerService;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +64,7 @@ public class CustomerController extends ABaseController {
      */
     @GetMapping("/page")
     @ResponseBody
-    public MResponse toPage(BasicSearchVO basicSearchVO, CustomerSearchVO customerSearchVO){
+    public MResponse toPage(BasicSearchReq basicSearchVO, CustomerSearchReq customerSearchVO){
 
         try {
             Page<CustomerDTO> page = customerService.findAll(basicSearchVO, customerSearchVO);
@@ -102,7 +102,7 @@ public class CustomerController extends ABaseController {
      * @return ModelAndView
      */
     @PostMapping("/update")
-    public ModelAndView update(@Validated CustomerVO customerVO, BindingResult bindingResult){
+    public ModelAndView update(@Validated CustomerReq customerVO, BindingResult bindingResult){
 
         ModelAndView mv = new ModelAndView("admin/customer/edit");
         Map<String, Object> errorMap = new HashMap<>();
@@ -139,7 +139,7 @@ public class CustomerController extends ABaseController {
      * @return ModelAndView
      */
     @PostMapping("/save")
-    public ModelAndView save(@Validated CustomerVO customerVO, BindingResult bindingResult){
+    public ModelAndView save(@Validated CustomerReq customerVO, BindingResult bindingResult){
 
         ModelAndView mv = new ModelAndView("admin/customer/add");
         Map<String, Object> errorMap = new HashMap<>();

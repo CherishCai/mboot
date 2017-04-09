@@ -2,9 +2,9 @@ package cn.cherish.mboot.service;
 
 import cn.cherish.mboot.dal.dto.RoleDTO;
 import cn.cherish.mboot.dal.entity.Role;
-import cn.cherish.mboot.dal.vo.BasicSearchVO;
-import cn.cherish.mboot.dal.vo.role.RoleSaveVO;
-import cn.cherish.mboot.dal.vo.role.RoleUpdateVO;
+import cn.cherish.mboot.dal.request.BasicSearchReq;
+import cn.cherish.mboot.dal.request.role.RoleSaveReq;
+import cn.cherish.mboot.dal.request.role.RoleUpdateReq;
 import cn.cherish.mboot.repository.IBaseDAO;
 import cn.cherish.mboot.repository.RoleDAO;
 import cn.cherish.mboot.util.ObjectConvertUtil;
@@ -29,7 +29,7 @@ public class RoleService extends ABaseService<Role, Long> {
         return roleDAO;
     }
 
-    public Page<RoleDTO> findAll(BasicSearchVO basicSearchVO) {
+    public Page<RoleDTO> findAll(BasicSearchReq basicSearchVO) {
 
         int pageNumber = basicSearchVO.getStartIndex() / basicSearchVO.getPageSize() + 1;
         Page<Role> rolePage = this.findAll(pageNumber, basicSearchVO.getPageSize());
@@ -42,7 +42,7 @@ public class RoleService extends ABaseService<Role, Long> {
     }
 
     @Transactional
-    public void updateByVO(RoleUpdateVO roleUpdateVO) {
+    public void update(RoleUpdateReq roleUpdateVO) {
         Role role = this.findById(roleUpdateVO.getId());
         ObjectConvertUtil.objectCopy(role, roleUpdateVO);
         this.update(role);
@@ -53,7 +53,7 @@ public class RoleService extends ABaseService<Role, Long> {
     }
 
     @Transactional
-    public void saveByVO(RoleSaveVO roleSaveVO) {
+    public void save(RoleSaveReq roleSaveVO) {
         Role role = new Role();
         ObjectConvertUtil.objectCopy(role, roleSaveVO);
         this.save(role);

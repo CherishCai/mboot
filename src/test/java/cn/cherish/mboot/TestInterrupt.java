@@ -62,6 +62,15 @@ public class TestInterrupt {
         sleepThread.interrupt();
         loopThread.interrupt();
 
+        while (true) {
+            try {
+                Thread.sleep(1000);//等待其它两个线程收到中断信号
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("【sleepThread】 isInterrupted = " + sleepThread.isInterrupted());
+            System.out.println("【loopThread】 isInterrupted = " + loopThread.isInterrupted());
+        }
     }
 
 

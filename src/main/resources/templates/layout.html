@@ -38,12 +38,12 @@
 
         <!--logo and iconic logo start-->
         <div class="logo">
-            <a th:href="@{/}"><img th:src="@{/image/logo.svg}" alt="LOGO"></a>
+            <a th:href="@{/}"><img th:src="@{/image/logo32.jpg}" alt="LOGO"></a>
             <label>Cherish管理系统</label>
         </div>
 
         <div class="logo-icon text-center">
-            <a th:href="@{/}"><img th:src="@{/image/logo.svg}" alt="LOGO"></a>
+            <a th:href="@{/}"><img th:src="@{/image/logo32.jpg}" alt="LOGO"></a>
         </div>
         <!--logo and iconic logo end-->
 
@@ -194,7 +194,7 @@
 <script>
     //去除shiro模板产生的p标签
     $(function () {
-        $allP = $(".custom-nav p");
+        var $allP = $(".custom-nav p");
         $.each($allP ,function (index, obj) {
             $(obj).remove();
         })
