@@ -1,14 +1,14 @@
 package cn.cherish.mboot.service;
 
-import cn.cherish.mboot.dal.dto.UserDTO;
+import cn.cherish.mboot.web.dto.UserDTO;
 import cn.cherish.mboot.dal.entity.User;
-import cn.cherish.mboot.dal.request.BasicSearchReq;
-import cn.cherish.mboot.dal.request.user.UserSaveReq;
-import cn.cherish.mboot.dal.request.user.UserSearchReq;
-import cn.cherish.mboot.dal.request.user.UserUpdateReq;
+import cn.cherish.mboot.web.request.BasicSearchReq;
+import cn.cherish.mboot.web.request.user.UserSaveReq;
+import cn.cherish.mboot.web.request.user.UserSearchReq;
+import cn.cherish.mboot.web.request.user.UserUpdateReq;
 import cn.cherish.mboot.common.shiro.CryptographyUtil;
-import cn.cherish.mboot.repository.IBaseDAO;
-import cn.cherish.mboot.repository.UserDAO;
+import cn.cherish.mboot.dal.repository.IBaseDAO;
+import cn.cherish.mboot.dal.repository.UserDAO;
 import cn.cherish.mboot.util.ObjectConvertUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

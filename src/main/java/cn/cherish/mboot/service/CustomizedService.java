@@ -1,6 +1,6 @@
 package cn.cherish.mboot.service;
 
-import cn.cherish.mboot.repository.CustomizedDAO;
+import cn.cherish.mboot.dal.repository.CustomizedDAO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

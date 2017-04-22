@@ -1,11 +1,11 @@
 package cn.cherish.mboot.service;
 
-import cn.cherish.mboot.dal.dto.ArticleDTO;
+import cn.cherish.mboot.web.dto.ArticleDTO;
 import cn.cherish.mboot.dal.entity.Article;
-import cn.cherish.mboot.dal.request.ArticleReq;
-import cn.cherish.mboot.dal.request.BasicSearchReq;
-import cn.cherish.mboot.repository.ArticleDAO;
-import cn.cherish.mboot.repository.IBaseDAO;
+import cn.cherish.mboot.web.request.ArticleReq;
+import cn.cherish.mboot.web.request.BasicSearchReq;
+import cn.cherish.mboot.dal.repository.ArticleDAO;
+import cn.cherish.mboot.dal.repository.IBaseDAO;
 import cn.cherish.mboot.util.ObjectConvertUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

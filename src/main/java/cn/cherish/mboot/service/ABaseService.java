@@ -1,6 +1,6 @@
 package cn.cherish.mboot.service;
 
-import cn.cherish.mboot.repository.IBaseDAO;
+import cn.cherish.mboot.dal.repository.IBaseDAO;
 import cn.cherish.mboot.util.DynamicSpecifications;
 import cn.cherish.mboot.util.ObjectConvertUtil;
 import cn.cherish.mboot.util.Reflections;

@@ -1,12 +1,12 @@
 package cn.cherish.mboot.service;
 
-import cn.cherish.mboot.dal.dto.PermissionDTO;
+import cn.cherish.mboot.web.dto.PermissionDTO;
 import cn.cherish.mboot.dal.entity.Permission;
-import cn.cherish.mboot.dal.request.BasicSearchReq;
-import cn.cherish.mboot.dal.request.permission.PermissionSaveReq;
-import cn.cherish.mboot.dal.request.permission.PermissionUpdateReq;
-import cn.cherish.mboot.repository.IBaseDAO;
-import cn.cherish.mboot.repository.PermissionDAO;
+import cn.cherish.mboot.web.request.BasicSearchReq;
+import cn.cherish.mboot.web.request.permission.PermissionSaveReq;
+import cn.cherish.mboot.web.request.permission.PermissionUpdateReq;
+import cn.cherish.mboot.dal.repository.IBaseDAO;
+import cn.cherish.mboot.dal.repository.PermissionDAO;
 import cn.cherish.mboot.util.ObjectConvertUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

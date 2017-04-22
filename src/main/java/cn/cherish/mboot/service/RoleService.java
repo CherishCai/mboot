@@ -1,12 +1,12 @@
 package cn.cherish.mboot.service;
 
-import cn.cherish.mboot.dal.dto.RoleDTO;
+import cn.cherish.mboot.web.dto.RoleDTO;
 import cn.cherish.mboot.dal.entity.Role;
-import cn.cherish.mboot.dal.request.BasicSearchReq;
-import cn.cherish.mboot.dal.request.role.RoleSaveReq;
-import cn.cherish.mboot.dal.request.role.RoleUpdateReq;
-import cn.cherish.mboot.repository.IBaseDAO;
-import cn.cherish.mboot.repository.RoleDAO;
+import cn.cherish.mboot.web.request.BasicSearchReq;
+import cn.cherish.mboot.web.request.role.RoleSaveReq;
+import cn.cherish.mboot.web.request.role.RoleUpdateReq;
+import cn.cherish.mboot.dal.repository.IBaseDAO;
+import cn.cherish.mboot.dal.repository.RoleDAO;
 import cn.cherish.mboot.util.ObjectConvertUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

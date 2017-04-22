@@ -7,11 +7,13 @@ import java.io.FileInputStream;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
+ * 这些类的源码必须看一下
  * Created by Cherish on 2017/3/10.
  */
 public class NeedToRead {
@@ -32,7 +34,8 @@ public class NeedToRead {
 
         Class clazz = Class.class;
 
-        StringBuffer stringBuffer = new StringBuffer(16);
+        StringBuilder stringBuilder = new StringBuilder(16);
+        StringBuffer stringBuffer = new StringBuffer(16);// toStringCache 有一个toString的缓存
 
         Thread thread = new Thread();
         ThreadLocal threadLocal = new ThreadLocal();
@@ -58,11 +61,13 @@ public class NeedToRead {
 
         ArrayList arrayList = new ArrayList();
         LinkedList linkedList = new LinkedList();
-        AbstractQueue queue = new PriorityQueue();
+        AbstractQueue priorityQueue = new PriorityQueue();
 
         BlockingQueue lbQueue = new LinkedBlockingQueue();
 
         ConcurrentMap concurrentMap = new ConcurrentHashMap();
+        CopyOnWriteArrayList copyOnWriteArrayList = new CopyOnWriteArrayList();
+        AtomicInteger atomicInteger = new AtomicInteger();
         LongAdder longAdder = new LongAdder();
 
         ReentrantLock lock = new ReentrantLock();
@@ -74,22 +79,20 @@ public class NeedToRead {
                 new ThreadPoolExecutor(5, 10, 5,
                         TimeUnit.SECONDS, new LinkedBlockingQueue<>());
 
-        FutureTask<Integer> futureTask = new FutureTask(()->{
-            return new Random().nextInt(100);
-        });
+        FutureTask futureTask = new FutureTask<>(()-> new Random().nextInt(100));
         final String returnObj = "";
-        futureTask = new FutureTask(() -> {
+        futureTask = new FutureTask<>(() -> {
 
         }, returnObj);
 
 
-        FileInputStream fileInputStream;
+        FileInputStream fileInputStream;// 策略模式，装饰者模式
 
         Field theUnsafe = null;
         try {
             theUnsafe = Unsafe.class.getDeclaredField("theUnsafe");
             theUnsafe.setAccessible(true);
-            Unsafe UNSAFE = (Unsafe) theUnsafe.get(null);
+            final Unsafe UNSAFE = (Unsafe) theUnsafe.get(null);
             System.out.println(UNSAFE);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
