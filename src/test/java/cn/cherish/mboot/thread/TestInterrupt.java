@@ -1,4 +1,4 @@
-package cn.cherish.mboot;
+package cn.cherish.mboot.thread;
 
 /**
  * @author Cherish

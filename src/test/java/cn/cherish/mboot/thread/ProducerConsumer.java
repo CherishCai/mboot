@@ -1,4 +1,4 @@
-package cn.cherish.mboot;
+package cn.cherish.mboot.thread;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;

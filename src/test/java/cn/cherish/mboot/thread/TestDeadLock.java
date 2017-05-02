@@ -1,4 +1,4 @@
-package cn.cherish.mboot;
+package cn.cherish.mboot.thread;
 
 /**
  * Created by Cherish on 2017/2/13.
