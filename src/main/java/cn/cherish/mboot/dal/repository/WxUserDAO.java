@@ -10,7 +10,7 @@ public interface WxUserDAO extends IBaseDAO<WxUser,Long> {
 
     WxUser findByOpenid(String openid);
 
-    @Query("SELECT w FROM WeixinUser AS w ")
+    @Query("SELECT w FROM WxUser AS w ")
     List<WxUser> listAllPaged(Pageable pageable);
 
 
