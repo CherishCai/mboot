@@ -6,9 +6,26 @@ package cn.cherish.mboot.arithmetic;
 public class Combination {
 
     public static void main(String[] args) {
-        char[] data = "ABCDEFGHIJ".toCharArray();
-        int sum = combination(10, 4);
-        System.out.println("sum = " + sum);
+        char[] data = "123456".toCharArray();
+//        int sum = combination(data.length, 4);
+//        System.out.println("sum = " + sum);
+        // C(n,4)
+        combine(data, 4);
+    }
+
+    private static void combine(char[] data, int m) {
+        combination(data, data.length, m, "");
+    }
+
+    private static void combination(char[] data, int n, int m, String str) {
+        if (n < m) return;
+        if (m <= 0) {
+            System.out.println(str);
+            return;
+        }
+
+        combination(data, n - 1, m - 1, str + data[n-1]);// 含有该球
+        combination(data, n - 1, m, str);// 不含有
     }
 
     /**
