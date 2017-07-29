@@ -6,7 +6,12 @@ package cn.cherish.mboot;
  * @date 2017/5/31 22:53
  */
 public class ExcelTest {
+    private String string;
+
     public static void main(String[] args) {
-        
+        String string = "";
+
+        String str = "";
+        System.out.println("string = " + string);
     }
 }

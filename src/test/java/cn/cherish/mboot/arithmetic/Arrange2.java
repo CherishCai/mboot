@@ -10,8 +10,10 @@ import java.util.Arrays;
 public class Arrange2 {
     public static void main(String[] args) {
         int[] data = new int[]{1, 2, 3, 4, 5};
+        long start = System.currentTimeMillis();
         // A(n,3)
-        arrange2(data, 3);
+        arrange1(data, 3);
+        System.out.println("耗时: " + (System.currentTimeMillis() - start));
         System.out.println("sum = " + sum);
     }
 
@@ -26,11 +28,11 @@ public class Arrange2 {
         permutation(data, 0, k);
     }
     private static void permutation(int[] data, int j, int k) {
-        if (j >= k) {
+        if (j == k) {
             ++sum;
             // 找到排列，结束本次，输出结果（或者保存下来）
             for (int i = 0; i < j; i++) {
-                System.out.print(data[i] + " ");
+                System.out.print(data[i]);
             }
             System.out.println();
             return;
