@@ -12,12 +12,7 @@ public class BinarySearch {
 	 * @return
 	 */
 	public static boolean search(int[] arr, int val){
-		
-		int index = findIndex(arr, val);
-		if (index == -1) {
-			return false;
-		}
-		return true;
+		return findIndex(arr, val) != -1;
 	}
 	/**
 	 * 找到对应val的下标
@@ -26,10 +21,10 @@ public class BinarySearch {
 	 * @return
 	 */
 	public static int findIndex(int[] arr, int val) {
-		int left = 0,right = arr.length - 1;
-		int pivot = -1;
+		int left = 0, right = arr.length - 1;
+		int pivot;
 		while (true) {
-			pivot = (left + right)>>1;
+			pivot = (left + right) >> 1;
 			if (arr[pivot] == val) {
 				break;
 			}

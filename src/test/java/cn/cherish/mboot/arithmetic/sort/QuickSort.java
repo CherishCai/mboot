@@ -104,13 +104,13 @@ public class QuickSort {
 			}
 			
 			//把中间值放到正确的位置
-			arr[end-1] = arr[leftPtr];
+			arr[end - 1] = arr[leftPtr];
 			arr[leftPtr] = temp;
 			
 			//对左边排序
-			quickSort(arr,start,leftPtr-1);
+			quickSort(arr, start, leftPtr - 1);
 			//对右边排序
-			quickSort(arr,leftPtr+1,end);
+			quickSort(arr, leftPtr + 1, end);
 		}
 	}
 	

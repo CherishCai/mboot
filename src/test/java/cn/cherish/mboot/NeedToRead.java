@@ -1,6 +1,5 @@
 package cn.cherish.mboot;
 
-import com.alibaba.druid.pool.DruidDataSource;
 import sun.misc.Unsafe;
 
 import java.io.FileInputStream;
@@ -53,7 +52,6 @@ public class NeedToRead {
         System.out.println("o1.getClass() = " + o1.getClass());
 
         //TODO 数据源
-        DruidDataSource druidDataSource = new DruidDataSource();
         //TODO java.util 及 concurrent 包，认真阅读源码
         TreeMap rbTree = new TreeMap();
         HashMap hashMap = new HashMap(8);
@@ -84,6 +82,13 @@ public class NeedToRead {
         futureTask = new FutureTask<>(() -> {
 
         }, returnObj);
+
+        CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(() -> {
+            return "Hello CompletableFuture!";
+        });
+        CompletableFuture future = completableFuture.thenAccept(o2 -> {
+            System.out.println("thenAccept: " + o2);
+        });
 
 
         FileInputStream fileInputStream;// 策略模式，装饰者模式

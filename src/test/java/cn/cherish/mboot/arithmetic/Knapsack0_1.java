@@ -48,10 +48,10 @@ public class Knapsack0_1 {
         for (int i = n - 1; i >= 0; i--) {
             jMax = Math.min(w[i] - 1, c);
 
-            for (int j = 0; j <= jMax ; j++) {
+            for (int j = 0; j <= jMax ; j++) {//容量不够该重量，使用上一次的价值
                 m[i][j] = m[i + 1][j];
             }
-            for (int j = w[i]; j <= c; j++) {
+            for (int j = w[i]; j <= c; j++) {// 没有该物品上一次的价值大，还是加入了该物品的价值大
                 m[i][j] = Math.max(m[i + 1][j], m[i + 1][j - w[i]] + v[i]);
             }
 

@@ -9,23 +9,23 @@ public class ShellSort {
 	 */
 	public static int[] sort(int[] arr){
 		int temp = 0;
-		int inner = 0,outer = 0;
+		int inner = 0, outer = 0;
 		
 		int h = 1;
-		while(3*h < arr.length){
-			h = 3*h + 1;
+		while (3 * h < arr.length) {
+			h = 3 * h + 1;
 		}
 		
 		while(h > 0){
 			for(outer = h; outer < arr.length; outer++){
 				temp = arr[outer];
 				inner = outer;
-				
-				while(inner > h-1 && arr[inner-h] >= temp){
-					arr[inner] = arr[inner-h];
-					inner -= h;
-				}
-				arr[inner] = temp;
+
+                while (inner >= h && arr[inner - h] >= temp) {
+                    arr[inner] = arr[inner - h];
+                    inner -= h;
+                }
+                arr[inner] = temp;
 				
 			}//end for
 			h = (h - 1)/3;

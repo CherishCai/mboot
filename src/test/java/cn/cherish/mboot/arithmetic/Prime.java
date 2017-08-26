@@ -46,11 +46,11 @@ public class Prime {
         if (2 == num) {
             return true;
         }
-        if (2 > num || num % 2 == 0) {
+        if (num < 2 || num % 2 == 0) {
             return false;
         }
 
-        for (long i = 3; i * i < num; i+=2) {
+        for (long i = 3; i * i < num; i += 2) {
             if (num % i == 0) {
                 return false;
             }

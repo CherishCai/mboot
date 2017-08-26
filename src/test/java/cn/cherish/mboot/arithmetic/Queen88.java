@@ -23,7 +23,7 @@ public class Queen88 {
         }
 
         while(row > 0){
-            column_num[row]++;
+            column_num[row]++;// 表示row行下的列数加一
             //找到该行下 可行列的位置
             while (column_num[row] <= maxCol && !isPlace(column_num, row, column_num[row])) {
                 column_num[row]++;
