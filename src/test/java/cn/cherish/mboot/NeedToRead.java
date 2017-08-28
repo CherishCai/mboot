@@ -16,8 +16,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * Created by Cherish on 2017/3/10.
  */
 public class NeedToRead {
-
-    public static void main(String[] args)  {
+    public static void main(String[] args) {
 
         String string = "原来整型字面量编译后是这样的，" +
                 "调用了Integer.valueOf(i)，可以取缓存";
@@ -77,7 +76,7 @@ public class NeedToRead {
                 new ThreadPoolExecutor(5, 10, 5,
                         TimeUnit.SECONDS, new LinkedBlockingQueue<>());
 
-        FutureTask futureTask = new FutureTask<>(()-> new Random().nextInt(100));
+        FutureTask futureTask = new FutureTask<>(() -> new Random().nextInt(100));
         final String returnObj = "";
         futureTask = new FutureTask<>(() -> {
 
@@ -102,7 +101,6 @@ public class NeedToRead {
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
-
 
     }
 }
