@@ -4,6 +4,7 @@ import sun.misc.Unsafe;
 
 import java.io.FileInputStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.Proxy;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -91,6 +92,9 @@ public class NeedToRead {
 
 
         FileInputStream fileInputStream;// 策略模式，装饰者模式
+
+        Proxy.newProxyInstance(Object.class.getClassLoader(), new Class[]{},
+                (proxy, method, args1) -> null);
 
         Field theUnsafe = null;
         try {
