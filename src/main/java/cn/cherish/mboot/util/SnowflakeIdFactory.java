@@ -139,6 +139,7 @@ public class SnowflakeIdFactory {
 
     public static void testPerSecondProductIdNums() {
         SnowflakeIdFactory idWorker = new SnowflakeIdFactory(1, 1);
+        idWorker.nextId();
         long start = System.currentTimeMillis();
         int count = 0;
         for (; System.currentTimeMillis() - start < 1000; count++) {
@@ -153,10 +154,32 @@ public class SnowflakeIdFactory {
         System.out.println("生产数：" + count);
     }
 
+    public static void testSequences() {
+        Sequence sequence = new Sequence();
+        sequence.nextId();
+        long start = System.currentTimeMillis();
+        int count = 0;
+        for (; System.currentTimeMillis() - start < 1000; count++) {
+            /*  测试方法一: 此用法纯粹的生产ID,每秒生产ID个数为400w+ */
+            sequence.nextId();
+            /*  测试方法二: 在log中打印,同时获取ID,此用法生产ID的能力受限于log.error()的吞吐能力.
+             * 每秒徘徊在10万左右. */
+            //log.error("{}",sequence.nextId());
+        }
+        long end = System.currentTimeMillis() - start;
+        System.out.println("耗时：" + end);
+        System.out.println("生产数：" + count);
+    }
+
     public static void main(String[] args) {
         /* case1: 测试每秒生产id个数?
          *   结论: 每秒生产id个数400w+ */
+        System.out.println("=========== System.currentTimeMillis() =================");
+
         testPerSecondProductIdNums();
+
+        System.out.println("=========== SystemClock =================");
+        testSequences();
 
         /* case2: 单线程-测试多个生产者同时生产N个id,验证id是否有重复?
          *   结论: 验证通过,没有重复. */
