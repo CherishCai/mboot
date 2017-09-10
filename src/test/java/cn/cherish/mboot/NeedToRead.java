@@ -77,6 +77,17 @@ public class NeedToRead {
                 new ThreadPoolExecutor(5, 10, 5,
                         TimeUnit.SECONDS, new LinkedBlockingQueue<>());
 
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            threadPoolExecutor.shutdownNow();
+            executorService.shutdownNow();
+            forkJoin.shutdownNow();
+        }));
+
+        Thread.setDefaultUncaughtExceptionHandler((Thread t, Throwable e) -> {
+            System.err.println("t = " + t);
+            e.printStackTrace(System.err);
+        });
+
         FutureTask futureTask = new FutureTask<>(() -> new Random().nextInt(100));
         final String returnObj = "";
         futureTask = new FutureTask<>(() -> {
@@ -89,7 +100,6 @@ public class NeedToRead {
         CompletableFuture future = completableFuture.thenAccept(o2 -> {
             System.out.println("thenAccept: " + o2);
         });
-
 
         FileInputStream fileInputStream;// 策略模式，装饰者模式
 

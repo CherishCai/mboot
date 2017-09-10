@@ -3,7 +3,6 @@ package cn.cherish.mboot.util;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.*;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -74,69 +73,6 @@ public class SnowflakeIdFactory {
         return System.currentTimeMillis();
     }
 
-    public static void testProductIdByMoreThread(int dataCenterId, int workerId, int n) throws InterruptedException {
-        List<Thread> tlist = new ArrayList<>();
-        Set<Long> setAll = new HashSet<>();
-        CountDownLatch cdLatch = new CountDownLatch(10);
-        long start = System.currentTimeMillis();
-        int threadNo = dataCenterId;
-        Map<String, SnowflakeIdFactory> idFactories = new HashMap<>();
-        for (int i = 0; i < 10; i++) {
-            //用线程名称做map key.
-            idFactories.put("snowflake" + i, new SnowflakeIdFactory(workerId, threadNo++));
-        }
-        for (int i = 0; i < 10; i++) {
-            Thread temp = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    Set<Long> setId = new HashSet<>();
-                    SnowflakeIdFactory idWorker = idFactories.get(Thread.currentThread().getName());
-                    for (int j = 0; j < n; j++) {
-                        setId.add(idWorker.nextId());
-                    }
-                    synchronized (setAll) {
-                        setAll.addAll(setId);
-                        log.info("{}生产了{}个id,并成功加入到setAll中.", Thread.currentThread().getName(), n);
-                    }
-                    cdLatch.countDown();
-                }
-            }, "snowflake" + i);
-            tlist.add(temp);
-        }
-        for (int j = 0; j < 10; j++) {
-            tlist.get(j).start();
-        }
-        cdLatch.await();
-
-        long end1 = System.currentTimeMillis() - start;
-
-        log.info("共耗时:{}毫秒,预期应该生产{}个id, 实际合并总计生成ID个数:{}", end1, 10 * n, setAll.size());
-
-    }
-
-    public static void testProductId(int dataCenterId, int workerId, int n) {
-        SnowflakeIdFactory idWorker = new SnowflakeIdFactory(workerId, dataCenterId);
-        SnowflakeIdFactory idWorker2 = new SnowflakeIdFactory(workerId + 1, dataCenterId);
-        Set<Long> setOne = new HashSet<>();
-        Set<Long> setTow = new HashSet<>();
-        long start = System.currentTimeMillis();
-        for (int i = 0; i < n; i++) {
-            setOne.add(idWorker.nextId());//加入set
-        }
-        long end1 = System.currentTimeMillis() - start;
-        log.info("第一批ID预计生成{}个,实际生成{}个<<<<*>>>>共耗时:{}", n, setOne.size(), end1);
-
-        for (int i = 0; i < n; i++) {
-            setTow.add(idWorker2.nextId());//加入set
-        }
-        long end2 = System.currentTimeMillis() - start;
-        log.info("第二批ID预计生成{}个,实际生成{}个<<<<*>>>>共耗时:{}", n, setTow.size(), end2);
-
-        setOne.addAll(setTow);
-        log.info("合并总计生成ID个数:{}", setOne.size());
-
-    }
-
     public static void testPerSecondProductIdNums() {
         SnowflakeIdFactory idWorker = new SnowflakeIdFactory(1, 1);
         idWorker.nextId();
@@ -171,28 +107,54 @@ public class SnowflakeIdFactory {
         System.out.println("生产数：" + count);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         /* case1: 测试每秒生产id个数?
          *   结论: 每秒生产id个数400w+ */
-        System.out.println("=========== System.currentTimeMillis() =================");
-
+        System.out.println("=========== 单线程 System.currentTimeMillis() =================");
         testPerSecondProductIdNums();
-
-        System.out.println("=========== SystemClock =================");
+        System.out.println("=========== 单线程 SystemClock =================");
         testSequences();
 
-        /* case2: 单线程-测试多个生产者同时生产N个id,验证id是否有重复?
-         *   结论: 验证通过,没有重复. */
-//        testProductId(1,1,10000);//验证通过!
-//        testProductId(1,2,20000);//验证通过!
+        for (int n = 1;n < 502;n += 20){
+            testNThread(n);
+        }
 
-        /* case3: 多线程-测试多个生产者同时生产N个id, 全部id在全局范围内是否会重复?
-         *   结论: 验证通过,没有重复. */
-        /*try {
-            testProductIdByMoreThread(0,0,100_000);//单机测试此场景,性能损失至少折半!
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }*/
+    }
 
+    private static void testNThread(int n) throws InterruptedException {
+        CountDownLatch latch = new CountDownLatch(n);
+        System.out.println("++++++++++++++++ " + n + "个线程并发 ++++++++++++++++");
+
+        System.out.println("############  System.currentTimeMillis() ########");
+        SnowflakeIdFactory snowflakeIdFactory = new SnowflakeIdFactory(1, 1);
+        snowflakeIdFactory.nextId();
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < n; i++) {
+            new Thread(() -> {
+                snowflakeIdFactory.nextId();
+                latch.countDown();
+            }).start();
+        }
+        latch.await();
+        long end = System.currentTimeMillis();
+
+        System.out.println("耗时：" + (end - start));
+        System.out.println("生产数：" + n);
+
+        System.out.println("######### SystemClock ##########");
+        CountDownLatch latchSequence = new CountDownLatch(n);
+        Sequence sequence = new Sequence();
+        sequence.nextId();
+        long startSequence = System.currentTimeMillis();
+        for (int i = 0; i < n; i++) {
+            new Thread(() -> {
+                sequence.nextId();
+                latchSequence.countDown();
+            }).start();
+        }
+        latchSequence.await();
+        long endSequence = System.currentTimeMillis();
+        System.out.println("耗时：" + (endSequence - startSequence));
+        System.out.println("生产数：" + n);
     }
 }
