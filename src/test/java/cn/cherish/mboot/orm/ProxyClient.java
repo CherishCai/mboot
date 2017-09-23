@@ -63,12 +63,12 @@ public class ProxyClient {
         }
 
         //做 Autowired 注解 设值工作
-        for (Class bean : ioc.keySet()) {
-            for (Field field : bean.getDeclaredFields()) {
+        for (Class clazz : ioc.keySet()) {
+            for (Field field : clazz.getDeclaredFields()) {
                 if (field.getAnnotation(Autowired.class) != null) {
                     try {
                         field.setAccessible(true);
-                        field.set(ioc.get(bean), ioc.get(field.getType()));
+                        field.set(ioc.get(clazz), ioc.get(field.getType()));
                     } catch (IllegalAccessException e) {
                         e.printStackTrace();
                     }
