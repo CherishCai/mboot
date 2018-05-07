@@ -14,6 +14,9 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
 
+import static com.alibaba.druid.support.http.ResourceServlet.*;
+import static com.alibaba.druid.support.http.StatViewServlet.PARAM_NAME_RESET_ENABLE;
+
 /**
  * 自我感觉屌屌的
  * Created by Cherish on 2017/2/8.
@@ -58,18 +61,18 @@ public class DruidDataSourceConfiguration {
     @Bean
     public ServletRegistrationBean druidStatViewServlet(){
         //org.springframework.boot.context.embedded.ServletRegistrationBean提供类的进行注册.
-        ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean(new StatViewServlet(),"/druid/*");
+        ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean(new StatViewServlet(), "/druid/*");
 
         //添加初始化参数：initParams
         //白名单：
-        servletRegistrationBean.addInitParameter("allow","127.0.0.1");
+        servletRegistrationBean.addInitParameter(PARAM_NAME_ALLOW, "127.0.0.1");
         //IP黑名单 (存在共同时，deny优先于allow) : 如果满足deny的话提示:Sorry, you are not permitted to view this page.
-        servletRegistrationBean.addInitParameter("deny","192.168.1.73");
+        servletRegistrationBean.addInitParameter(PARAM_NAME_DENY, "192.168.1.73");
         //登录查看信息的账号密码.
-        servletRegistrationBean.addInitParameter("loginUsername","cherish");
-        servletRegistrationBean.addInitParameter("loginPassword","cherish");
+        servletRegistrationBean.addInitParameter(PARAM_NAME_USERNAME, "cherish");
+        servletRegistrationBean.addInitParameter(PARAM_NAME_PASSWORD, "cherish");
         //是否能够重置数据.
-        servletRegistrationBean.addInitParameter("resetEnable","false");// 禁用HTML页面上的“Reset All”功能
+        servletRegistrationBean.addInitParameter(PARAM_NAME_RESET_ENABLE, "false");// 禁用HTML页面上的“Reset All”功能
         return servletRegistrationBean;
     }
 
